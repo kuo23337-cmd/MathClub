@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gamma Math Club — Gammath.xyz</title>
+  <!-- 引入 Google 一键登录官方高级安全组件库 -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
   <style>
     :root {
       --bg-primary: #f8fafc;
@@ -120,40 +122,24 @@
     input:focus, textarea:focus, select:focus { outline: none; border-color: var(--border-focus); }
 
     .problem-box { background-color: var(--bg-secondary); border: 1px solid var(--border-color); border-left: 4px solid var(--accent-blue); padding: 1.5rem; border-radius: var(--card-radius); box-shadow: var(--card-shadow); margin: 1.5rem 0; }
-    .hint-box { background-color: var(--accent-light); border: 1px dashed #bfdbfe; padding: 1rem; border-radius: 6px; margin-top: 1rem; font-size: 0.9rem; color: var(--accent-blue); display: none; }
     
-    .challenge-hall { background-color: var(--bg-secondary); border: 1px solid var(--border-color); padding: 2rem; border-radius: var(--card-radius); box-shadow: var(--card-shadow); margin: 2rem 0; }
-    .challenge-entry { background-color: var(--bg-primary); border: 1px solid var(--border-color); padding: 1rem; border-radius: 6px; margin-bottom: 1rem; border-left: 3px solid var(--accent-blue); }
-
     .timeline { border-left: 2px solid var(--border-color); padding-left: 1.5rem; margin: 2rem 0; }
-    .timeline-item { position: relative; margin-bottom: 2rem; cursor: pointer; }
+    .timeline-item { position: relative; margin-bottom: 2rem; }
     .timeline-item::before { content: ""; position: absolute; left: calc(-1.5rem - 6px); top: 0.25rem; width: 10px; height: 10px; border-radius: 50%; background-color: var(--accent-blue); border: 2px solid var(--bg-primary); }
     .timeline-date { font-weight: 700; color: var(--accent-blue); font-size: 0.9rem; }
     .timeline-title { font-weight: 600; margin: 0.25rem 0; }
-    .timeline-detail { display: none; font-size: 0.9rem; color: var(--text-muted); margin-top: 0.5rem; background-color: var(--bg-secondary); padding: 0.75rem; border-radius: 6px; border: 1px solid var(--border-color); }
 
     .video-card { background-color: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--card-radius); padding: 1.5rem; box-shadow: var(--card-shadow); margin: 2rem 0; }
     .mock-screen { background-color: #0f172a; color: #94a3b8; aspect-ratio: 16/9; border-radius: 6px; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; overflow: hidden; margin-bottom: 1rem; border: 1px solid #1e293b; }
-    .play-trigger { font-size: 3.5rem; cursor: pointer; transition: transform 0.1s; z-index: 2; }
-    .play-trigger:hover { transform: scale(1.1); }
-    .player-progress-container { position: absolute; bottom: 0; left: 0; width: 100%; height: 4px; background-color: #334155; }
-    .player-progress-bar { height: 100%; width: 0%; background-color: var(--accent-blue); transition: width 0.1s linear; }
-
-    .receipt-card { background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--accent-light) 100%); border: 2px solid var(--accent-blue); border-radius: var(--card-radius); padding: 2rem; box-shadow: var(--card-shadow); margin-top: 2rem; animation: scaleIn 0.3s ease-out; }
-    @keyframes scaleIn { from { transform: scale(0.97); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    .play-trigger { font-size: 3.5rem; cursor: pointer; }
 
     footer { border-top: 1px solid var(--border-color); background-color: var(--bg-secondary); padding: 3rem 1.5rem; text-align: center; font-size: 0.85rem; color: var(--text-muted); }
-    .footer-links { display: flex; justify-content: center; gap: 1.5rem; margin-top: 0.75rem; }
-    .footer-links a { color: var(--text-muted); text-decoration: none; }
-    .footer-links a:hover { color: var(--accent-blue); }
 
     #login-screen { display: flex; align-items: center; justify-content: center; min-height: 100vh; background-color: var(--bg-primary); padding: 1.5rem; }
-    .login-box { background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--card-radius); padding: 2.5rem 2rem; box-shadow: var(--card-shadow); width: 100%; max-width: 400px; text-align: center; }
+    .login-box { background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--card-radius); padding: 2.5rem 2rem; box-shadow: var(--card-shadow); width: 100%; max-width: 420px; text-align: center; }
     .lang-selector-header { margin-bottom: 1.5rem; display: flex; justify-content: flex-end; }
-    .toggle-auth-link { color: var(--accent-blue); text-decoration: none; font-size: 0.85rem; font-weight: 600; display: inline-block; margin-top: 1rem; cursor: pointer; }
-    .toggle-auth-link:hover { text-decoration: underline; }
 
-    /* 新增聊天专属样式 */
+    /* 聊天专属样式 */
     .chat-bubble { max-width: 75%; padding: 0.6rem 1rem; border-radius: 12px; font-size: 0.95rem; margin-bottom: 0.2rem; }
     .chat-bubble.self { background-color: var(--accent-blue); color: #ffffff; align-self: flex-end; border-bottom-right-radius: 2px; }
     .chat-bubble.other { background-color: var(--bg-secondary); color: var(--text-main); border: 1px solid var(--border-color); align-self: flex-start; border-bottom-left-radius: 2px; }
@@ -161,6 +147,7 @@
 </head>
 <body class="lang-en">
 
+  <!-- 安全登录与姓名激活看板 -->
   <div id="login-screen">
     <div class="login-box">
       <div class="lang-selector-header">
@@ -171,73 +158,51 @@
       </div>
       <div style="font-size: 2.5rem; color: var(--accent-blue); margin-bottom: 0.5rem; font-weight: 700;">Γ</div>
       
-      <h2 id="auth-main-title" style="border: none; padding: 0; margin: 0 0 0.5rem 0;">
+      <h2 style="border: none; padding: 0; margin: 0 0 0.5rem 0;">
         <span class="lang-en">Gamma Math Club</span>
         <span class="lang-zh">伽马数学社</span>
       </h2>
-      <p id="auth-sub-title" style="font-size: 0.9rem; margin-bottom: 1.5rem;">
-        <span class="lang-en">Please sign in to access the portal</span>
-        <span class="lang-zh">请登录以进入系统门户</span>
-      </p>
 
+      <!-- 一键登录主入口面板 -->
       <div id="login-form-wrapper">
-        <form id="login-form">
-          <div style="text-align: left; margin-bottom: 1rem;">
-            <label class="lang-en" style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted);">Username</label>
-            <label class="lang-zh" style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted);">用户名</label>
-            <input type="text" id="login-username" required>
-          </div>
-          <div style="text-align: left; margin-bottom: 1.5rem;">
-            <label class="lang-en" style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted);">Password</label>
-            <label class="lang-zh" style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted);">密码</label>
-            <input type="password" id="login-password" required>
-          </div>
-          <button type="submit" class="btn" style="width: 100%; padding: 0.75rem;">
-            <span class="lang-en">Sign In</span>
-            <span class="lang-zh">登录</span>
-          </button>
-        </form>
-        <span class="toggle-auth-link" id="link-to-register">
-          <span class="lang-en">Don't have an account? Register</span>
-          <span class="lang-zh">还没有账户？立即注册</span>
-        </span>
+        <p style="font-size: 0.9rem; margin-bottom: 2rem;">
+          <span class="lang-en">Sign in securely using your institution Google account</span>
+          <span class="lang-zh">请使用您的学校或个人 Google 账户一键安全登录</span>
+        </p>
+        
+        <!-- 谷歌官方渲染托管节点 -->
+        <div style="display: flex; justify-content: center; margin: 2rem 0;">
+          <div id="google-btn-container"></div>
+        </div>
       </div>
 
-      <div id="register-form-wrapper" style="display: none;">
-        <form id="register-form">
-          <div style="text-align: left; margin-bottom: 1rem;">
-            <label class="lang-en" style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted);">Choose Username</label>
-            <label class="lang-zh" style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted);">创建用户名</label>
-            <input type="text" id="register-username" required>
-          </div>
-          <div style="text-align: left; margin-bottom: 1rem;">
-            <label class="lang-en" style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted);">Password</label>
-            <label class="lang-zh" style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted);">密码</label>
-            <input type="password" id="register-password" required>
-          </div>
-          <div style="text-align: left; margin-bottom: 1.5rem;">
-            <label class="lang-en" style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted);">Confirm Password</label>
-            <label class="lang-zh" style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted);">确认密码</label>
-            <input type="password" id="register-confirm" required>
-          </div>
+      <!-- 首次登录弹出的真实姓名录入面板 -->
+      <div id="name-prompt-wrapper" style="display: none; text-align: left; animation: fadeIn 0.3s ease-in-out;">
+        <h3 class="lang-en" style="margin-bottom: 0.5rem; color: var(--accent-blue);">Please enter your full name</h3>
+        <h3 class="lang-zh" style="margin-bottom: 0.5rem; color: var(--accent-blue);">请输入您的真实姓名</h3>
+        <p style="font-size: 0.85rem; margin-bottom: 1.5rem;">
+          <span class="lang-en">Your full name will serve as your verified identity for seminar RSVPs and global chat records.</span>
+          <span class="lang-zh">您的姓名将作为参与双周研讨会预约（登记学时）以及在社区发言时的唯一官方实名标识。</span>
+        </p>
+        <form id="name-submit-form" style="margin: 0;">
+          <label style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted);" class="lang-en">Full Name</label>
+          <label style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted);" class="lang-zh">真实姓名</label>
+          <input type="text" id="user-full-name" required placeholder="e.g. Yongkuo Chen" style="margin-bottom: 1.25rem;">
           <button type="submit" class="btn" style="width: 100%; padding: 0.75rem;">
-            <span class="lang-en">Create Account</span>
-            <span class="lang-zh">创建账户</span>
+            <span class="lang-en">Enter Portal</span>
+            <span class="lang-zh">进入门户系统</span>
           </button>
         </form>
-        <span class="toggle-auth-link" id="link-to-login">
-          <span class="lang-en">Already have an account? Sign In</span>
-          <span class="lang-zh">已有账户？立即登录</span>
-        </span>
       </div>
 
-      <p id="auth-status-msg" style="font-size: 0.85rem; margin-top: 1.25rem; display: none; padding: 0.5rem; border-radius: 4px;"></p>
+      <p id="auth-status-msg" style="font-size: 0.85rem; margin-top: 1.25rem; display: none; padding: 0.5rem; border-radius: 4px; background-color: #fef2f2; color: #ef4444;"></p>
     </div>
   </div>
 
+  <!-- 主系统应用 -->
   <div id="main-app-container" style="display: none;">
     <header>
-      <a href="#" class="logo" id="header-logo-link">Γ<span>ammath.xyz</span></a>
+      <a href="#" class="logo">Γ<span>ammath.xyz</span></a>
       <div class="nav-container">
         <nav id="nav-menu">
           <a href="#about" class="nav-item"><span class="lang-en">X. About</span><span class="lang-zh">X. 关于我们</span></a>
@@ -255,16 +220,14 @@
     </header>
 
     <main id="view-container">
+      <!-- 主页 -->
       <section id="home" class="section active">
         <div style="margin-bottom: 3rem;">
           <span style="font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; font-size: 0.8rem; color: var(--accent-blue);">
             <span class="lang-en">Gamma Math Club</span>
             <span class="lang-zh">伽马数学社</span>
           </span>
-          <h1 style="margin-top: 0.5rem; font-size: 3.2rem; line-height: 1.1;">
-            <span class="lang-en">Where Gamma meets X, Y, Z.</span>
-            <span class="lang-zh">当伽马遇见 X, Y, Z。</span>
-          </h1>
+          <h1 style="margin-top: 0.5rem; font-size: 3.2rem; line-height: 1.1;">Where Gamma meets X, Y, Z.</h1>
           <p style="font-size: 1.25rem; max-width: 700px; color: var(--text-muted); margin-top: 1rem;">
             <span class="lang-en">We bridge mathematical inquiry with global collaboration. Organized by high school students connecting Rome and Beijing.</span>
             <span class="lang-zh">我们连接数学探究与全球协作。由连接罗马与北京的高中生共同组织。</span>
@@ -274,153 +237,105 @@
         <div class="card-grid">
           <div class="card">
             <div style="font-size: 1.5rem; margin-bottom: 0.75rem;">📅</div>
-            <h3 class="lang-en">Bi-Weekly Seminars</h3>
-            <h3 class="lang-zh">双周研讨会</h3>
-            <p style="font-size: 0.9rem;" class="lang-en">Interact during 60-minute exploration sessions addressing Algebra, Geometry, Analysis, and Number Theory.</p>
-            <p style="font-size: 0.9rem;" class="lang-zh">在代数、几何、分析和数论相关的60分钟探索会议中进行学术探讨与互动。</p>
-            <a href="#activities" class="btn secondary nav-router" data-dest="activities" style="width: 100%; margin-top: 0.5rem;">
-              <span class="lang-en">Explore Seminars</span>
-              <span class="lang-zh">浏览研讨会议程</span>
-            </a>
+            <h3 class="lang-en">Bi-Weekly Seminars</h3><h3 class="lang-zh">双周研讨会</h3>
+            <p style="font-size: 0.9rem;" class="lang-en">Interact during 60-minute exploration sessions addressing Algebra, Geometry, and Number Theory.</p>
+            <p style="font-size: 0.9rem;" class="lang-zh">在代数、几何和数论相关的60分钟探索会议中进行学术探讨与互动。</p>
+            <a href="#activities" class="btn secondary" style="width: 100%; margin-top: 0.5rem;">Explore Seminars</a>
           </div>
           <div class="card">
             <div style="font-size: 1.5rem; margin-bottom: 0.75rem;">💬</div>
-            <h3 class="lang-en">Global Chat Room</h3>
-            <h3 class="lang-zh">跨国界交流社区</h3>
+            <h3 class="lang-en">Global Chat Room</h3><h3 class="lang-zh">跨国界交流社区</h3>
             <p style="font-size: 0.9rem;" class="lang-en">Connect and chat instantly with mathematics lovers from different chapters online.</p>
             <p style="font-size: 0.9rem;" class="lang-zh">与来自全球各地的数学爱好者们在线建立实时连接，探讨疑难学术痛点。</p>
-            <a href="#chat" class="btn secondary nav-router" data-dest="chat" style="width: 100%; margin-top: 0.5rem;">
-              <span class="lang-en">Enter Chat Hub</span>
-              <span class="lang-zh">进入交流大厅</span>
-            </a>
+            <a href="#chat" class="btn secondary" style="width: 100%; margin-top: 0.5rem;">Enter Chat Hub</a>
           </div>
           <div class="card">
             <div style="font-size: 1.5rem; margin-bottom: 0.75rem;">🧩</div>
-            <h3 class="lang-en">Weekly Problem</h3>
-            <h3 class="lang-zh">每周一题</h3>
-            <p style="font-size: 0.9rem;" class="lang-en">View our weekly select mathematical puzzle. Conceptualized to puzzle, curated not to exceed high school scope.</p>
+            <h3 class="lang-en">Weekly Problem</h3><h3 class="lang-zh">每周一题</h3>
+            <p style="font-size: 0.9rem;" class="lang-en">View our weekly select mathematical puzzle curated within secondary school boundaries.</p>
             <p style="font-size: 0.9rem;" class="lang-zh">探索我们每周精选的数学谜题。专为启发理性逻辑而设计，且难度不超出高中范围。</p>
-            <button id="home-problem-btn" class="btn" style="width: 100%; margin-top: 0.5rem;">
-              <span class="lang-en">Solve Current Problem</span>
-              <span class="lang-zh">解答当前问题</span>
-            </button>
+            <a href="#activities" class="btn" style="width: 100%; margin-top: 0.5rem;">Solve Current Problem</a>
           </div>
         </div>
         <div id="home-problem-arena"></div>
       </section>
 
+      <!-- 关于我们 -->
       <section id="about" class="section">
-        <h1 class="lang-en">X. About the Club</h1>
-        <h1 class="lang-zh">X. 关于数学社</h1>
-        <p style="font-size: 1.1rem; max-width: 800px; margin-bottom: 2rem;" class="lang-en">
-          Gamma Math Club originated from a shared conviction that mathematical exploration thrives outside standard testing parameters. We form intellectual connections between international divisions in Beijing and European secondary schools, establishing a global communication channel.
-        </p>
-        <p style="font-size: 1.1rem; max-width: 800px; margin-bottom: 2rem;" class="lang-zh">
-          伽马数学社源于一个共同的信念，即数学探索不仅存在于标准化测试之中。我们在北京的国际教育资源与欧洲的中学之间搭建起学术桥梁，建立起国际化的互通合作平台。
-        </p>
-
-        <h2 class="lang-en">Co-Founders & Core Chapters</h2>
-        <h2 class="lang-zh">联合创始人与核心分部</h2>
+        <h1 class="lang-en">X. About the Club</h1><h1 class="lang-zh">X. 关于数学社</h1>
+        <p style="font-size: 1.1rem; max-width: 800px; margin-bottom: 2rem;" class="lang-en">Gamma Math Club originated from a shared conviction that mathematical exploration thrives outside standard testing parameters. We form intellectual connections between international divisions in Beijing and European secondary schools.</p>
+        <p style="font-size: 1.1rem; max-width: 800px; margin-bottom: 2rem;" class="lang-zh">伽马数学社源于一个共同的信念，即数学探索不仅存在于标准化测试之中。我们在北京的国际教育资源与欧洲的中学之间搭建起学术桥梁，建立起国际化的互通合作平台。</p>
+        <h2>Co-Founders & Core Chapters</h2>
         <div class="card-grid">
           <div class="card">
-            <span style="font-size: 0.85rem; text-transform: uppercase; color: var(--accent-blue); font-weight: 750;" class="lang-en">Rome Chapter</span>
-            <span style="font-size: 0.85rem; text-transform: uppercase; color: var(--accent-blue); font-weight: 750;" class="lang-zh">罗马分部</span>
-            <h3 style="margin-top: 0.5rem; font-size: 1.3rem;">Marymount International School Rome</h3>
-            <p style="font-size: 0.9rem; margin-top: 0.5rem;" class="lang-en">Establishing core links with European international curriculums and local mathematics interest groups.</p>
-            <p style="font-size: 0.9rem; margin-top: 0.5rem;" class="lang-zh">与欧洲国际课程及当地数学兴趣小组建立核心学术联系。</p>
+            <h3>Marymount International School Rome</h3>
+            <p style="font-size: 0.9rem;" class="lang-en">Establishing core links with European international curriculums and local mathematics interest groups.</p>
           </div>
           <div class="card">
-            <span style="font-size: 0.85rem; text-transform: uppercase; color: var(--accent-blue); font-weight: 750;" class="lang-en">Leadership Team</span>
-            <span style="font-size: 0.85rem; text-transform: uppercase; color: var(--accent-blue); font-weight: 750;" class="lang-zh">领导团队</span>
-            <h3 style="margin-top: 0.5rem; font-size: 1.3rem;">Yongkuo Chen & Zofia Grzelinska</h3>
-            <p style="font-size: 0.9rem; margin-top: 0.5rem;" class="lang-en">Co-founded by Yongkuo Chen (President) and Zofia Grzelinska (Vice President) to construct an inclusive, balanced academic workspace.</p>
-            <p style="font-size: 0.9rem; margin-top: 0.5rem;" class="lang-zh">由陈永阔（社长）和 Zofia Grzelinska（副社长）联合创立，旨在构建一个学术平衡的多维学术交流社群。</p>
+            <h3>Yongkuo Chen & Zofia Grzelinska</h3>
+            <p style="font-size: 0.9rem;" class="lang-en">Co-founded to construct an inclusive, balanced academic workspace.</p>
           </div>
         </div>
       </section>
 
+      <!-- 学术活动 -->
       <section id="activities" class="section">
-        <h1 class="lang-en">Y. Academic Activities</h1>
-        <h1 class="lang-zh">Y. 学术活动</h1>
-        <h2 class="lang-en">📅 Bi-Weekly Theme Seminars</h2>
-        <h2 class="lang-zh">📅 双周主题研讨会</h2>
-        <p style="margin-bottom: 1.5rem;" class="lang-en">Click "RSVP" to secure a placeholder seat. Registered sessions update your active CAS hours indicator.</p>
-        <p style="margin-bottom: 1.5rem;" class="lang-zh">点击“RSVP（预约）”锁定席位。登记参与的会议将用于更新您的 CAS 学时统计指标。</p>
+        <h1>Y. Academic Activities</h1>
         <div id="seminars-board" class="card-grid"></div>
       </section>
 
+      <!-- 联机聊天模块 -->
       <section id="chat" class="section">
-        <h1 class="lang-en">W. Connected Chat Hub</h1>
-        <h1 class="lang-zh">W. 联机交流社区</h1>
-        <p class="lang-en">Real-time academic communication channel. Message historical streams sync directly from Cloudflare servers.</p>
-        <p class="lang-zh">跨国实时学术讨论枢纽。所有消息流实时与 Cloudflare 分布式边缘服务器同步存储。</p>
-        
+        <h1>W. Connected Chat Hub</h1>
         <div style="background-color: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--card-radius); box-shadow: var(--card-shadow); display: flex; flex-direction: column; height: 520px; margin-top: 1.5rem;">
-          <div id="chat-messages-box" style="flex: 1; padding: 1.5rem; overflow-y: auto; display: flex; flex-direction: column; gap: 0.8rem; background: #fdfdfd;">
-            </div>
+          <div id="chat-messages-box" style="flex: 1; padding: 1.5rem; overflow-y: auto; display: flex; flex-direction: column; gap: 0.8rem; background: #fdfdfd;"></div>
           <form id="chat-send-form" style="display: flex; gap: 0.75rem; padding: 1rem; border-top: 1px solid var(--border-color); background: var(--bg-secondary); margin: 0;">
             <input type="text" id="chat-message-input" placeholder="Type messages or academic query..." style="margin: 0; flex: 1;" required autocomplete="off">
-            <button type="submit" class="btn" style="white-space: nowrap; padding: 0 1.5rem;">
-              <span class="lang-en">Send</span>
-              <span class="lang-zh">发送</span>
-            </button>
+            <button type="submit" class="btn" style="white-space: nowrap; padding: 0 1.5rem;">Send</button>
           </form>
         </div>
       </section>
 
+      <!-- CAS 契合度 -->
       <section id="cas" class="section">
-        <h1 class="lang-en">Z. CAS Alignment</h1>
-        <h1 class="lang-zh">Z. CAS 契合度</h1>
+        <h1>Z. CAS Alignment</h1>
         <div id="cas-timeline" class="timeline"></div>
         <div class="card" style="background-color: var(--accent-light); border-color: #bfdbfe; margin-top: 1rem;">
           <div style="display: flex; justify-content: space-around; flex-wrap: wrap; gap: 1.5rem; text-align: center;">
             <div>
-              <div style="font-size: 2rem; font-weight: 800; color: var(--accent-blue);" id="stat-seminars">4</div>
-              <div style="font-size: 0.8rem; font-weight: 600; text-transform: uppercase; color: var(--text-muted);" class="lang-en">Seminars Planned</div>
-              <div style="font-size: 0.8rem; font-weight: 600; text-transform: uppercase; color: var(--text-muted);" class="lang-zh">拟定研讨会</div>
+              <div style="font-size: 2rem; font-weight: 800; color: var(--accent-blue);">4</div>
+              <div style="font-size: 0.8rem; font-weight: 600; text-transform: uppercase; color: var(--text-muted);">Seminars Planned</div>
             </div>
             <div>
               <div style="font-size: 2rem; font-weight: 800; color: var(--accent-blue);" id="stat-rsvp">0</div>
-              <div style="font-size: 0.8rem; font-weight: 600; text-transform: uppercase; color: var(--text-muted);" class="lang-en">Your RSVP Points</div>
-              <div style="font-size: 0.8rem; font-weight: 600; text-transform: uppercase; color: var(--text-muted);" class="lang-zh">您的预约会议数</div>
+              <div style="font-size: 0.8rem; font-weight: 600; text-transform: uppercase; color: var(--text-muted);">Your RSVPs</div>
             </div>
           </div>
         </div>
       </section>
 
+      <!-- 加入我们 -->
       <section id="join" class="section">
-        <h1 class="lang-en">∫ Join the Movement</h1>
-        <h1 class="lang-zh">∫ 加入我们</h1>
-        <div id="join-workflow-container" style="background-color: var(--bg-secondary); border: 1px solid var(--border-color); padding: 2rem; border-radius: var(--card-radius); box-shadow: var(--card-shadow);">
+        <h1>∫ Join the Movement</h1>
+        <div style="background-color: var(--bg-secondary); border: 1px solid var(--border-color); padding: 2rem; border-radius: var(--card-radius);">
           <form id="speaker-application-form">
-            <div>
-              <label class="lang-en">Full Name</label><label class="lang-zh">姓名</label>
-              <input type="text" id="app-name" required>
-            </div>
-            <div>
-              <label class="lang-en">Proposed Mathematical Theme</label><label class="lang-zh">拟定学术分享主题</label>
-              <textarea id="app-subject" rows="3" required></textarea>
-            </div>
+            <div><label>Full Name</label><input type="text" required></div>
+            <div><label>Proposed Theme</label><textarea rows="3" required></textarea></div>
             <button type="submit" class="btn" style="width: 100%;">Submit Application</button>
           </form>
         </div>
       </section>
 
+      <!-- 媒体资源 -->
       <section id="media" class="section">
-        <h1 class="lang-en">∑ Resource Archives</h1>
-        <h1 class="lang-zh">∑ 资源与录制归档</h1>
+        <h1>∑ Resource Archives</h1>
         <div class="video-card">
-          <div class="mock-screen" id="seminar-video-box">
-            <span id="video-play-icon" class="play-trigger">▶️</span>
-            <div style="margin-top: 1rem; font-family: monospace; font-size: 0.85rem;" id="video-display-status">[ Seminar Closed ]</div>
-          </div>
+          <div class="mock-screen">[ Video Stream Vault Closed ]</div>
         </div>
       </section>
     </main>
 
-    <footer>
-      <p>© 2026 Gammath.xyz. Powered by Cloudflare Serverless DB System.</p>
-    </footer>
+    <footer><p>© 2026 Gammath.xyz. Powered by Cloudflare D1 Systems.</p></footer>
   </div>
 
   <script>
@@ -433,12 +348,8 @@
             { id: 3, topic: "Analytic Geometry & Vectors", speaker: "Yongkuo Chen", date: "Nov 09, 2026", desc: "Simplifying geometric proofs through matrix operations and vector transformations." },
             { id: 4, topic: "Graph Theory Foundations", speaker: "Guest Panelist", date: "Nov 23, 2026", desc: "Eulerian paths, vertex optimization, and applications in modern network layouts." }
           ],
-          weeklyProblems: [
-            { q: "For a real parameters, solve the system: x + y = 3, x³ + y³ = 9.", hint: "Factorize to obtain solutions (1,2) and (2,1)." }
-          ],
-          milestones: [
-            { date: "June 2026", title: "Global Collaboration Kick-Off", text: "Linking Marymount Rome with Beijing-based peer networks." }
-          ],
+          weeklyProblems: [{ q: "For a real parameters, solve the system: x + y = 3, x³ + y³ = 9.", hint: "Factorize to obtain solutions (1,2) and (2,1)." }],
+          milestones: [{ date: "June 2026", title: "Global Collaboration Kick-Off", text: "Linking Marymount Rome with Beijing-based peer networks." }],
           ui: { rtext: "Registered ✓", rsvp: "RSVP (Reserve Seat)" }
         },
         zh: {
@@ -448,27 +359,20 @@
             { id: 3, topic: "解析几何与向量", speaker: "陈永阔", date: "2026年11月09日", desc: "利用矩阵运算和向量变换简化传统的几何证明。" },
             { id: 4, topic: "图论基础入门", speaker: "特邀主讲人", date: "2026年11月23日", desc: "欧拉路径、顶点优化以及它们在网络布局中的应用。" }
           ],
-          weeklyProblems: [
-            { q: "在实数范围内解方程组: x + y = 3, x³ + y³ = 9。", hint: "因式分解联立，解得唯一解组为 (1,2) 与 (2,1)。" }
-          ],
-          milestones: [
-            { date: "2026年6月", title: "跨国学术协同启动", text: "成功连接罗马玛丽蒙特与北京的同伴高中生数学网络。" }
-          ],
+          weeklyProblems: [{ q: "在实数范围内解方程组: x + y = 3, x³ + y³ = 9。", hint: "因式分解联立，解得唯一解组为 (1,2) 与 (2,1)。" }],
+          milestones: [{ date: "2026年6月", title: "跨国学术协同启动", text: "成功连接罗马玛丽蒙特与北京的同伴高中生数学网络。" }],
           ui: { rtext: "已登记 ✓", rsvp: "预约 (锁定席位)" }
         }
       };
 
       let currentLang = localStorage.getItem('gammath_lang') || 'en';
       let rsvpedSeminars = new Set();
-      let activeProblemIndex = 0;
+      let cachedGoogleIdToken = null; // 临时缓存凭证
       let chatPollInterval = null;
 
       function getAuthHeaders() {
         const token = sessionStorage.getItem('gammath_token');
-        return {
-          'Content-Type': 'application/json',
-          'Authorization': token ? `Bearer ${token}` : ''
-        };
+        return { 'Content-Type': 'application/json', 'Authorization': token ? `Bearer ${token}` : '' };
       }
 
       function checkAuth() {
@@ -481,95 +385,97 @@
           document.getElementById('login-screen').style.display = 'flex';
           document.getElementById('main-app-container').style.display = 'none';
           if (chatPollInterval) clearInterval(chatPollInterval);
+          initGoogleButton();
         }
       }
 
-      // 切换登录/注册表单显示
-      document.getElementById('link-to-register').addEventListener('click', () => {
-        document.getElementById('login-form-wrapper').style.display = 'none';
-        document.getElementById('register-form-wrapper').style.display = 'block';
-      });
-      document.getElementById('link-to-login').addEventListener('click', () => {
-        document.getElementById('register-form-wrapper').style.display = 'none';
-        document.getElementById('login-form-wrapper').style.display = 'block';
-      });
+      // 初始化渲染 Google 一键登录按钮
+      function initGoogleButton() {
+        if (typeof google !== 'undefined') {
+          google.accounts.id.initialize({
+            client_id: "644634274465-npr1lvtfejdfr1ql5ctqao8219tkr0mg.apps.googleusercontent.com",
+            callback: handleGoogleCredential
+          });
+          google.accounts.id.renderButton(
+            document.getElementById("google-btn-container"),
+            { theme: "outline", size: "large", width: "300" }
+          );
+        } else {
+          setTimeout(initGoogleButton, 250);
+        }
+      }
 
-      // 注册逻辑接收后端返回值
-      document.getElementById('register-form').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const username = document.getElementById('register-username').value.trim();
-        const password = document.getElementById('register-password').value;
-        const confirm = document.getElementById('register-confirm').value;
+      // 核心鉴权回调
+      async function handleGoogleCredential(response) {
+        const id_token = response.credential;
+        cachedGoogleIdToken = id_token;
         const msg = document.getElementById('auth-status-msg');
 
-        if (password !== confirm) {
-          msg.textContent = currentLang === 'zh' ? "密码不一致" : "Passwords mismatch";
-          msg.style.display = 'block'; return;
-        }
-
         try {
-          const res = await fetch('/api/register', {
+          const res = await fetch('/api/google-auth', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username, password })
+            body: JSON.stringify({ id_token })
           });
           const data = await res.json();
-          if (res.ok) {
-            msg.textContent = currentLang === 'zh' ? "注册成功！请登录" : "Success! Please sign in.";
-            msg.style.color = '#10b981'; msg.style.display = 'block';
-            setTimeout(() => document.getElementById('link-to-login').click(), 1000);
+
+          if (res.ok && data.success) {
+            sessionStorage.setItem('gammath_token', data.token);
+            sessionStorage.setItem('gammath_username', data.username);
+            checkAuth();
+          } else if (data.needName) {
+            // 是全新用户：隐藏登录，探出起名界面
+            document.getElementById('login-form-wrapper').style.display = 'none';
+            document.getElementById('name-prompt-wrapper').style.display = 'block';
+            msg.style.display = 'none';
           } else {
-            msg.textContent = data.error || "Error";
-            msg.style.color = '#ef4444'; msg.style.display = 'block';
+            msg.textContent = data.error || "Authentication failed";
+            msg.style.display = 'block';
           }
         } catch {
-          msg.textContent = "Server Connection Failed"; msg.style.display = 'block';
+          msg.textContent = "Server connection timeout"; msg.style.display = 'block';
         }
-      });
+      }
 
-      // 登录逻辑存储 JWT
-      document.getElementById('login-form').addEventListener('submit', async (e) => {
+      // 新用户提名字表单
+      document.getElementById('name-submit-form').addEventListener('submit', async (e) => {
         e.preventDefault();
-        const username = document.getElementById('login-username').value.trim();
-        const password = document.getElementById('login-password').value;
+        const fullName = document.getElementById('user-full-name').value.trim();
         const msg = document.getElementById('auth-status-msg');
+        if (!fullName || !cachedGoogleIdToken) return;
 
         try {
-          const res = await fetch('/api/login', {
+          const res = await fetch('/api/google-auth', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username, password })
+            body: JSON.stringify({ id_token: cachedGoogleIdToken, fullName })
           });
           const data = await res.json();
-          if (res.ok) {
+          if (res.ok && data.success) {
             sessionStorage.setItem('gammath_token', data.token);
             sessionStorage.setItem('gammath_username', data.username);
             checkAuth();
           } else {
-            msg.textContent = data.error || "Invalid Credentials";
-            msg.style.color = '#ef4444'; msg.style.display = 'block';
+            msg.textContent = data.error || "Failed to finalize registration";
+            msg.style.display = 'block';
           }
         } catch {
-          msg.textContent = "Server Connection Failed"; msg.style.display = 'block';
+          msg.textContent = "Network transaction failed"; msg.style.display = 'block';
         }
       });
 
-      // 路由控制
       function handleRoute() {
         let hash = window.location.hash.slice(1) || 'home';
         if (!['home', 'about', 'activities', 'chat', 'cas', 'join', 'media'].includes(hash)) hash = 'home';
-        
         document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
         const target = document.getElementById(hash);
         if (target) target.classList.add('active');
-
         document.querySelectorAll('#nav-menu a').forEach(link => {
           link.classList.toggle('active', link.getAttribute('href') === '#' + hash);
         });
       }
       window.addEventListener('hashchange', handleRoute);
 
-      // 语言环境加载
       document.querySelectorAll('.lang-switcher').forEach(sel => {
         sel.value = currentLang;
         sel.addEventListener('change', (e) => {
@@ -587,7 +493,6 @@
         renderCASRequirements();
       }
 
-      // 异步读取与同步 RSVP 预约状态
       async function syncRSVPs() {
         try {
           const res = await fetch('/api/rsvp', { headers: getAuthHeaders() });
@@ -597,7 +502,7 @@
             renderSeminars();
             document.getElementById('stat-rsvp').textContent = rsvpedSeminars.size;
           }
-        } catch (e) { console.error("RSVP Sync Fail", e); }
+        } catch {}
       }
 
       function renderSeminars() {
@@ -633,15 +538,13 @@
         });
       }
 
-      // 联机聊天轮询与渲染逻辑
       async function fetchChatMessages() {
         try {
           const res = await fetch('/api/chat', { headers: getAuthHeaders() });
           if (!res.ok) return;
           const messages = await res.json();
           const box = document.getElementById('chat-messages-box');
-          const currentLoggedUser = sessionStorage.getItem('gammath_username');
-          
+          const currentLoggedUser = sessionStorage.getItem('gammath_username') || '';
           const atBottom = box.scrollHeight - box.scrollTop <= box.clientHeight + 40;
 
           box.innerHTML = messages.map(msg => {
@@ -655,9 +558,8 @@
               </div>
             `;
           }).join('');
-
           if (atBottom) { box.scrollTop = box.scrollHeight; }
-        } catch (e) { console.error("Chat fetch err", e); }
+        } catch {}
       }
 
       document.getElementById('chat-send-form').addEventListener('submit', async (e) => {
@@ -665,29 +567,25 @@
         const input = document.getElementById('chat-message-input');
         const message = input.value.trim();
         if (!message) return;
-
         try {
           const res = await fetch('/api/chat', {
             method: 'POST',
             headers: getAuthHeaders(),
             body: JSON.stringify({ message })
           });
-          if (res.ok) {
-            input.value = '';
-            fetchChatMessages();
-          }
-        } catch (e) { console.error(e); }
+          if (res.ok) { input.value = ''; fetchChatMessages(); }
+        } catch {}
       });
 
       function renderWeeklyProblemArea() {
         const host = document.getElementById('home-problem-arena');
         if (!host) return;
-        const data = localData[currentLang].weeklyProblems[activeProblemIndex];
+        const data = localData[currentLang].weeklyProblems[0];
         host.innerHTML = `
           <div class="problem-box">
-            <h3>🧩 Current Selection</h3>
+            <h3>🧩 Selection of the Week</h3>
             <p style="font-family:monospace; margin:0.5rem 0;">${data.q}</p>
-            <div class="hint-box" id="hint-panel" style="display:block;"><strong>Hint:</strong> ${data.hint}</div>
+            <div style="font-size: 0.9rem; color: var(--accent-blue);"><strong>Hint:</strong> ${data.hint}</div>
           </div>
         `;
       }
@@ -709,7 +607,6 @@
         handleRoute();
         syncRSVPs();
         fetchChatMessages();
-        // 启动安全短轮询，每隔 2.5 秒与边缘节点高频对齐聊天数据流
         if (chatPollInterval) clearInterval(chatPollInterval);
         chatPollInterval = setInterval(fetchChatMessages, 2500);
       }
