@@ -3,39 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MathClub - 实时聊天室</title>
-    <!-- 引入 MQTT.js 库，这是实现“免后端”实时通讯的魔法 -->
+    <title>MathClub - 加密聊天室</title>
+    <!-- 引入 MQTT.js -->
     <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+    <!-- 引入 CryptoJS 加密库，用来对消息进行 AES 加密 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #e0eafc; margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh; }
-        .chat-container { width: 90%; max-width: 450px; height: 85vh; background: white; border-radius: 12px; display: flex; flex-direction: column; box-shadow: 0 10px 20px rgba(0,0,0,0.15); overflow: hidden; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #2c3e50; margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh; }
+        .chat-container { width: 90%; max-width: 450px; height: 85vh; background: white; border-radius: 12px; display: flex; flex-direction: column; box-shadow: 0 15px 30px rgba(0,0,0,0.3); overflow: hidden; }
         
-        /* 登录界面样式 */
-        .login-screen { padding: 40px; text-align: center; display: flex; flex-direction: column; justify-content: center; height: 100%; background: #ffffff; }
-        .login-screen h2 { color: #2c3e50; }
-        .login-screen input { padding: 12px; margin-bottom: 15px; border: 2px solid #ecf0f1; border-radius: 8px; font-size: 16px; outline: none; transition: border 0.3s; }
-        .login-screen input:focus { border-color: #3498db; }
+        /* 登录界面 */
+        .login-screen { padding: 40px; text-align: center; display: flex; flex-direction: column; justify-content: center; height: 100%; background: #ecf0f1; }
+        .login-screen h2 { color: #2c3e50; margin-bottom: 5px;}
+        .login-screen .lock-icon { font-size: 3em; margin-bottom: 10px; }
+        .login-screen input { padding: 12px; margin-bottom: 15px; border: 2px solid #bdc3c7; border-radius: 8px; font-size: 16px; outline: none; transition: border 0.3s; }
+        .login-screen input:focus { border-color: #27ae60; }
         
-        /* 聊天界面样式 */
+        /* 聊天界面 */
         .chat-screen { display: none; flex-direction: column; height: 100%; }
-        .header { background: #3498db; color: white; padding: 15px; text-align: center; font-weight: bold; font-size: 1.2em; box-shadow: 0 2px 5px rgba(0,0,0,0.1); z-index: 10; }
+        .header { background: #27ae60; color: white; padding: 15px; text-align: center; font-weight: bold; font-size: 1.2em; box-shadow: 0 2px 5px rgba(0,0,0,0.1); z-index: 10; }
         .messages { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; background: #f8f9fa; }
         
-        /* 气泡样式 */
         .msg { max-width: 75%; padding: 10px 14px; border-radius: 12px; word-wrap: break-word; font-size: 15px; animation: popIn 0.3s ease-out; }
         .msg.system { align-self: center; background: rgba(0,0,0,0.05); color: #888; font-size: 12px; padding: 4px 10px; border-radius: 20px; }
         .msg.other { align-self: flex-start; background: #ffffff; border: 1px solid #eee; box-shadow: 0 2px 4px rgba(0,0,0,0.05); border-bottom-left-radius: 2px; }
-        .msg.me { align-self: flex-end; background: #3498db; color: white; box-shadow: 0 2px 4px rgba(52,152,219,0.3); border-bottom-right-radius: 2px; }
+        .msg.me { align-self: flex-end; background: #27ae60; color: white; box-shadow: 0 2px 4px rgba(39,174,96,0.3); border-bottom-right-radius: 2px; }
         
         .sender { font-size: 12px; margin-bottom: 4px; color: #95a5a6; font-weight: bold; }
-        .msg.me .sender { display: none; } /* 自己的消息不显示名字 */
+        .msg.me .sender { display: none; }
         
-        /* 输入框区域 */
         .input-area { display: flex; padding: 12px; background: white; border-top: 1px solid #eee; }
         .input-area input { flex: 1; padding: 12px; border: 1px solid #ddd; border-radius: 20px; font-size: 15px; outline: none; padding-left: 15px;}
-        .input-area button { padding: 10px 20px; background: #3498db; color: white; border: none; border-radius: 20px; margin-left: 10px; cursor: pointer; font-weight: bold; transition: background 0.2s;}
-        .input-area button:hover { background: #2980b9; }
-        button { padding: 12px; background: #3498db; color: white; border: none; border-radius: 8px; font-size: 16px; cursor: pointer; }
+        .input-area button { padding: 10px 20px; background: #27ae60; color: white; border: none; border-radius: 20px; margin-left: 10px; cursor: pointer; font-weight: bold; transition: background 0.2s;}
+        .input-area button:hover { background: #219653; }
+        button.login-btn { padding: 12px; background: #27ae60; color: white; border: none; border-radius: 8px; font-size: 16px; cursor: pointer; font-weight: bold;}
+        button.login-btn:hover { background: #219653; }
         
         @keyframes popIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
@@ -43,22 +45,23 @@
 <body>
 
 <div class="chat-container">
-    <!-- 进入前的取名界面 -->
     <div class="login-screen" id="login-screen">
-        <h2>👋 欢迎来到 MathClub</h2>
-        <p style="color: #7f8c8d; margin-bottom: 20px; font-size: 14px;">请输入你的昵称进入聊天大厅</p>
-        <input type="text" id="username-input" placeholder="例如: 匿名黑客" maxlength="12" onkeypress="handleLoginEnter(event)">
-        <button onclick="joinChat()">进入聊天室</button>
+        <div class="lock-icon">🔒</div>
+        <h2>加密聊天室</h2>
+        <p style="color: #7f8c8d; margin-bottom: 20px; font-size: 14px;">请输入昵称和访问暗号</p>
+        <input type="text" id="username-input" placeholder="你的昵称 (最多10字)" maxlength="10" onkeypress="handleLoginEnter(event)">
+        <!-- 添加了密码输入框 -->
+        <input type="password" id="password-input" placeholder="访问暗号" onkeypress="handleLoginEnter(event)">
+        <button class="login-btn" onclick="joinChat()">解密并进入</button>
     </div>
 
-    <!-- 内部聊天界面 -->
     <div class="chat-screen" id="chat-screen">
-        <div class="header">💬 MathClub 大厅 <span id="my-name" style="font-size: 14px; font-weight: normal; margin-left: 5px; opacity: 0.8;"></span></div>
+        <div class="header">🔒 私密大厅 <span id="my-name" style="font-size: 14px; font-weight: normal; margin-left: 5px; opacity: 0.8;"></span></div>
         <div class="messages" id="messages">
-            <div class="msg system">连接服务器中...</div>
+            <div class="msg system">加密通道建立中...</div>
         </div>
         <div class="input-area">
-            <input type="text" id="msg-input" placeholder="说点什么吧..." onkeypress="handleChatEnter(event)">
+            <input type="text" id="msg-input" placeholder="输入加密消息..." onkeypress="handleChatEnter(event)">
             <button onclick="sendMessage()">发送</button>
         </div>
     </div>
@@ -67,19 +70,29 @@
 <script>
     let username = "";
     let client = null;
-    // 房间的唯一频道号，只要大家的这个频道号一样，就能收到彼此的消息
-    const chatTopic = "mathclub/public/chat/room_v1";
+    
+    // 更换了一个新的频道，防止和之前的明文聊天室冲突
+    const chatTopic = "mathclub/secure/chat_v2"; 
+    
+    // 固定的暗号（密码）
+    const ROOM_PASSWORD = "marymount";
 
-    // 监听回车键
     function handleLoginEnter(e) { if(e.key === 'Enter') joinChat(); }
     function handleChatEnter(e) { if(e.key === 'Enter') sendMessage(); }
 
     function joinChat() {
-        const input = document.getElementById('username-input');
-        username = input.value.trim();
-        if(!username) { alert("取个炫酷的名字吧！"); return; }
+        const inputName = document.getElementById('username-input').value.trim();
+        const inputPass = document.getElementById('password-input').value.trim();
+        
+        if(!inputName) { alert("请输入昵称！"); return; }
+        
+        // 【新增验证机制】检查密码
+        if(inputPass !== ROOM_PASSWORD) {
+            alert("❌ 访问暗号错误，无法进入！");
+            return;
+        }
 
-        // 切换界面
+        username = inputName;
         document.getElementById('login-screen').style.display = 'none';
         document.getElementById('chat-screen').style.display = 'flex';
         document.getElementById('my-name').innerText = `(${username})`;
@@ -88,28 +101,34 @@
     }
 
     function connectServer() {
-        // 使用 EMQX 提供的免费公共 MQTT 实时通讯服务器
         client = mqtt.connect('wss://broker.emqx.io:8084/mqtt');
 
         client.on('connect', function () {
-            // 连接成功，清空系统提示
             document.getElementById('messages').innerHTML = '';
-            // 订阅我们专属的频道
             client.subscribe(chatTopic, function (err) {
                 if (!err) {
-                    // 广播一条系统消息：我进来了
-                    publishMessage('system', `${username} 悄悄地加入了聊天室 🎉`);
+                    publishMessage('system', `${username} 解密成功，进入了房间`);
                 }
             });
         });
 
-        // 接收到别人（或自己）发送的消息
         client.on('message', function (topic, message) {
             try {
-                // 解析收到的消息
-                const data = JSON.parse(message.toString());
-                displayMessage(data);
-            } catch(e) { console.error("消息解析错误", e); }
+                // 收到的 message 是别人加密后的密文字符串
+                const encryptedText = message.toString();
+                
+                // 【新增解密机制】使用 CryptoJS.AES 和我们的密码进行解密
+                const bytes = CryptoJS.AES.decrypt(encryptedText, ROOM_PASSWORD);
+                const decryptedText = bytes.toString(CryptoJS.enc.Utf8);
+                
+                // 如果解密出来的文本是空的，说明密码不对或者是捣乱的明文
+                if (decryptedText) {
+                    const data = JSON.parse(decryptedText);
+                    displayMessage(data);
+                }
+            } catch(e) { 
+                console.log("收到无法解密的数据，已自动拦截过滤。"); 
+            }
         });
     }
 
@@ -119,48 +138,39 @@
         if(!text || !client) return;
         
         publishMessage('chat', text);
-        input.value = ""; // 清空输入框
-        input.focus(); // 焦点留在输入框方便继续打字
+        input.value = "";
+        input.focus();
     }
 
     function publishMessage(type, text) {
-        // 将消息打包成 JSON 格式
-        const msgObj = {
-            type: type,
-            user: username,
-            text: text,
-            timestamp: Date.now()
-        };
-        // 发送给服务器，服务器会广播给所有在这个频道的人
-        client.publish(chatTopic, JSON.stringify(msgObj));
+        const msgObj = { type: type, user: username, text: text, timestamp: Date.now() };
+        
+        // 【新增加密机制】将原本明文的 JSON，用密码加密成天书一样的乱码
+        const jsonStr = JSON.stringify(msgObj);
+        const encryptedData = CryptoJS.AES.encrypt(jsonStr, ROOM_PASSWORD).toString();
+        
+        // 将乱码发送给公共服务器
+        client.publish(chatTopic, encryptedData);
     }
 
     function displayMessage(data) {
         const msgDiv = document.createElement('div');
-        
         if(data.type === 'system') {
             msgDiv.className = 'msg system';
             msgDiv.innerText = data.text;
         } else {
-            // 判断是不是自己发的消息，来决定气泡靠左还是靠右
             const isMe = data.user === username;
             msgDiv.className = `msg ${isMe ? 'me' : 'other'}`;
-            
             const senderDiv = document.createElement('div');
             senderDiv.className = 'sender';
             senderDiv.innerText = data.user;
-            
             const textDiv = document.createElement('div');
             textDiv.innerText = data.text;
-            
-            if(!isMe) msgDiv.appendChild(senderDiv); // 别人的消息才显示名字
+            if(!isMe) msgDiv.appendChild(senderDiv);
             msgDiv.appendChild(textDiv);
         }
-        
         const messagesContainer = document.getElementById('messages');
         messagesContainer.appendChild(msgDiv);
-        
-        // 发送或收到新消息时，滚动条自动滑到最底部
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
     }
 </script>
