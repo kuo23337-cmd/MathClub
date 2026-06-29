@@ -446,11 +446,25 @@
       display: flex;
       justify-content: flex-end;
     }
+
+    .toggle-auth-link {
+      color: var(--accent-blue);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 600;
+      display: inline-block;
+      margin-top: 1rem;
+      cursor: pointer;
+    }
+
+    .toggle-auth-link:hover {
+      text-decoration: underline;
+    }
   </style>
 </head>
 <body class="lang-en">
 
-  <!-- LOGIN MODULE -->
+  <!-- LOGIN & REGISTER MODULE -->
   <div id="login-screen">
     <div class="login-box">
       <div class="lang-selector-header">
@@ -460,28 +474,71 @@
         </select>
       </div>
       <div style="font-size: 2.5rem; color: var(--accent-blue); margin-bottom: 0.5rem; font-weight: 700;">Γ</div>
-      <h2 style="border: none; padding: 0; margin: 0 0 0.5rem 0;" class="lang-en">Gamma Math Club</h2>
-      <h2 style="border: none; padding: 0; margin: 0 0 0.5rem 0;" class="lang-zh">伽马数学社</h2>
-      <p class="lang-en" style="font-size: 0.9rem; margin-bottom: 1.5rem;">Please authenticate to access the portal</p>
-      <p class="lang-zh" style="font-size: 0.9rem; margin-bottom: 1.5rem;">请验证身份以进入系统门户</p>
+      
+      <!-- Dynamic Title based on Auth Mode -->
+      <h2 id="auth-main-title" style="border: none; padding: 0; margin: 0 0 0.5rem 0;">
+        <span class="lang-en">Gamma Math Club</span>
+        <span class="lang-zh">伽马数学社</span>
+      </h2>
+      <p id="auth-sub-title" style="font-size: 0.9rem; margin-bottom: 1.5rem;">
+        <span class="lang-en">Please sign in to access the portal</span>
+        <span class="lang-zh">请登录以进入系统门户</span>
+      </p>
 
-      <form id="login-form">
-        <div style="text-align: left; margin-bottom: 1rem;">
-          <label style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted);" class="lang-en">Username</label>
-          <label style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted);" class="lang-zh">用户名</label>
-          <input type="text" id="login-username" placeholder="Any username" style="margin: 0.25rem 0 0;" required>
-        </div>
-        <div style="text-align: left; margin-bottom: 1.5rem;">
-          <label style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted);" class="lang-en">Password</label>
-          <label style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted);" class="lang-zh">密码</label>
-          <input type="password" id="login-password" placeholder="Password: gamma" style="margin: 0.25rem 0 0;" required>
-        </div>
-        <p id="login-error" style="color: #ef4444; font-size: 0.85rem; margin-bottom: 1rem; display: none;"></p>
-        <button type="submit" class="btn" style="width: 100%; padding: 0.75rem;">
-          <span class="lang-en">Enter Portal</span>
-          <span class="lang-zh">进入门户</span>
-        </button>
-      </form>
+      <!-- LOGIN FORM -->
+      <div id="login-form-wrapper">
+        <form id="login-form">
+          <div style="text-align: left; margin-bottom: 1rem;">
+            <label style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted);" class="lang-en">Username</label>
+            <label style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted);" class="lang-zh">用户名</label>
+            <input type="text" id="login-username" placeholder="Username" style="margin: 0.25rem 0 0;" required>
+          </div>
+          <div style="text-align: left; margin-bottom: 1.5rem;">
+            <label style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted);" class="lang-en">Password</label>
+            <label style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted);" class="lang-zh">密码</label>
+            <input type="password" id="login-password" placeholder="Password" style="margin: 0.25rem 0 0;" required>
+          </div>
+          <button type="submit" class="btn" style="width: 100%; padding: 0.75rem;">
+            <span class="lang-en">Sign In</span>
+            <span class="lang-zh">登录</span>
+          </button>
+        </form>
+        <span class="toggle-auth-link" id="link-to-register">
+          <span class="lang-en">Don't have an account? Register</span>
+          <span class="lang-zh">还没有账户？立即注册</span>
+        </span>
+      </div>
+
+      <!-- REGISTER FORM -->
+      <div id="register-form-wrapper" style="display: none;">
+        <form id="register-form">
+          <div style="text-align: left; margin-bottom: 1rem;">
+            <label style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted);" class="lang-en">Choose Username</label>
+            <label style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted);" class="lang-zh">创建用户名</label>
+            <input type="text" id="register-username" placeholder="Create Username" style="margin: 0.25rem 0 0;" required>
+          </div>
+          <div style="text-align: left; margin-bottom: 1rem;">
+            <label style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted);" class="lang-en">Password</label>
+            <label style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted);" class="lang-zh">密码</label>
+            <input type="password" id="register-password" placeholder="Create Password" style="margin: 0.25rem 0 0;" required>
+          </div>
+          <div style="text-align: left; margin-bottom: 1.5rem;">
+            <label style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted);" class="lang-en">Confirm Password</label>
+            <label style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted);" class="lang-zh">确认密码</label>
+            <input type="password" id="register-confirm" placeholder="Confirm Password" style="margin: 0.25rem 0 0;" required>
+          </div>
+          <button type="submit" class="btn" style="width: 100%; padding: 0.75rem;">
+            <span class="lang-en">Create Account</span>
+            <span class="lang-zh">创建账户</span>
+          </button>
+        </form>
+        <span class="toggle-auth-link" id="link-to-login">
+          <span class="lang-en">Already have an account? Sign In</span>
+          <span class="lang-zh">已有账户？立即登录</span>
+        </span>
+      </div>
+
+      <p id="auth-status-msg" style="font-size: 0.85rem; margin-top: 1.25rem; display: none; padding: 0.5rem; border-radius: 4px;"></p>
     </div>
   </div>
 
@@ -630,7 +687,7 @@
             <h3 class="lang-en">Clear Pedagogy</h3>
             <h3 class="lang-zh">教学相长</h3>
             <p style="font-size: 0.9rem;" class="lang-en">Developing students' presentation skills. Teaching mathematics to others is the most reliable way to formalize and master one's own understanding.</p>
-            <p style="font-size: 0.9rem;" class="lang-zh">培养学生的演示技能。向他人阐述数学原理是深化并巩固自身认知的极佳方式。</p>
+            <p style="font-size: 0.9rem;" class="lang-zh">培养学生的演示技能。向他人阐述数学原理是深化并巩固自身认值的极佳方式。</p>
           </div>
         </div>
       </section>
@@ -963,7 +1020,11 @@
             allCriteriaRequired: "All challenge formulation criteria must be fully satisfied.",
             defaultStatusActive: "Active",
             defaultStatusCompleted: "Completed",
-            week: "Week"
+            week: "Week",
+            pwdMismatch: "Passwords do not match.",
+            userExists: "Username already exists.",
+            invalidCreds: "Invalid username or password.",
+            regSuccess: "Registration successful! You can now log in."
           }
         },
         zh: {
@@ -989,7 +1050,7 @@
           ],
           milestones: [
             { date: "2026年6月", title: "跨国学术协同启动", text: "陈永阔与 Zofia 制定了初始的项目结构框架，成功连接罗马玛丽蒙特与北京的同伴高中生数学网络。" },
-            { date: "2026年8月", title: "学术范畴基准确立", text: "将课程目标对齐至 AP/IB 教育体系，规划学术挑战内容，鼓励广泛群体的广泛参与。" },
+            { date: "2026年8月", title: "学术范畴基准确立", text: "将课程要求与 AP/IB 教育体系，规划学术挑战内容，鼓励广泛群体的广泛参与。" },
             { date: "2026年9月", title: "Gammath.xyz 门户发布", text: "干净优雅的蓝白主题网站正式上线，启动针对学术研讨会的在线虚拟席位预约系统。" }
           ],
           ui: {
@@ -1024,7 +1085,11 @@
             allCriteriaRequired: "所有学术表单字段均必须完整输入。",
             defaultStatusActive: "活跃中",
             defaultStatusCompleted: "已完成",
-            week: "第"
+            week: "第",
+            pwdMismatch: "两次输入的密码不一致。",
+            userExists: "该用户名已被注册。",
+            invalidCreds: "用户名或密码不正确。",
+            regSuccess: "注册成功！现在您可以登录该账户。"
           }
         }
       };
@@ -1036,7 +1101,7 @@
       let isAuthenticated = sessionStorage.getItem('gammath_authenticated') === 'true';
       let activeProblemIndex = 0;
 
-      // --- AUTHENTICATION FLOW ---
+      // --- AUTHENTICATION FLOW (RE-WRITTEN) ---
       function checkAuth() {
         const loginScreen = document.getElementById('login-screen');
         const mainApp = document.getElementById('main-app-container');
@@ -1051,21 +1116,100 @@
         }
       }
 
+      // Toggle form logic
+      document.getElementById('link-to-register').addEventListener('click', function(e) {
+        e.preventDefault();
+        document.getElementById('login-form-wrapper').style.display = 'none';
+        document.getElementById('register-form-wrapper').style.display = 'block';
+        document.getElementById('auth-status-msg').style.display = 'none';
+        
+        // Update labels
+        document.getElementById('auth-sub-title').querySelector('.lang-en').textContent = "Create your custom credentials";
+        document.getElementById('auth-sub-title').querySelector('.lang-zh').textContent = "创建您的自定义账户凭证";
+      });
+
+      document.getElementById('link-to-login').addEventListener('click', function(e) {
+        e.preventDefault();
+        document.getElementById('register-form-wrapper').style.display = 'none';
+        document.getElementById('login-form-wrapper').style.display = 'block';
+        document.getElementById('auth-status-msg').style.display = 'none';
+
+        // Update labels
+        document.getElementById('auth-sub-title').querySelector('.lang-en').textContent = "Please sign in to access the portal";
+        document.getElementById('auth-sub-title').querySelector('.lang-zh').textContent = "请登录以进入系统门户";
+      });
+
+      // Submit: Login Form
       document.getElementById('login-form').addEventListener('submit', function(e) {
         e.preventDefault();
-        const username = document.getElementById('login-username').value.trim();
-        const password = document.getElementById('login-password').value;
-        const errorMsg = document.getElementById('login-error');
+        const usernameVal = document.getElementById('login-username').value.trim().toLowerCase();
+        const passwordVal = document.getElementById('login-password').value;
+        const statusMsg = document.getElementById('auth-status-msg');
+        const data = localData[currentLang];
 
-        if (password === 'gamma') {
+        const usersDb = JSON.parse(localStorage.getItem('gammath_users') || '{}');
+
+        if (usersDb[usernameVal] && usersDb[usernameVal] === passwordVal) {
           isAuthenticated = true;
           sessionStorage.setItem('gammath_authenticated', 'true');
-          errorMsg.style.display = 'none';
+          statusMsg.style.display = 'none';
           checkAuth();
         } else {
-          errorMsg.textContent = currentLang === 'zh' ? "密码不正确，请重新输入" : "Invalid password. Access Denied.";
-          errorMsg.style.display = 'block';
+          statusMsg.textContent = data.ui.invalidCreds;
+          statusMsg.style.backgroundColor = '#fef2f2';
+          statusMsg.style.color = '#ef4444';
+          statusMsg.style.display = 'block';
         }
+      });
+
+      // Submit: Register Form
+      document.getElementById('register-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const usernameVal = document.getElementById('register-username').value.trim();
+        const passwordVal = document.getElementById('register-password').value;
+        const confirmVal = document.getElementById('register-confirm').value;
+        const statusMsg = document.getElementById('auth-status-msg');
+        const data = localData[currentLang];
+
+        // Validations
+        if (passwordVal !== confirmVal) {
+          statusMsg.textContent = data.ui.pwdMismatch;
+          statusMsg.style.backgroundColor = '#fef2f2';
+          statusMsg.style.color = '#ef4444';
+          statusMsg.style.display = 'block';
+          return;
+        }
+
+        const normalizedUsername = usernameVal.toLowerCase();
+        const usersDb = JSON.parse(localStorage.getItem('gammath_users') || '{}');
+
+        if (usersDb[normalizedUsername]) {
+          statusMsg.textContent = data.ui.userExists;
+          statusMsg.style.backgroundColor = '#fef2f2';
+          statusMsg.style.color = '#ef4444';
+          statusMsg.style.display = 'block';
+          return;
+        }
+
+        // Save User Account (Simulated Server Save)
+        usersDb[normalizedUsername] = passwordVal;
+        localStorage.setItem('gammath_users', JSON.stringify(usersDb));
+
+        // Show Success status
+        statusMsg.textContent = data.ui.regSuccess;
+        statusMsg.style.backgroundColor = '#ecfdf5';
+        statusMsg.style.color = '#10b981';
+        statusMsg.style.display = 'block';
+
+        // Clear Fields
+        document.getElementById('register-username').value = '';
+        document.getElementById('register-password').value = '';
+        document.getElementById('register-confirm').value = '';
+
+        // Auto transition to login view
+        setTimeout(() => {
+          document.getElementById('link-to-login').click();
+        }, 1500);
       });
 
 
@@ -1147,6 +1291,21 @@
       function updatePlaceholders() {
         const en = currentLang === 'en';
         
+        const loginUser = document.getElementById('login-username');
+        if (loginUser) loginUser.placeholder = en ? "Username" : "用户名";
+
+        const loginPass = document.getElementById('login-password');
+        if (loginPass) loginPass.placeholder = en ? "Password" : "密码";
+
+        const regUser = document.getElementById('register-username');
+        if (regUser) regUser.placeholder = en ? "Create Username" : "创建用户名";
+
+        const regPass = document.getElementById('register-password');
+        if (regPass) regPass.placeholder = en ? "Create Password" : "创建密码";
+
+        const regConfirm = document.getElementById('register-confirm');
+        if (regConfirm) regConfirm.placeholder = en ? "Confirm Password" : "确认密码";
+
         const chalName = document.getElementById('form-challenger-name');
         if (chalName) chalName.placeholder = en ? "e.g. Chen (Marymount)" : "例如：陈（罗马）";
 
@@ -1477,6 +1636,8 @@
 
       // Entry point checks auth immediately
       window.addEventListener('DOMContentLoaded', () => {
+        // Run localized setup to initialize placeholders and text directions
+        applyLanguage();
         checkAuth();
       });
 
