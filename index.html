@@ -1,281 +1,753 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gamma Math Club | Explore the unexplored</title>
-    <!-- 引入 Google 字体 -->
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-    <!-- 引入 FontAwesome 图标库 -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        :root {
-            --bg-dark: #0a0b10;
-            --bg-card: rgba(20, 22, 37, 0.7);
-            --primary-glow: #7c4dff;
-            --secondary-glow: #00e5ff;
-            --text-main: #ffffff;
-            --text-muted: #a0a5b5;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gammath.xyz — Where Gamma Meets X, Y, Z</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, sans-serif;
+      background: #0a0c0f;
+      color: #e0e0e0;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
 
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg-dark);
-            color: var(--text-main);
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
+    /* 极简导航 */
+    header {
+      background: rgba(10, 12, 15, 0.92);
+      backdrop-filter: blur(12px);
+      padding: 1rem 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      border-bottom: 1px solid #2a2d32;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
 
-        /* 科技星空动态背景 */
-        .stars-bg {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: radial-gradient(circle at center, #1b1e32 0%, #0a0b10 100%);
-            z-index: -1;
-        }
-        .stars-bg::after {
-            content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background-image: 
-                radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 4px),
-                radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 30px);
-            background-size: 550px 550px, 350px 250px;
-            background-position: 0 0, 40px 60px;
-            opacity: 0.3;
-            animation: drift 100s linear infinite;
-        }
-        @keyframes drift { from { background-position: 0 0, 40px 60px; } to { background-position: 1000px 1000px, 1040px 1060px; } }
+    .logo {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #f0c060; /* 突出大写Gamma的视觉效果 */
+      text-decoration: none;
+      letter-spacing: 1px;
+    }
+    .logo span {
+      color: #a0d2f0;
+      font-weight: 600;
+    }
 
-        /* 导航栏 */
-        header {
-            padding: 20px 5%; display: flex; justify-content: space-between; align-items: center;
-            background: rgba(10, 11, 16, 0.8); backdrop-filter: blur(10px);
-            position: fixed; width: 100%; top: 0; z-index: 100; border-bottom: 1px solid rgba(255,255,255,0.05);
-        }
-        .logo { font-family: 'Outfit', sans-serif; font-size: 24px; font-weight: 700; display: flex; align-items: center; gap: 10px; }
-        .logo span { background: linear-gradient(90deg, var(--secondary-glow), var(--primary-glow)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        nav a { color: var(--text-main); text-decoration: none; margin-left: 30px; font-size: 14px; font-weight: 500; transition: color 0.3s; }
-        nav a:hover { color: var(--secondary-glow); }
+    nav {
+      display: flex;
+      gap: 1.8rem;
+      flex-wrap: wrap;
+    }
 
-        /* 主视差区域 */
-        .hero {
-            height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center;
-            text-align: center; padding: 0 20px; position: relative;
-        }
-        .hero h1 { font-family: 'Outfit', sans-serif; font-size: 4rem; line-height: 1.1; margin-bottom: 20px; text-shadow: 0 0 40px rgba(124, 77, 255, 0.5); }
-        .hero p { font-size: 1.2rem; color: var(--text-muted); max-width: 600px; margin-bottom: 40px; }
-        .btn {
-            display: inline-block; padding: 15px 40px; font-size: 16px; font-weight: 600; text-decoration: none;
-            border-radius: 30px; transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 1px;
-        }
-        .btn-primary {
-            background: linear-gradient(45deg, var(--primary-glow), var(--secondary-glow)); color: white;
-            box-shadow: 0 0 20px rgba(124, 77, 255, 0.4); border: none; cursor: pointer;
-        }
-        .btn-primary:hover { box-shadow: 0 0 30px rgba(0, 229, 255, 0.6); transform: translateY(-2px); }
+    nav a {
+      color: #b0b8c0;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.95rem;
+      transition: color 0.2s;
+      padding: 0.3rem 0;
+      border-bottom: 2px solid transparent;
+    }
 
-        /* 内容区块通用样式 */
-        section { padding: 100px 10%; }
-        .section-title { font-family: 'Outfit', sans-serif; font-size: 2.5rem; text-align: center; margin-bottom: 60px; }
-        .section-title span { color: var(--secondary-glow); }
+    nav a:hover,
+    nav a.active {
+      color: #f0c060;
+      border-bottom-color: #f0c060;
+    }
 
-        /* 核心价值卡片 */
-        .values-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
-        .card { background: var(--bg-card); padding: 40px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.05); backdrop-filter: blur(10px); transition: transform 0.3s; }
-        .card:hover { transform: translateY(-10px); border-color: rgba(124, 77, 255, 0.3); }
-        .card i { font-size: 2.5rem; color: var(--secondary-glow); margin-bottom: 20px; }
-        .card h3 { font-family: 'Outfit', sans-serif; font-size: 1.5rem; margin-bottom: 15px; }
-        .card p { color: var(--text-muted); font-size: 0.95rem; }
+    main {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 4rem;
+    }
 
-        /* 分部展示 */
-        .divisions-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
-        .division-box { background: rgba(0,0,0,0.4); padding: 30px; border-radius: 15px; border-left: 4px solid var(--text-muted); position: relative; overflow: hidden; }
-        .division-box.active { border-left-color: var(--primary-glow); background: linear-gradient(90deg, rgba(124,77,255,0.1) 0%, transparent 100%); }
-        .division-box h4 { font-family: 'Outfit', sans-serif; font-size: 1.2rem; margin-bottom: 10px; color: var(--text-main); }
-        .division-box p.school { font-size: 0.85rem; color: var(--secondary-glow); margin-bottom: 15px; }
-        .leaders { font-size: 0.9rem; color: #ccc; }
-        .leaders strong { color: white; }
-        .badge { position: absolute; top: 20px; right: 20px; font-size: 0.7rem; padding: 4px 10px; border-radius: 20px; background: rgba(255,255,255,0.1); }
-        .badge.active { background: rgba(0, 229, 255, 0.2); color: var(--secondary-glow); }
+    .section {
+      display: none;
+      animation: fade 0.35s ease;
+    }
 
-        /* 活动区块 (双排布局) */
-        .events-container { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
-        .event-card { background: linear-gradient(145deg, var(--bg-card) 0%, rgba(0,0,0,0.5) 100%); padding: 40px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.05); }
-        .event-tag { display: inline-block; padding: 5px 15px; background: rgba(124, 77, 255, 0.2); color: #b388ff; border-radius: 20px; font-size: 0.8rem; font-weight: 600; margin-bottom: 20px; text-transform: uppercase; }
-        .event-title { font-family: 'Outfit', sans-serif; font-size: 1.8rem; margin-bottom: 15px; }
-        .event-time { color: var(--secondary-glow); font-size: 1rem; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
-        .math-problem { background: rgba(0,0,0,0.6); padding: 20px; border-radius: 10px; font-family: monospace; font-size: 1.1rem; color: #e2e8f0; border-left: 3px solid var(--secondary-glow); margin: 20px 0; }
+    .section.active {
+      display: block;
+    }
 
-        /* 社交与页脚 */
-        footer { background: #050608; padding: 80px 10% 40px; text-align: center; border-top: 1px solid rgba(255,255,255,0.05); }
-        .social-links { display: flex; justify-content: center; gap: 20px; margin-bottom: 40px; }
-        .social-btn { display: flex; align-items: center; justify-content: center; width: 60px; height: 60px; border-radius: 50%; background: var(--bg-card); color: white; font-size: 24px; text-decoration: none; transition: all 0.3s; border: 1px solid rgba(255,255,255,0.1); }
-        .social-btn:hover { background: var(--primary-glow); transform: translateY(-5px); border-color: transparent; }
-        .social-btn.whatsapp:hover { background: #25D366; }
-        .social-btn.youtube:hover { background: #FF0000; }
-        .copyright { color: var(--text-muted); font-size: 0.9rem; margin-top: 20px; }
+    @keyframes fade {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
 
-        /* 响应式设计 */
-        @media (max-width: 768px) {
-            .hero h1 { font-size: 2.5rem; }
-            .events-container { grid-template-columns: 1fr; }
-            nav a { display: none; } /* 移动端暂时隐藏顶部菜单 */
-        }
-    </style>
+    h1 {
+      font-size: 2.4rem;
+      margin-bottom: 1rem;
+      color: #f0e6d2;
+    }
+    h2 {
+      font-size: 1.7rem;
+      margin: 1.5rem 0 0.8rem;
+      color: #d4c8a8;
+    }
+    h3 {
+      color: #c0b090;
+      margin: 1.2rem 0 0.5rem;
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+
+    .card {
+      background: #14181d;
+      border: 1px solid #2a3038;
+      border-radius: 12px;
+      padding: 1.4rem;
+      transition: 0.2s;
+      position: relative;
+    }
+
+    .card:hover {
+      border-color: #f0c060;
+      background: #1a1f26;
+    }
+
+    .card h3 {
+      margin-top: 0;
+      color: #e6d7b4;
+    }
+
+    .btn {
+      display: inline-block;
+      background: #f0c060;
+      color: #0a0c0f;
+      font-weight: 600;
+      padding: 0.6rem 1.4rem;
+      border-radius: 20px;
+      text-decoration: none;
+      transition: all 0.2s;
+      margin-top: 0.8rem;
+      cursor: pointer;
+      border: none;
+      font-size: 0.95rem;
+    }
+
+    .btn:hover {
+      background: #e0b040;
+    }
+
+    .btn.secondary {
+      background: #22272e;
+      color: #c9d1d9;
+      border: 1px solid #3a4048;
+    }
+    .btn.secondary:hover {
+      background: #2d333b;
+      border-color: #f0c060;
+    }
+
+    .btn.success {
+      background: #238636;
+      color: #ffffff;
+    }
+
+    .time-line {
+      position: relative;
+      padding-left: 1.8rem;
+      border-left: 2px solid #3a4048;
+      margin: 1.5rem 0;
+    }
+
+    .time-item {
+      margin-bottom: 1.6rem;
+      position: relative;
+      cursor: pointer;
+      padding: 0.5rem;
+      border-radius: 6px;
+      transition: background 0.2s;
+    }
+    .time-item:hover {
+      background: #161b22;
+    }
+
+    .time-item::before {
+      content: "▹";
+      position: absolute;
+      left: -1.6rem;
+      top: 0.5rem;
+      color: #f0c060;
+      font-size: 1.2rem;
+    }
+
+    .time-detail {
+      display: none;
+      font-size: 0.9rem;
+      color: #8b949e;
+      margin-top: 0.3rem;
+      padding-left: 0.5rem;
+      border-left: 2px dashed #f0c060;
+    }
+
+    .problem-box {
+      background: #12161c;
+      border: 1px solid #2e3740;
+      padding: 1.2rem;
+      border-radius: 10px;
+      font-family: 'Courier New', monospace;
+      font-size: 1.1rem;
+      margin: 1rem 0;
+    }
+
+    .hint-box {
+      background: #1c120c;
+      border: 1px dashed #e0b040;
+      padding: 0.8rem;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      margin-top: 0.5rem;
+      display: none;
+    }
+
+    .challenge-hall {
+      background: #1a1e24;
+      padding: 1.5rem;
+      border-radius: 10px;
+      margin-bottom: 2rem;
+    }
+
+    .challenge-form {
+      background: #14181d;
+      padding: 1rem;
+      border-radius: 8px;
+      border: 1px solid #2a3038;
+      margin-bottom: 1.5rem;
+    }
+
+    input,
+    textarea {
+      background: #1c2128;
+      border: 1px solid #3a4048;
+      padding: 0.7rem;
+      border-radius: 8px;
+      color: #e0e0e0;
+      width: 100%;
+      margin: 0.5rem 0;
+      font-family: inherit;
+    }
+    input:focus, textarea:focus {
+      outline: none;
+      border-color: #f0c060;
+    }
+
+    /* 模拟播放器样式 */
+    .mock-player {
+      background: #1c2128;
+      padding: 2rem;
+      text-align: center;
+      border-radius: 12px;
+      margin: 1rem 0;
+      border: 1px solid #2d333b;
+      position: relative;
+    }
+    .progress-bar-bg {
+      background: #30363d;
+      height: 6px;
+      width: 100%;
+      border-radius: 3px;
+      margin-top: 1rem;
+      overflow: hidden;
+    }
+    .progress-bar-fill {
+      background: #f0c060;
+      height: 100%;
+      width: 0%;
+      transition: width 0.1s linear;
+    }
+
+    /* 电子卡片表单成功样式 */
+    .success-card {
+      background: linear-gradient(135deg, #141c24 0%, #0d1117 100%);
+      border: 2px solid #f0c060;
+      padding: 2rem;
+      border-radius: 12px;
+      text-align: center;
+      margin-top: 1rem;
+      box-shadow: 0 8px 24px rgba(240,192,96,0.15);
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 3rem;
+      color: #6a7280;
+      font-size: 0.85rem;
+      padding: 1rem 0;
+    }
+  </style>
 </head>
 <body>
+  <header>
+    <a href="#" class="logo" id="home-link">Γ<span>ammath</span>.xyz</a>
+    <nav id="main-nav">
+      <a href="#about">X. About</a>
+      <a href="#activities">Y. Activities</a>
+      <a href="#cas">Z. CAS</a>
+      <a href="#join">∫ Join</a>
+      <a href="#media">∑ Media</a>
+    </nav>
+  </header>
 
-    <!-- 背景特效 -->
-    <div class="stars-bg"></div>
-
-    <!-- 顶部导航 -->
-    <header>
-        <div class="logo"><i class="fa-solid fa-infinity"></i> <span>Gamma</span> Math Club</div>
-        <nav>
-            <a href="#about">About</a>
-            <a href="#divisions">Global Divisions</a>
-            <a href="#events">Activities</a>
-            <a href="#join">Join Us</a>
-        </nav>
-    </header>
-
-    <!-- 英雄首屏区域 -->
-    <section class="hero">
-        <h1>Explore the unexplored<br>through math</h1>
-        <p>A global network of high school students. Breaking barriers, challenging minds, and sharing the pure beauty of mathematics across borders and genders.</p>
-        <a href="#join" class="btn btn-primary">Join the Community</a>
-    </section>
-
-    <!-- 核心价值观与介绍 -->
-    <section id="about">
-        <h2 class="section-title">Why <span>Gamma?</span></h2>
-        <div class="values-grid">
-            <div class="card">
-                <i class="fa-solid fa-brain"></i>
-                <h3>Beauty of Math</h3>
-                <p>We believe math is more than exams. It's a rigorous, beautiful art form. We dive deep into algebra, geometry, and logic to appreciate its true elegance.</p>
-            </div>
-            <div class="card">
-                <i class="fa-solid fa-earth-americas"></i>
-                <h3>Cross-Border Network</h3>
-                <p>Based in Rome, connected to Beijing, and expanding globally. We foster cross-cultural academic exchange among international and domestic high school students.</p>
-            </div>
-            <div class="card">
-                <i class="fa-solid fa-venus-mars"></i>
-                <h3>Breaking Bias</h3>
-                <p>We actively advocate for gender equality in STEM. With strong female leadership, we encourage and empower all minds to conquer complex mathematical challenges.</p>
-            </div>
+  <main id="app">
+    <section id="home" class="section active">
+      <h1>Where Gamma meets X, Y, Z.</h1>
+      <p style="font-size:1.3rem; margin-bottom:2rem;">求解未知，连接世界。<br>一个由高中生发起的全球数学交流社区。</p>
+      <div class="card-grid">
+        <div class="card">
+          <h3>📡 双周研讨会</h3>
+          <p>每两周一次深度数学分享，覆盖代数、几何、数论等领域。</p>
+          <a href="#activities" class="btn nav-trigger" data-target="activities">查看日程</a>
         </div>
-    </section>
-
-    <!-- 国际分部展示 -->
-    <section id="divisions">
-        <h2 class="section-title">Global <span>Divisions</span></h2>
-        <div class="divisions-grid">
-            <!-- 罗马总部 (活跃) -->
-            <div class="division-box active">
-                <span class="badge active">HQ / Active</span>
-                <h4>Rome Division</h4>
-                <p class="school">Marymount International School Rome</p>
-                <div class="leaders">
-                    President: <strong>Yongkuo Chen</strong><br>
-                    Vice President: <strong>Zofia Grzelinska</strong>
-                </div>
-            </div>
-            <!-- 北京联动 (筹备/活跃) -->
-            <div class="division-box active">
-                <span class="badge active">Linked</span>
-                <h4>Beijing Division</h4>
-                <p class="school">BJTU High School (Beijing)</p>
-                <div class="leaders">
-                    Status: <strong>Co-organizing Activities</strong>
-                </div>
-            </div>
-            <!-- 英国 (占位) -->
-            <div class="division-box">
-                <span class="badge">Planning</span>
-                <h4>UK Division</h4>
-                <p class="school">Partner Schools TBA</p>
-                <div class="leaders">Seeking Leaders...</div>
-            </div>
-            <!-- 美国 (占位) -->
-            <div class="division-box">
-                <span class="badge">Planning</span>
-                <h4>US Division</h4>
-                <p class="school">Partner Schools TBA</p>
-                <div class="leaders">Seeking Leaders...</div>
-            </div>
+        <div class="card">
+          <h3>⚔️ 数学挑战赛</h3>
+          <p>向伙伴发起题目挑战，合作解答，共同展示。</p>
+          <a href="#activities" class="btn nav-trigger" data-target="activities">进入挑战大厅</a>
         </div>
-    </section>
-
-    <!-- 活动预告区域 -->
-    <section id="events">
-        <h2 class="section-title">Current <span>Activities</span></h2>
-        <div class="events-container">
-            <!-- 主题研讨会预告 -->
-            <div class="event-card">
-                <span class="event-tag">Bi-weekly Seminar</span>
-                <h3 class="event-title">IB Y1 Differentiation</h3>
-                <div class="event-time"><i class="fa-regular fa-clock"></i> Next Sunday, 8:00 PM (Local Time)</div>
-                <p style="color: var(--text-muted); margin-bottom: 20px;">Join our upcoming online seminar. We will dive deep into the concepts of differentiation, sharing intuitive insights followed by an interactive problem-solving session.</p>
-                <p style="font-size: 0.9rem; color: #ccc;"><i class="fa-solid fa-video"></i> Online Meeting Link will be shared in WhatsApp group.</p>
-            </div>
-            
-            <!-- 本周挑战题 -->
-            <div class="event-card">
-                <span class="event-tag">Weekly Challenge</span>
-                <h3 class="event-title">Prove the Irrationality</h3>
-                <p style="color: var(--text-muted);">Think you can solve it? Submit your proof in the group chat and you might be selected to present your thought process in our next meeting!</p>
-                
-                <div class="math-problem">
-                    <strong>Problem:</strong><br>
-                    How to rigorously prove the irrationality of &radic;2 ?
-                </div>
-                
-                <p style="font-size: 0.85rem; color: #888;">* Feel free to discuss and challenge each other's proofs.</p>
-            </div>
+        <div class="card">
+          <h3>❓ 每周难题</h3>
+          <p>每周一道不超纲但烧脑的题，自由讨论。</p>
+          <button id="weekly-problem-btn" class="btn">换一道难题</button>
         </div>
+      </div>
+      <div id="weekly-problem-display" style="margin-top:1.5rem;"></div>
     </section>
 
-    <!-- 加入我们 & 页脚 -->
-    <footer id="join">
-        <h2 class="section-title" style="margin-bottom: 30px;">Become a <span>Member</span></h2>
-        <p style="color: var(--text-muted); max-width: 600px; margin: 0 auto 40px;">Ready to explore mathematics with passionate peers around the world? Fill out the form and jump into our WhatsApp community.</p>
+    <section id="about" class="section">
+      <h1>X. About</h1>
+      <h2>我们的故事</h2>
+      <p>Gammath 源于一份对数学纯粹的热爱。创始人相信，数学之美不应被教室围墙阻隔。从北京到罗马，我们连接国际课程体系里的高中生，让讨论跨越时区与文化。</p>
+      <h2>核心使命</h2>
+      <div class="card-grid">
+        <div class="card"><h3>🌍 跨文化交流</h3><p>用数学作为通用语言，在不同国家学生间架起桥梁。</p></div>
+        <div class="card"><h3>✨ 传播数学之美</h3><p>通过精心设计的研讨与挑战，展示数学的优雅与惊奇。</p></div>
+        <div class="card"><h3>♀️ 打破刻板印象</h3><p>积极鼓励女性参与，目前社团联合创始人与核心成员中女性占比45%。</p></div>
+      </div>
+      <h2>核心团队</h2>
+      <p style="background: #161b22; padding: 1rem; border-radius: 8px; margin-top: 1rem;">
+        👩‍🎓 联合社长：Aurora (北京) &nbsp;|&nbsp; 👨‍🎓 联合社长：Leonardo (罗马) &nbsp;|&nbsp; 🛠️ 技术负责人：你（已成功连接到控制台）
+      </p>
+    </section>
+
+    <section id="activities" class="section">
+      <h1>Y. Activities</h1>
+      <h2>📆 双周主题研讨会</h2>
+      <div id="seminar-list" class="card-grid"></div>
+
+      <h2 style="margin-top: 2.5rem;">⚔️ 数学挑战大厅</h2>
+      <div class="challenge-hall">
+        <p style="margin-bottom: 1rem;"><strong>规则：</strong> 挑战者出题 (AP/A Level/IB/国内高中范围)，被挑战者可求助社区成员，最终共同讲解解答。目标是合作而非尴尬。</p>
         
-        <div class="social-links">
-            <!-- ！！注意：将 # 替换为你们真实的 Google Form 链接！！ -->
-            <a href="#" class="btn btn-primary" style="display: flex; align-items: center; gap: 10px;">
-                <i class="fa-brands fa-wpforms"></i> Fill Google Form
-            </a>
-            
-            <!-- ！！注意：将 # 替换为你们真实的 WhatsApp 群组邀请链接！！ -->
-            <a href="#" class="social-btn whatsapp" title="Join WhatsApp Group">
-                <i class="fa-brands fa-whatsapp"></i>
-            </a>
-            
-            <!-- ！！注意：将 # 替换为你们未来的 YouTube / B站频道链接！！ -->
-            <a href="#" class="social-btn youtube" title="Gammath Club YouTube">
-                <i class="fa-brands fa-youtube"></i>
-            </a>
-            <!-- B站图标备用 -->
-            <a href="#" class="social-btn" style="background:#00a1d6;" title="Gammath Club Bilibili">
-                <i class="fa-brands fa-bilibili"></i>
-            </a>
+        <div class="challenge-form">
+          <h4>发起新挑战：</h4>
+          <input type="text" id="challenger-input" placeholder="你的名字 / Name">
+          <textarea id="challenge-input" rows="2" placeholder="输入你要发起的数学挑战题目描述..."></textarea>
+          <button id="submit-challenge-btn" class="btn" style="margin-top:0.5rem; padding: 0.4rem 1rem; font-size:0.85rem;">发布到大厅</button>
         </div>
 
-        <p class="copyright">&copy; 2026 Gamma Math Club. All rights reserved.<br>Founded in Marymount International School Rome.</p>
-    </footer>
+        <h3>🏆 实时大厅与名人堂</h3>
+        <div id="hall-of-fame" style="margin-top: 0.8rem;"></div>
+      </div>
 
-    <!-- 平滑滚动脚本 -->
-    <script>
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
-            });
+      <h2>❓ 每周难题存档</h2>
+      <div id="problem-archive" style="margin-top:1rem;"></div>
+    </section>
+
+    <section id="cas" class="section">
+      <h1>Z. CAS Project</h1>
+      <h2>Creativity · Activity · Service</h2>
+      <div class="card-grid">
+        <div class="card"><h3>🎨 创造力</h3><p>设计研讨会内容、剪辑数学视频、运营社交媒体。</p></div>
+        <div class="card"><h3>🚀 行动</h3><p>组织跨国线上会议、管理挑战赛流程、维护官网。</p></div>
+        <div class="card"><h3>🤝 服务</h3><p>提供免费数学互助平台、鼓励女性参与、促进教育公平。</p></div>
+      </div>
+      <h2>📈 成长时间线 <span style="font-size:0.9rem; color:#8b949e;">(点击节点查看详情)</span></h2>
+      <div id="timeline-container" class="time-line"></div>
+      <h2>影响力快照</h2>
+      <p style="font-size: 1.1rem; background: #14181d; padding: 1rem; border-radius: 8px;">
+        🌐 参与者来自 <span id="country-count" style="color:#f0c060; font-weight:bold;">4</span> 个国家 · 
+        📽️ 已举办/参与 <span id="seminar-total" style="color:#f0c060; font-weight:bold;">8</span> 场研讨会 · 
+        👩‍🔬 女性参与比例 <span id="female-ratio" style="color:#f0c060; font-weight:bold;">42%</span>
+      </p>
+    </section>
+
+    <section id="join" class="section">
+      <h1>∫ Join Gammath</h1>
+      <p>面向所有国际课程（AP/A Level/IB/国内高中）对数学有热情的高中生。尤其欢迎女生加入！</p>
+      <h2>参与方式</h2>
+      <ul style="margin-left:1.5rem; line-height:2; color: #a0d2f0;">
+        <li>加入微信社群（主要即时通讯群组）</li>
+        <li>国际参与者可加入 Discord 服务器</li>
+        <li>腾讯会议 / Voov Meeting 用于线上活动</li>
+      </ul>
+      <h2>成为演讲者</h2>
+      <p>如果你对某个数学主题有独到见解，欢迎申请成为双周研讨会主讲人。用下面的表单告诉我们你的想法。</p>
+      
+      <div id="join-form-container">
+        <form id="join-form">
+          <input type="text" id="join-name" placeholder="姓名 / Name" required>
+          <input type="email" id="join-email" placeholder="邮箱 / Email" required>
+          <textarea id="join-topic" rows="3" placeholder="你感兴趣的数学主题或想分享的题目 ..." required></textarea>
+          <button type="submit" class="btn">提交正式申请</button>
+        </form>
+      </div>
+    </section>
+
+    <section id="media" class="section">
+      <h1>∑ Media & Resources</h1>
+      <h2>🎬 研讨会录像精选</h2>
+      <p>关注我们的 Bilibili / YouTube / TikTok 频道。</p>
+      
+      <div class="mock-player" id="video-player">
+        <span id="player-status-icon" style="font-size: 3rem; display:block; margin-bottom:0.5rem; cursor:pointer;">▶️</span>
+        <h4 id="player-title">【录像回放】群论入门：从对称性看魔方公式的本质</h4>
+        <button id="player-btn" class="btn" style="padding: 0.4rem 1rem; font-size: 0.85rem;">播放视频</button>
+        <div class="progress-bar-bg">
+          <div class="progress-bar-fill" id="player-progress"></div>
+        </div>
+      </div>
+
+      <h2>📚 推荐资源</h2>
+      <p>第一次研讨会推荐的读物：《What is Mathematics?》、3Blue1Brown 视频集。</p>
+    </section>
+  </main>
+
+  <div class="footer">
+    <p>© 2026 Gammath.xyz · solve@gammath.xyz · 数学是宇宙的语法</p>
+  </div>
+
+  <script>
+    (function() {
+      // ---------- 核心数据结构（扩充了提示与方案） ----------
+      const seminars = [
+        { id: 1, theme: "Algebra & Symmetry", speaker: "Aurora (Beijing)", date: "2025-03-12", description: "从群论入门看对称之美。" },
+        { id: 2, theme: "Number Theory Treasures", speaker: "Leonardo (Rome)", date: "2025-03-26", description: "费马小定理与RSA加密初探。" },
+        { id: 3, theme: "Geometry in Motion", speaker: "Jiayi (Shanghai)", date: "2025-04-09", description: "用向量和复数解几何问题。" },
+        { id: 4, theme: "Probability & Paradoxes", speaker: "Sofia (Milan)", date: "2025-04-23", description: "蒙提霍尔问题与贝叶斯思维。" }
+      ];
+
+      const defaultHallOfFame = [
+        { challenger: "Marco", solver: "Aurora & community", problem: "一道组合极值趣题" },
+        { challenger: "Yuki", solver: "Leonardo", problem: "IB HL 三角函数难题" }
+      ];
+
+      const problemsArchive = [
+        {
+          q: "Find all real solutions: x² + y² = 1, x³ + y³ = 1.",
+          hint: "提示：利用因式分解 $x^3+y^3=(x+y)(x^2-xy+y^2)$，或者代入 $y = 1$ 或 $x = 1$ 观察边界。答案为 $(1,0)$ 和 $(0,1)$。"
+        },
+        {
+          q: "Prove that among any 5 points inside an equilateral triangle of side 1, there exist two points at distance ≤ 1/2.",
+          hint: "提示：鸽笼原理（抽屉原理）。将边长为1的正三角形均分成4个边长为1/2的小正三角形，5个点落入4个区域，必有两个点在同一个小三角形内。"
+        },
+        {
+          q: "If a+b+c=0, prove that a³+b³+c³ = 3abc.",
+          hint: "提示：利用恒等式 $a^3+b^3+c^3-3abc = (a+b+c)(a^2+b^2+c^2-ab-bc-ca)$。由于 $a+b+c=0$，等式右边直接为0，移项即得证。"
+        }
+      ];
+
+      const timelineData = [
+        { date: "2025-01", event: "项目构思，联系北京与罗马的伙伴。", detail: "通过线上论坛完成首次建组会议，确定了Gammath这个名字。" },
+        { date: "2025-02", event: "域名 gammath.xyz 注册，官网第一版上线。", detail: "独立完成了前端黑暗极简风格的框架搭建，并确立Gamma跨界标志。" },
+        { date: "2025-03", event: "首场双周研讨会举行，参与者 12 人。", detail: "Aurora主讲了对称与群论，反响热烈，超出了最初设想的人数。" },
+        { date: "2025-04", event: "挑战赛机制启动，女性参与者达到 40%。", detail: "建立了大厅挑战规则，破除了数学‘仅限男生’的刻板标签。" },
+        { date: "2025-05", event: "社交媒体频道开通，累计播放 5000+。", detail: "剪辑了首期回放短视频，成功吸引了来自海外两个新高中的成员加入。" }
+      ];
+
+      // ---------- 状态持久化管理 ----------
+      let rsvpCount = 0; 
+      let localChallenges = JSON.parse(localStorage.getItem('gammath_challenges')) || defaultHallOfFame;
+
+      // ---------- 路由导航机制 ----------
+      function showSection(sectionId) {
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+        const target = document.getElementById(sectionId);
+        if (target) target.classList.add('active');
+        
+        document.querySelectorAll('nav a').forEach(a => {
+          const href = a.getAttribute('href');
+          if (href === '#' + sectionId) a.classList.add('active');
+          else a.classList.remove('active');
         });
-    </script>
+        
+        const homeLink = document.getElementById('home-link');
+        if (sectionId === 'home') homeLink.classList.add('active');
+        else homeLink.classList.remove('active');
+        
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      function handleHash() {
+        let hash = window.location.hash.slice(1) || 'home';
+        const validSections = ['home', 'about', 'activities', 'cas', 'join', 'media'];
+        if (!validSections.includes(hash)) hash = 'home';
+        showSection(hash);
+      }
+
+      window.addEventListener('hashchange', handleHash);
+      handleHash();
+
+      // 全局卡片内跳转触发器
+      document.addEventListener('click', function(e) {
+        const navTrigger = e.target.closest('.nav-trigger');
+        if (navTrigger) {
+          e.preventDefault();
+          const targetId = navTrigger.getAttribute('data-target');
+          if (targetId) window.location.hash = targetId;
+        }
+      });
+
+      document.getElementById('home-link').addEventListener('click', function(e) {
+        e.preventDefault();
+        window.location.hash = 'home';
+      });
+
+
+      // ---------- 动态渲染与深度交互逻辑 ----------
+
+      // 1. 研讨会列表联动预约机制
+      function renderSeminars() {
+        const container = document.getElementById('seminar-list');
+        if (!container) return;
+        container.innerHTML = seminars.map(s => `
+          <div class="card" id="seminar-card-${s.id}">
+            <h3>${s.theme}</h3>
+            <p><strong>主讲：</strong>${s.speaker}</p>
+            <p><strong>日期：</strong>${s.date}</p>
+            <p style="color: #b0b8c0; font-size:0.9rem; margin-top:0.3rem;">${s.description}</p>
+            <button class="btn secondary rsvp-btn" data-id="${s.id}" style="width:100%; margin-top:1rem;">席位预约 (RSVP)</button>
+          </div>
+        `).join('');
+
+        // 绑定预约点击事件
+        container.querySelectorAll('.rsvp-btn').forEach(btn => {
+          btn.addEventListener('click', function() {
+            if (!this.classList.contains('success')) {
+              this.classList.remove('secondary');
+              this.classList.add('success');
+              this.textContent = '已预约 ✓ (加入日程)';
+              rsvpCount++;
+            } else {
+              this.classList.remove('success');
+              this.classList.add('secondary');
+              this.textContent = '席位预约 (RSVP)';
+              rsvpCount--;
+            }
+            // 实时联动更新CAS全景页面的总数据指标
+            const seminarTotalDisplay = document.getElementById('seminar-total');
+            if (seminarTotalDisplay) {
+              seminarTotalDisplay.textContent = seminars.length + rsvpCount;
+            }
+          });
+        });
+      }
+
+      // 2. 挑战大厅动态发布与读取 (LocalStorage)
+      function renderHallOfFame() {
+        const container = document.getElementById('hall-of-fame');
+        if (!container) return;
+        container.innerHTML = localChallenges.map(entry => `
+          <div style="background: #12161c; padding: 0.8rem; border-radius: 6px; margin-bottom: 0.6rem; border-left: 3px solid #f0c060;">
+            <p>🏅 <strong>${entry.challenger}</strong> 发起的挑战 → ${entry.problem}</p>
+            <p style="font-size: 0.85rem; color:#8a94a0;">当前状态：<span style="color:#f0c060;">${entry.solver || '待解答，等待共同攻克...'}</span></p>
+          </div>
+        `).join('');
+      }
+
+      document.getElementById('submit-challenge-btn')?.addEventListener('click', function() {
+        const nameInput = document.getElementById('challenger-input');
+        const probInput = document.getElementById('challenge-input');
+        
+        if (!nameInput.value.trim() || !probInput.value.trim()) {
+          alert('请先填写完整的名字和挑战题目内容再发布哦！');
+          return;
+        }
+
+        const newChallenge = {
+          challenger: nameInput.value.trim(),
+          solver: "社区协作中 (去微信群讨论)",
+          problem: probInput.value.trim()
+        };
+
+        localChallenges.unshift(newChallenge); // 最新发布的排在前面
+        localStorage.setItem('gammath_challenges', JSON.stringify(localChallenges));
+        
+        renderHallOfFame(); // 刷新渲染
+        nameInput.value = '';
+        probInput.value = '';
+      });
+
+      // 3. 每周难题抽题与答案提示盒交互
+      function showRandomWeeklyProblem() {
+        const display = document.getElementById('weekly-problem-display');
+        if (!display) return;
+        
+        const randomObj = problemsArchive[Math.floor(Math.random() * problemsArchive.length)];
+        
+        display.innerHTML = `
+          <div class="problem-box" style="border-color:#f0c060; background: #131822;">
+            <strong>🧩 选中难题：</strong><br>
+            <p style="margin: 0.5rem 0; color:#fff;">${randomObj.q}</p>
+            <button id="toggle-hint-btn" class="btn secondary" style="padding: 0.3rem 0.8rem; font-size: 0.8rem; margin:0;">显示/隐藏解题思路</button>
+            <div id="hint-box-element" class="hint-box">${randomObj.hint}</div>
+          </div>
+        `;
+
+        // 思路面板展开/折叠
+        document.getElementById('toggle-hint-btn').addEventListener('click', function() {
+          const hintBox = document.getElementById('hint-box-element');
+          if (hintBox.style.display === 'block') {
+            hintBox.style.display = 'none';
+          } else {
+            hintBox.style.display = 'block';
+          }
+        });
+      }
+
+      document.getElementById('weekly-problem-btn')?.addEventListener('click', showRandomWeeklyProblem);
+
+      function renderProblemArchive() {
+        const container = document.getElementById('problem-archive');
+        if (!container) return;
+        container.innerHTML = problemsArchive.map((p, i) => `
+          <div class="problem-box">
+            <strong>Week ${i+1}:</strong> ${p.q}
+          </div>
+        `).join('');
+      }
+
+      // 4. 成成长时间线可折叠扩展模块
+      function renderTimeline() {
+        const container = document.getElementById('timeline-container');
+        if (!container) return;
+        container.innerHTML = timelineData.map((item, index) => `
+          <div class="time-item" data-index="${index}">
+            <strong>${item.date}</strong> — ${item.event}
+            <div class="time-detail" id="time-detail-${index}">${item.detail}</div>
+          </div>
+        `).join('');
+
+        container.querySelectorAll('.time-item').forEach(item => {
+          item.addEventListener('click', function() {
+            const idx = this.getAttribute('data-index');
+            const detailPanel = document.getElementById(`time-detail-${idx}`);
+            if (detailPanel.style.display === 'block') {
+              detailPanel.style.display = 'none';
+            } else {
+              detailPanel.style.display = 'block';
+            }
+          });
+        });
+      }
+
+      // 5. 加入表单生成专属“电子凭证”交互
+      document.getElementById('join-form')?.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const name = document.getElementById('join-name').value;
+        const email = document.getElementById('join-email').value;
+        const topic = document.getElementById('join-topic').value;
+        const container = document.getElementById('join-form-container');
+        
+        const randomId = 'GM-' + Math.floor(100000 + Math.random() * 900000);
+
+        // 替换表单为精美成功的交互式电子凭证卡片
+        container.innerHTML = `
+          <div class="success-card">
+            <span style="font-size: 3rem;">✨</span>
+            <h3 style="color: #f0c060; margin: 0.5rem 0;">申请已受理 / Application Received</h3>
+            <p style="margin-bottom: 1rem;">尊敬的 <strong>${name}</strong>，你已成功提交双周研讨会演讲人计划。</p>
+            <div style="background: #0a0c0f; padding: 1rem; border-radius: 6px; text-align: left; font-family: monospace;">
+              <p>🔢 <strong>申请编号：</strong>${randomId}</p>
+              <p>📧 <strong>联络邮箱：</strong>${email}</p>
+              <p>💡 <strong>预选主题：</strong>${topic}</p>
+              <p>⏳ <strong>实时状态：</strong><span style="color: #a0d2f0; animation: blink 1s infinite;">核心委员会初审中 (1-2个工作日)</span></p>
+            </div>
+            <button id="reset-form-btn" class="btn secondary" style="margin-top: 1.2rem;">重新填写新申请</button>
+          </div>
+        `;
+
+        document.getElementById('reset-form-btn').addEventListener('click', function() {
+          window.location.reload(); // 刷新恢复状态
+        });
+      });
+
+      // 6. 模拟视频播放器引擎
+      let isPlaying = false;
+      let progressPercent = 0;
+      let playInterval;
+
+      const playerBtn = document.getElementById('player-btn');
+      const playerIcon = document.getElementById('player-status-icon');
+      const progressFill = document.getElementById('player-progress');
+      const playerTitle = document.getElementById('player-title');
+
+      function togglePlay() {
+        if (!isPlaying) {
+          isPlaying = true;
+          playerBtn.textContent = '暂停';
+          playerBtn.classList.add('secondary');
+          playerIcon.textContent = '⏸️';
+          playerTitle.style.color = '#f0c060';
+          
+          playInterval = setInterval(() => {
+            if (progressPercent >= 100) {
+              progressPercent = 0; // 播完循环
+            }
+            progressPercent += 0.5;
+            progressFill.style.width = progressPercent + '%';
+          }, 100);
+        } else {
+          isPlaying = false;
+          playerBtn.textContent = '继续播放';
+          playerBtn.classList.remove('secondary');
+          playerIcon.textContent = '▶️';
+          clearInterval(playInterval);
+        }
+      }
+
+      playerBtn?.addEventListener('click', togglePlay);
+      playerIcon?.addEventListener('click', togglePlay);
+
+
+      // ---------- 初始化加载逻辑 ----------
+      window.addEventListener('DOMContentLoaded', function() {
+        renderSeminars();
+        renderHallOfFame();
+        renderProblemArchive();
+        renderTimeline();
+        showRandomWeeklyProblem(); // 首页默认加载初始化难题
+        
+        // 设置初始数据底色
+        const seminarTotalDisplay = document.getElementById('seminar-total');
+        if (seminarTotalDisplay) seminarTotalDisplay.textContent = seminars.length;
+      });
+
+    })();
+  </script>
 </body>
 </html>
