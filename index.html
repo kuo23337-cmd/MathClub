@@ -1,178 +1,495 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MathClub - 加密聊天室</title>
-    <!-- 引入 MQTT.js -->
-    <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
-    <!-- 引入 CryptoJS 加密库，用来对消息进行 AES 加密 -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
-    <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #2c3e50; margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh; }
-        .chat-container { width: 90%; max-width: 450px; height: 85vh; background: white; border-radius: 12px; display: flex; flex-direction: column; box-shadow: 0 15px 30px rgba(0,0,0,0.3); overflow: hidden; }
-        
-        /* 登录界面 */
-        .login-screen { padding: 40px; text-align: center; display: flex; flex-direction: column; justify-content: center; height: 100%; background: #ecf0f1; }
-        .login-screen h2 { color: #2c3e50; margin-bottom: 5px;}
-        .login-screen .lock-icon { font-size: 3em; margin-bottom: 10px; }
-        .login-screen input { padding: 12px; margin-bottom: 15px; border: 2px solid #bdc3c7; border-radius: 8px; font-size: 16px; outline: none; transition: border 0.3s; }
-        .login-screen input:focus { border-color: #27ae60; }
-        
-        /* 聊天界面 */
-        .chat-screen { display: none; flex-direction: column; height: 100%; }
-        .header { background: #27ae60; color: white; padding: 15px; text-align: center; font-weight: bold; font-size: 1.2em; box-shadow: 0 2px 5px rgba(0,0,0,0.1); z-index: 10; }
-        .messages { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; background: #f8f9fa; }
-        
-        .msg { max-width: 75%; padding: 10px 14px; border-radius: 12px; word-wrap: break-word; font-size: 15px; animation: popIn 0.3s ease-out; }
-        .msg.system { align-self: center; background: rgba(0,0,0,0.05); color: #888; font-size: 12px; padding: 4px 10px; border-radius: 20px; }
-        .msg.other { align-self: flex-start; background: #ffffff; border: 1px solid #eee; box-shadow: 0 2px 4px rgba(0,0,0,0.05); border-bottom-left-radius: 2px; }
-        .msg.me { align-self: flex-end; background: #27ae60; color: white; box-shadow: 0 2px 4px rgba(39,174,96,0.3); border-bottom-right-radius: 2px; }
-        
-        .sender { font-size: 12px; margin-bottom: 4px; color: #95a5a6; font-weight: bold; }
-        .msg.me .sender { display: none; }
-        
-        .input-area { display: flex; padding: 12px; background: white; border-top: 1px solid #eee; }
-        .input-area input { flex: 1; padding: 12px; border: 1px solid #ddd; border-radius: 20px; font-size: 15px; outline: none; padding-left: 15px;}
-        .input-area button { padding: 10px 20px; background: #27ae60; color: white; border: none; border-radius: 20px; margin-left: 10px; cursor: pointer; font-weight: bold; transition: background 0.2s;}
-        .input-area button:hover { background: #219653; }
-        button.login-btn { padding: 12px; background: #27ae60; color: white; border: none; border-radius: 8px; font-size: 16px; cursor: pointer; font-weight: bold;}
-        button.login-btn:hover { background: #219653; }
-        
-        @keyframes popIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gammath.xyz — Where Gamma Meets X, Y, Z</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, sans-serif;
+      background: #0a0c0f;
+      color: #e0e0e0;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* 极简导航 */
+    header {
+      background: rgba(10, 12, 15, 0.92);
+      backdrop-filter: blur(12px);
+      padding: 1rem 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      border-bottom: 1px solid #2a2d32;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+
+    .logo {
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: #a0d2f0;
+      text-decoration: none;
+      letter-spacing: 1px;
+    }
+    .logo span {
+      color: #f0c060;
+    }
+
+    nav {
+      display: flex;
+      gap: 1.8rem;
+      flex-wrap: wrap;
+    }
+
+    nav a {
+      color: #b0b8c0;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.95rem;
+      transition: color 0.2s;
+      padding: 0.3rem 0;
+      border-bottom: 2px solid transparent;
+    }
+
+    nav a:hover,
+    nav a.active {
+      color: #f0c060;
+      border-bottom-color: #f0c060;
+    }
+
+    main {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 4rem;
+    }
+
+    .section {
+      display: none;
+      animation: fade 0.35s ease;
+    }
+
+    .section.active {
+      display: block;
+    }
+
+    @keyframes fade {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    h1 {
+      font-size: 2.4rem;
+      margin-bottom: 1rem;
+      color: #f0e6d2;
+    }
+    h2 {
+      font-size: 1.7rem;
+      margin: 1.5rem 0 0.8rem;
+      color: #d4c8a8;
+    }
+    h3 {
+      color: #c0b090;
+      margin: 1.2rem 0 0.5rem;
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+
+    .card {
+      background: #14181d;
+      border: 1px solid #2a3038;
+      border-radius: 12px;
+      padding: 1.4rem;
+      transition: 0.2s;
+    }
+
+    .card:hover {
+      border-color: #f0c060;
+      background: #1a1f26;
+    }
+
+    .card h3 {
+      margin-top: 0;
+      color: #e6d7b4;
+    }
+
+    .btn {
+      display: inline-block;
+      background: #f0c060;
+      color: #0a0c0f;
+      font-weight: 600;
+      padding: 0.6rem 1.4rem;
+      border-radius: 20px;
+      text-decoration: none;
+      transition: 0.2s;
+      margin-top: 0.8rem;
+      cursor: pointer;
+      border: none;
+      font-size: 0.95rem;
+    }
+
+    .btn:hover {
+      background: #e0b040;
+    }
+
+    .time-line {
+      position: relative;
+      padding-left: 1.8rem;
+      border-left: 2px solid #3a4048;
+      margin: 1.5rem 0;
+    }
+
+    .time-item {
+      margin-bottom: 1.6rem;
+      position: relative;
+    }
+
+    .time-item::before {
+      content: "▹";
+      position: absolute;
+      left: -2.1rem;
+      top: 0;
+      color: #f0c060;
+      font-size: 1.2rem;
+    }
+
+    .problem-box {
+      background: #12161c;
+      border: 1px solid #2e3740;
+      padding: 1.2rem;
+      border-radius: 10px;
+      font-family: 'Courier New', monospace;
+      font-size: 1.1rem;
+      margin: 1rem 0;
+    }
+
+    .challenge-hall {
+      background: #1a1e24;
+      padding: 1rem;
+      border-radius: 10px;
+    }
+
+    input,
+    textarea {
+      background: #1c2128;
+      border: 1px solid #3a4048;
+      padding: 0.7rem;
+      border-radius: 8px;
+      color: #e0e0e0;
+      width: 100%;
+      margin: 0.5rem 0;
+      font-family: inherit;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 3rem;
+      color: #6a7280;
+      font-size: 0.85rem;
+    }
+  </style>
 </head>
 <body>
+  <header>
+    <a href="#" class="logo" id="home-link">Γ<span>ammath</span>.xyz</a >
+    <nav id="main-nav">
+      <a href="#about">X. About</a >
+      <a href="#activities">Y. Activities</a >
+      <a href="#cas">Z. CAS</a >
+      <a href="#join">∫ Join</a >
+      <a href="#media">∑ Media</a >
+    </nav>
+  </header>
 
-<div class="chat-container">
-    <div class="login-screen" id="login-screen">
-        <div class="lock-icon">🔒</div>
-        <h2>加密聊天室</h2>
-        <p style="color: #7f8c8d; margin-bottom: 20px; font-size: 14px;">请输入昵称和访问暗号</p>
-        <input type="text" id="username-input" placeholder="你的昵称 (最多10字)" maxlength="10" onkeypress="handleLoginEnter(event)">
-        <!-- 添加了密码输入框 -->
-        <input type="password" id="password-input" placeholder="访问暗号" onkeypress="handleLoginEnter(event)">
-        <button class="login-btn" onclick="joinChat()">解密并进入</button>
-    </div>
-
-    <div class="chat-screen" id="chat-screen">
-        <div class="header">🔒 私密大厅 <span id="my-name" style="font-size: 14px; font-weight: normal; margin-left: 5px; opacity: 0.8;"></span></div>
-        <div class="messages" id="messages">
-            <div class="msg system">加密通道建立中...</div>
+  <main id="app">
+    <!-- 首页 -->
+    <section id="home" class="section active">
+      <h1>Where Gamma meets X, Y, Z.</h1>
+      <p style="font-size:1.3rem; margin-bottom:2rem;">求解未知，连接世界。<br>一个由高中生发起的全球数学交流社区。</p>
+      <div class="card-grid">
+        <div class="card">
+          <h3>📡 双周研讨会</h3>
+          <p>每两周一次深度数学分享，覆盖代数、几何、数论等领域。</p>
+          <a href="#activities" class="btn nav-trigger" data-target="activities">查看日程</a >
         </div>
-        <div class="input-area">
-            <input type="text" id="msg-input" placeholder="输入加密消息..." onkeypress="handleChatEnter(event)">
-            <button onclick="sendMessage()">发送</button>
+        <div class="card">
+          <h3>⚔️ 数学挑战赛</h3>
+          <p>向伙伴发起题目挑战，合作解答，共同展示。</p>
+          <a href="#activities" class="btn nav-trigger" data-target="activities">进入挑战大厅</a >
         </div>
-    </div>
-</div>
+        <div class="card">
+          <h3>❓ 每周难题</h3>
+          <p>每周一道不超纲但烧脑的题，自由讨论。</p>
+          <button id="weekly-problem-btn" class="btn">查看本周题目</button>
+        </div>
+      </div>
+      <div id="weekly-problem-display" style="margin-top:1.5rem;"></div>
+    </section>
 
-<script>
-    let username = "";
-    let client = null;
-    
-    // 更换了一个新的频道，防止和之前的明文聊天室冲突
-    const chatTopic = "mathclub/secure/chat_v2"; 
-    
-    // 固定的暗号（密码）
-    const ROOM_PASSWORD = "marymount";
+    <!-- 关于我们 -->
+    <section id="about" class="section">
+      <h1>X. About</h1>
+      <h2>我们的故事</h2>
+      <p>Gammath 源于一份对数学纯粹的热爱。创始人相信，数学之美不应被教室围墙阻隔。从北京到罗马，我们连接国际课程体系里的高中生，让讨论跨越时区与文化。</p>
+      <h2>核心使命</h2>
+      <div class="card-grid">
+        <div class="card"><h3>🌍 跨文化交流</h3><p>用数学作为通用语言，在不同国家学生间架起桥梁。</p></div>
+        <div class="card"><h3>✨ 传播数学之美</h3><p>通过精心设计的研讨与挑战，展示数学的优雅与惊奇。</p></div>
+        <div class="card"><h3>♀️ 打破刻板印象</h3><p>积极鼓励女性参与，目前社团联合创始人与核心成员中女性占比45%。</p></div>
+      </div>
+      <h2>核心团队 (示例)</h2>
+      <p>👩‍🎓 联合社长：Aurora (北京) · 👨‍🎓 联合社长：Leonardo (罗马) · 技术负责：你</p>
+    </section>
 
-    function handleLoginEnter(e) { if(e.key === 'Enter') joinChat(); }
-    function handleChatEnter(e) { if(e.key === 'Enter') sendMessage(); }
+    <!-- 活动页面 -->
+    <section id="activities" class="section">
+      <h1>Y. Activities</h1>
+      <h2>📆 双周主题研讨会</h2>
+      <div id="seminar-list" class="card-grid"></div>
 
-    function joinChat() {
-        const inputName = document.getElementById('username-input').value.trim();
-        const inputPass = document.getElementById('password-input').value.trim();
-        
-        if(!inputName) { alert("请输入昵称！"); return; }
-        
-        // 【新增验证机制】检查密码
-        if(inputPass !== ROOM_PASSWORD) {
-            alert("❌ 访问暗号错误，无法进入！");
-            return;
+      <h2>⚔️ 数学挑战大厅</h2>
+      <div class="challenge-hall">
+        <p><strong>规则：</strong> 挑战者出题 (AP/A Level/IB/国内高中范围)，被挑战者可求助社区成员，最终共同讲解解答。目标是合作而非尴尬。</p>
+        <h3>🏆 名人堂</h3>
+        <div id="hall-of-fame"></div>
+      </div>
+      <h2>❓ 每周难题存档</h2>
+      <div id="problem-archive" style="margin-top:1rem;"></div>
+    </section>
+
+    <!-- CAS 项目全景 -->
+    <section id="cas" class="section">
+      <h1>Z. CAS Project</h1>
+      <h2>Creativity · Activity · Service</h2>
+      <div class="card-grid">
+        <div class="card"><h3>🎨 创造力</h3><p>设计研讨会内容、剪辑数学视频、运营社交媒体。</p></div>
+        <div class="card"><h3>🚀 行动</h3><p>组织跨国线上会议、管理挑战赛流程、维护官网。</p></div>
+        <div class="card"><h3>🤝 服务</h3><p>提供免费数学互助平台、鼓励女性参与、促进教育公平。</p></div>
+      </div>
+      <h2>📈 成长时间线</h2>
+      <div id="timeline-container" class="time-line"></div>
+      <h2>影响力快照</h2>
+      <p>🌐 参与者来自 <span id="country-count">4</span> 个国家 · 📽️ 已举办 <span id="seminar-total">8</span> 场研讨会 · 👩‍🔬 女性参与比例 <span id="female-ratio">42%</span></p>
+    </section>
+
+    <!-- 加入我们 -->
+    <section id="join" class="section">
+      <h1>∫ Join Gammath</h1>
+      <p>面向所有国际课程（AP/A Level/IB/国内高中）对数学有热情的高中生。尤其欢迎女生加入！</p>
+      <h2>参与方式</h2>
+      <ul style="margin-left:1.5rem; line-height:2;">
+        <li>加入微信社群（主要即时通讯）</li>
+        <li>国际参与者可加入 Discord 服务器</li>
+        <li>腾讯会议 / Voov Meeting 用于线上活动</li>
+      </ul>
+      <h2>成为演讲者</h2>
+      <p>如果你对某个数学主题有独到见解，欢迎申请成为双周研讨会主讲人。用下面的表单告诉我们你的想法。</p>
+      <form id="join-form">
+        <input type="text" placeholder="姓名 / Name" required>
+        <input type="email" placeholder="邮箱 / Email" required>
+        <textarea rows="3" placeholder="你感兴趣的数学主题或想分享的题目 ..." required></textarea>
+        <button type="submit" class="btn">提交申请 (模拟)</button>
+      </form>
+      <p style="margin-top:0.5rem; color:#8a94a0;">* 本表单仅为前端演示，不会真正发送数据。</p>
+    </section>
+
+    <!-- 自媒体与资源 -->
+    <section id="media" class="section">
+      <h1>∑ Media & Resources</h1>
+      <h2>🎬 研讨会录像精选</h2>
+      <p>关注我们的 Bilibili / YouTube / TikTok 频道 (嵌入占位)。</p>
+      <div style="background:#1c2128; padding:2rem; text-align:center; border-radius:12px; margin:1rem 0;">
+        <p>📺 视频播放器将嵌入此处</p>
+      </div>
+      <h2>📚 推荐资源</h2>
+      <p>第一次研讨会推荐的读物：《What is Mathematics?》、3Blue1Brown 视频集。</p>
+    </section>
+  </main>
+
+  <div class="footer">
+    <p>© 2025 Gammath.xyz · solve@gammath.xyz · 数学是宇宙的语法</p>
+  </div>
+
+  <script>
+    (function() {
+      // ---------- 数据 ----------
+      const seminars = [
+        { theme: "Algebra & Symmetry", speaker: "Aurora (Beijing)", date: "2025-03-12", description: "从群论入门看对称之美。" },
+        { theme: "Number Theory Treasures", speaker: "Leonardo (Rome)", date: "2025-03-26", description: "费马小定理与RSA加密初探。" },
+        { theme: "Geometry in Motion", speaker: "Jiayi (Shanghai)", date: "2025-04-09", description: "用向量和复数解几何问题。" },
+        { theme: "Probability & Paradoxes", speaker: "Sofia (Milan)", date: "2025-04-23", description: "蒙提霍尔问题与贝叶斯思维。" }
+      ];
+
+      const hallOfFame = [
+        { challenger: "Marco", solver: "Aurora & community", problem: "一道组合极值趣题" },
+        { challenger: "Yuki", solver: "Leonardo", problem: "IB HL 三角函数难题" }
+      ];
+
+      const problemsArchive = [
+        "Find all real solutions: x² + y² = 1, x³ + y³ = 1 (within high school curriculum).",
+        "Prove that among any 5 points inside an equilateral triangle of side 1, there exist two points at distance ≤ 1/2.",
+        "A classic: If a+b+c=0, prove that a³+b³+c³ = 3abc."
+      ];
+
+      const timelineData = [
+        { date: "2025-01", event: "项目构思，联系北京与罗马的伙伴。" },
+        { date: "2025-02", event: "域名 gammath.xyz 注册，官网第一版上线。" },
+        { date: "2025-03", event: "首场双周研讨会举行，参与者 12 人。" },
+        { date: "2025-04", event: "挑战赛机制启动，女性参与者达到 40%。" },
+        { date: "2025-05", event: "社交媒体频道开通，累计播放 5000+。" }
+      ];
+
+      // ---------- 工具函数 ----------
+      function showSection(sectionId) {
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+        const target = document.getElementById(sectionId);
+        if (target) {
+          target.classList.add('active');
         }
-
-        username = inputName;
-        document.getElementById('login-screen').style.display = 'none';
-        document.getElementById('chat-screen').style.display = 'flex';
-        document.getElementById('my-name').innerText = `(${username})`;
-
-        connectServer();
-    }
-
-    function connectServer() {
-        client = mqtt.connect('wss://broker.emqx.io:8084/mqtt');
-
-        client.on('connect', function () {
-            document.getElementById('messages').innerHTML = '';
-            client.subscribe(chatTopic, function (err) {
-                if (!err) {
-                    publishMessage('system', `${username} 解密成功，进入了房间`);
-                }
-            });
+        // 更新导航激活样式
+        document.querySelectorAll('nav a').forEach(a => {
+          const href = a.getAttribute('href');
+          if (href === '#' + sectionId) a.classList.add('active');
+          else a.classList.remove('active');
         });
-
-        client.on('message', function (topic, message) {
-            try {
-                // 收到的 message 是别人加密后的密文字符串
-                const encryptedText = message.toString();
-                
-                // 【新增解密机制】使用 CryptoJS.AES 和我们的密码进行解密
-                const bytes = CryptoJS.AES.decrypt(encryptedText, ROOM_PASSWORD);
-                const decryptedText = bytes.toString(CryptoJS.enc.Utf8);
-                
-                // 如果解密出来的文本是空的，说明密码不对或者是捣乱的明文
-                if (decryptedText) {
-                    const data = JSON.parse(decryptedText);
-                    displayMessage(data);
-                }
-            } catch(e) { 
-                console.log("收到无法解密的数据，已自动拦截过滤。"); 
-            }
-        });
-    }
-
-    function sendMessage() {
-        const input = document.getElementById('msg-input');
-        const text = input.value.trim();
-        if(!text || !client) return;
-        
-        publishMessage('chat', text);
-        input.value = "";
-        input.focus();
-    }
-
-    function publishMessage(type, text) {
-        const msgObj = { type: type, user: username, text: text, timestamp: Date.now() };
-        
-        // 【新增加密机制】将原本明文的 JSON，用密码加密成天书一样的乱码
-        const jsonStr = JSON.stringify(msgObj);
-        const encryptedData = CryptoJS.AES.encrypt(jsonStr, ROOM_PASSWORD).toString();
-        
-        // 将乱码发送给公共服务器
-        client.publish(chatTopic, encryptedData);
-    }
-
-    function displayMessage(data) {
-        const msgDiv = document.createElement('div');
-        if(data.type === 'system') {
-            msgDiv.className = 'msg system';
-            msgDiv.innerText = data.text;
+        // 首页链接特殊处理
+        const homeLink = document.getElementById('home-link');
+        if (sectionId === 'home') {
+          homeLink.classList.add('active');
         } else {
-            const isMe = data.user === username;
-            msgDiv.className = `msg ${isMe ? 'me' : 'other'}`;
-            const senderDiv = document.createElement('div');
-            senderDiv.className = 'sender';
-            senderDiv.innerText = data.user;
-            const textDiv = document.createElement('div');
-            textDiv.innerText = data.text;
-            if(!isMe) msgDiv.appendChild(senderDiv);
-            msgDiv.appendChild(textDiv);
+          homeLink.classList.remove('active');
         }
-        const messagesContainer = document.getElementById('messages');
-        messagesContainer.appendChild(msgDiv);
-        messagesContainer.scrollTop = messagesContainer.scrollHeight;
-    }
-</script>
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      // 路由处理
+      function handleHash() {
+        let hash = window.location.hash.slice(1) || 'home';
+        // 允许直接通过id匹配
+        const validSections = ['home', 'about', 'activities', 'cas', 'join', 'media'];
+        if (!validSections.includes(hash)) hash = 'home';
+        showSection(hash);
+      }
+
+      window.addEventListener('hashchange', handleHash);
+      // 初始加载
+      handleHash();
+
+      // 导航点击 (包括卡片内带有 data-target 的按钮)
+      document.addEventListener('click', function(e) {
+        const navTrigger = e.target.closest('.nav-trigger');
+        if (navTrigger) {
+          e.preventDefault();
+          const targetId = navTrigger.getAttribute('data-target');
+          if (targetId) {
+            window.location.hash = targetId;
+          }
+        }
+      });
+
+      // 首页链接点击回到home
+      document.getElementById('home-link').addEventListener('click', function(e) {
+        e.preventDefault();
+        window.location.hash = 'home';
+      });
+
+      // ---------- 动态内容渲染 ----------
+      function renderSeminars() {
+        const container = document.getElementById('seminar-list');
+        if (!container) return;
+        container.innerHTML = seminars.map(s => `
+          <div class="card">
+            <h3>${s.theme}</h3>
+            <p><strong>主讲：</strong>${s.speaker}</p>
+            <p><strong>日期：</strong>${s.date}</p>
+            <p>${s.description}</p>
+          </div>
+        `).join('');
+      }
+
+      function renderHallOfFame() {
+        const container = document.getElementById('hall-of-fame');
+        if (!container) return;
+        container.innerHTML = hallOfFame.map(entry => `
+          <p>🏅 <strong>${entry.challenger}</strong> 挑战 → 由 <strong>${entry.solver}</strong> 完美解答：${entry.problem}</p>
+        `).join('');
+      }
+
+      function renderProblemArchive() {
+        const container = document.getElementById('problem-archive');
+        if (!container) return;
+        container.innerHTML = problemsArchive.map((p, i) => `
+          <div class="problem-box">Week ${i+1}: ${p}</div>
+        `).join('');
+      }
+
+      function renderTimeline() {
+        const container = document.getElementById('timeline-container');
+        if (!container) return;
+        container.innerHTML = timelineData.map(item => `
+          <div class="time-item">
+            <strong>${item.date}</strong> — ${item.event}
+          </div>
+        `).join('');
+      }
+
+      // 每周难题随机展示
+      function showWeeklyProblem() {
+        const display = document.getElementById('weekly-problem-display');
+        if (!display) return;
+        const randomProblem = problemsArchive[Math.floor(Math.random() * problemsArchive.length)];
+        display.innerHTML = `
+          <div class="problem-box" style="border-color:#f0c060;">
+            <strong>🧩 本周难题：</strong><br>${randomProblem}
+          </div>
+          <p style="color:#a0b0c0;">欢迎在社群中讨论你的思路！</p>
+        `;
+      }
+
+      document.getElementById('weekly-problem-btn')?.addEventListener('click', showWeeklyProblem);
+
+      // 动态数据数字 (可后续从真实数据更新)
+      document.getElementById('seminar-total') && (document.getElementById('seminar-total').textContent = seminars.length);
+      // 女性比例等保持静态示例
+
+      // 表单模拟提交
+      document.getElementById('join-form')?.addEventListener('submit', function(e) {
+        e.preventDefault();
+        alert('✨ 收到！这只是一个前端演示，实际我们会通过邮箱联系你。感谢关注 Gammath！');
+        this.reset();
+      });
+
+      // 页面加载时渲染动态部分
+      window.addEventListener('DOMContentLoaded', function() {
+        renderSeminars();
+        renderHallOfFame();
+        renderProblemArchive();
+        renderTimeline();
+        // 默认显示一道题在首页增加趣味
+        showWeeklyProblem();
+      });
+
+    })();
+  </script>
 </body>
 </html>
