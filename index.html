@@ -3,211 +3,165 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MathClub - 极速算术挑战</title>
+    <title>MathClub - 实时聊天室</title>
+    <!-- 引入 MQTT.js 库，这是实现“免后端”实时通讯的魔法 -->
+    <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f0f8ff; /* 浅蓝色背景 */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-        .game-container {
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-            text-align: center;
-            width: 350px;
-            max-width: 90%;
-        }
-        h1 { color: #2c3e50; margin-top: 0;}
-        .stats {
-            display: flex;
-            justify-content: space-between;
-            font-size: 1.2em;
-            margin-bottom: 20px;
-            color: #34495e;
-            font-weight: bold;
-        }
-        .question {
-            font-size: 3em;
-            font-weight: bold;
-            margin: 20px 0;
-            color: #2980b9;
-        }
-        .options {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-        }
-        button {
-            padding: 15px;
-            font-size: 1.5em;
-            border: none;
-            border-radius: 10px;
-            background-color: #ecf0f1;
-            color: #2c3e50;
-            cursor: pointer;
-            transition: all 0.2s;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-        }
-        button:hover { background-color: #bdc3c7; transform: translateY(-2px); }
-        button:active { transform: translateY(0); }
-        button.correct { background-color: #2ecc71 !important; color: white; }
-        button.wrong { background-color: #e74c3c !important; color: white; }
-        #start-btn {
-            background-color: #3498db;
-            color: white;
-            width: 100%;
-            margin-top: 20px;
-            font-size: 1.3em;
-            padding: 15px;
-        }
-        #start-btn:hover { background-color: #2980b9; }
-        .hidden { display: none !important; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #e0eafc; margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh; }
+        .chat-container { width: 90%; max-width: 450px; height: 85vh; background: white; border-radius: 12px; display: flex; flex-direction: column; box-shadow: 0 10px 20px rgba(0,0,0,0.15); overflow: hidden; }
+        
+        /* 登录界面样式 */
+        .login-screen { padding: 40px; text-align: center; display: flex; flex-direction: column; justify-content: center; height: 100%; background: #ffffff; }
+        .login-screen h2 { color: #2c3e50; }
+        .login-screen input { padding: 12px; margin-bottom: 15px; border: 2px solid #ecf0f1; border-radius: 8px; font-size: 16px; outline: none; transition: border 0.3s; }
+        .login-screen input:focus { border-color: #3498db; }
+        
+        /* 聊天界面样式 */
+        .chat-screen { display: none; flex-direction: column; height: 100%; }
+        .header { background: #3498db; color: white; padding: 15px; text-align: center; font-weight: bold; font-size: 1.2em; box-shadow: 0 2px 5px rgba(0,0,0,0.1); z-index: 10; }
+        .messages { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; background: #f8f9fa; }
+        
+        /* 气泡样式 */
+        .msg { max-width: 75%; padding: 10px 14px; border-radius: 12px; word-wrap: break-word; font-size: 15px; animation: popIn 0.3s ease-out; }
+        .msg.system { align-self: center; background: rgba(0,0,0,0.05); color: #888; font-size: 12px; padding: 4px 10px; border-radius: 20px; }
+        .msg.other { align-self: flex-start; background: #ffffff; border: 1px solid #eee; box-shadow: 0 2px 4px rgba(0,0,0,0.05); border-bottom-left-radius: 2px; }
+        .msg.me { align-self: flex-end; background: #3498db; color: white; box-shadow: 0 2px 4px rgba(52,152,219,0.3); border-bottom-right-radius: 2px; }
+        
+        .sender { font-size: 12px; margin-bottom: 4px; color: #95a5a6; font-weight: bold; }
+        .msg.me .sender { display: none; } /* 自己的消息不显示名字 */
+        
+        /* 输入框区域 */
+        .input-area { display: flex; padding: 12px; background: white; border-top: 1px solid #eee; }
+        .input-area input { flex: 1; padding: 12px; border: 1px solid #ddd; border-radius: 20px; font-size: 15px; outline: none; padding-left: 15px;}
+        .input-area button { padding: 10px 20px; background: #3498db; color: white; border: none; border-radius: 20px; margin-left: 10px; cursor: pointer; font-weight: bold; transition: background 0.2s;}
+        .input-area button:hover { background: #2980b9; }
+        button { padding: 12px; background: #3498db; color: white; border: none; border-radius: 8px; font-size: 16px; cursor: pointer; }
+        
+        @keyframes popIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
 
-<div class="game-container">
-    <h1>🔢 MathClub 挑战</h1>
-    <div class="stats">
-        <div>得分: <span id="score" style="color:#e67e22;">0</span></div>
-        <div>时间: <span id="time" style="color:#e74c3c;">30</span>s</div>
-    </div>
-    
-    <!-- 游戏区域 -->
-    <div id="game-area" class="hidden">
-        <div class="question" id="question">3 + 5 = ?</div>
-        <div class="options" id="options">
-            <!-- 选项按钮会由 JavaScript 动态生成 -->
-        </div>
+<div class="chat-container">
+    <!-- 进入前的取名界面 -->
+    <div class="login-screen" id="login-screen">
+        <h2>👋 欢迎来到 MathClub</h2>
+        <p style="color: #7f8c8d; margin-bottom: 20px; font-size: 14px;">请输入你的昵称进入聊天大厅</p>
+        <input type="text" id="username-input" placeholder="例如: 匿名黑客" maxlength="12" onkeypress="handleLoginEnter(event)">
+        <button onclick="joinChat()">进入聊天室</button>
     </div>
 
-    <!-- 开始/结束界面 -->
-    <div id="start-screen">
-        <p style="color: #7f8c8d; font-size: 1.1em;">在 <strong>30秒</strong> 内尽可能多地答对算术题！</p>
-        <button id="start-btn" onclick="startGame()">开始游戏</button>
+    <!-- 内部聊天界面 -->
+    <div class="chat-screen" id="chat-screen">
+        <div class="header">💬 MathClub 大厅 <span id="my-name" style="font-size: 14px; font-weight: normal; margin-left: 5px; opacity: 0.8;"></span></div>
+        <div class="messages" id="messages">
+            <div class="msg system">连接服务器中...</div>
+        </div>
+        <div class="input-area">
+            <input type="text" id="msg-input" placeholder="说点什么吧..." onkeypress="handleChatEnter(event)">
+            <button onclick="sendMessage()">发送</button>
+        </div>
     </div>
 </div>
 
 <script>
-    let score = 0;
-    let timeLeft = 30;
-    let timer;
-    let correctAnswer;
+    let username = "";
+    let client = null;
+    // 房间的唯一频道号，只要大家的这个频道号一样，就能收到彼此的消息
+    const chatTopic = "mathclub/public/chat/room_v1";
 
-    const scoreEl = document.getElementById('score');
-    const timeEl = document.getElementById('time');
-    const questionEl = document.getElementById('question');
-    const optionsEl = document.getElementById('options');
-    const gameArea = document.getElementById('game-area');
-    const startScreen = document.getElementById('start-screen');
-    const startBtn = document.getElementById('start-btn');
+    // 监听回车键
+    function handleLoginEnter(e) { if(e.key === 'Enter') joinChat(); }
+    function handleChatEnter(e) { if(e.key === 'Enter') sendMessage(); }
 
-    function startGame() {
-        score = 0;
-        timeLeft = 30;
-        scoreEl.innerText = score;
-        timeEl.innerText = timeLeft;
-        
-        startScreen.classList.add('hidden');
-        gameArea.classList.remove('hidden');
-        
-        nextQuestion();
-        
-        timer = setInterval(() => {
-            timeLeft--;
-            timeEl.innerText = timeLeft;
-            if (timeLeft <= 0) {
-                endGame();
-            }
-        }, 1000);
+    function joinChat() {
+        const input = document.getElementById('username-input');
+        username = input.value.trim();
+        if(!username) { alert("取个炫酷的名字吧！"); return; }
+
+        // 切换界面
+        document.getElementById('login-screen').style.display = 'none';
+        document.getElementById('chat-screen').style.display = 'flex';
+        document.getElementById('my-name').innerText = `(${username})`;
+
+        connectServer();
     }
 
-    function nextQuestion() {
-        const ops = ['+', '-', '×'];
-        const op = ops[Math.floor(Math.random() * ops.length)];
-        let num1, num2;
+    function connectServer() {
+        // 使用 EMQX 提供的免费公共 MQTT 实时通讯服务器
+        client = mqtt.connect('wss://broker.emqx.io:8084/mqtt');
 
-        // 生成题目逻辑
-        if (op === '+') {
-            num1 = Math.floor(Math.random() * 50) + 1;
-            num2 = Math.floor(Math.random() * 50) + 1;
-            correctAnswer = num1 + num2;
-        } else if (op === '-') {
-            num1 = Math.floor(Math.random() * 50) + 20; // 保证被减数较大
-            num2 = Math.floor(Math.random() * 20) + 1;
-            correctAnswer = num1 - num2;
-        } else {
-            num1 = Math.floor(Math.random() * 12) + 2; // 乘法控制在12以内
-            num2 = Math.floor(Math.random() * 12) + 2;
-            correctAnswer = num1 * num2;
-        }
+        client.on('connect', function () {
+            // 连接成功，清空系统提示
+            document.getElementById('messages').innerHTML = '';
+            // 订阅我们专属的频道
+            client.subscribe(chatTopic, function (err) {
+                if (!err) {
+                    // 广播一条系统消息：我进来了
+                    publishMessage('system', `${username} 悄悄地加入了聊天室 🎉`);
+                }
+            });
+        });
 
-        questionEl.innerText = `${num1} ${op} ${num2} = ?`;
-
-        // 混淆选项生成逻辑
-        let answers = [correctAnswer];
-        while (answers.length < 4) {
-            let offset = Math.floor(Math.random() * 21) - 10; // 偏差在 -10 到 +10 之间
-            let wrong = correctAnswer + offset;
-            // 确保错误答案不等于正确答案，不重复，且不为负数
-            if (wrong !== correctAnswer && !answers.includes(wrong) && wrong >= 0) {
-                answers.push(wrong);
-            }
-        }
-
-        // 打乱四个选项的顺序
-        answers.sort(() => Math.random() - 0.5);
-
-        // 渲染按钮
-        optionsEl.innerHTML = '';
-        answers.forEach(ans => {
-            const btn = document.createElement('button');
-            btn.innerText = ans;
-            btn.onclick = () => checkAnswer(btn, ans);
-            optionsEl.appendChild(btn);
+        // 接收到别人（或自己）发送的消息
+        client.on('message', function (topic, message) {
+            try {
+                // 解析收到的消息
+                const data = JSON.parse(message.toString());
+                displayMessage(data);
+            } catch(e) { console.error("消息解析错误", e); }
         });
     }
 
-    function checkAnswer(btn, ans) {
-        // 玩家点击后，立刻禁用所有按钮，防止乱点
-        Array.from(optionsEl.children).forEach(b => b.disabled = true);
+    function sendMessage() {
+        const input = document.getElementById('msg-input');
+        const text = input.value.trim();
+        if(!text || !client) return;
         
-        if (ans === correctAnswer) {
-            btn.classList.add('correct');
-            score += 10;
-            scoreEl.innerText = score;
-        } else {
-            btn.classList.add('wrong');
-            // 如果答错，自动标出正确的按钮是哪一个
-            Array.from(optionsEl.children).forEach(b => {
-                if (parseInt(b.innerText) === correctAnswer) {
-                    b.classList.add('correct');
-                }
-            });
-        }
-
-        // 停顿 0.4 秒后自动进入下一题，让玩家看清楚对错
-        setTimeout(() => {
-            if (timeLeft > 0) nextQuestion();
-        }, 400);
+        publishMessage('chat', text);
+        input.value = ""; // 清空输入框
+        input.focus(); // 焦点留在输入框方便继续打字
     }
 
-    function endGame() {
-        clearInterval(timer);
-        gameArea.classList.add('hidden');
-        startScreen.classList.remove('hidden');
-        startScreen.innerHTML = `
-            <h2 style="color:#e74c3c;">时间到！</h2>
-            <p style="font-size:1.2em;">你的最终得分: <strong style="font-size:1.5em;color:#27ae60;">${score}</strong></p>
-        `;
-        startBtn.innerText = "再玩一次";
-        startScreen.appendChild(startBtn);
+    function publishMessage(type, text) {
+        // 将消息打包成 JSON 格式
+        const msgObj = {
+            type: type,
+            user: username,
+            text: text,
+            timestamp: Date.now()
+        };
+        // 发送给服务器，服务器会广播给所有在这个频道的人
+        client.publish(chatTopic, JSON.stringify(msgObj));
+    }
+
+    function displayMessage(data) {
+        const msgDiv = document.createElement('div');
+        
+        if(data.type === 'system') {
+            msgDiv.className = 'msg system';
+            msgDiv.innerText = data.text;
+        } else {
+            // 判断是不是自己发的消息，来决定气泡靠左还是靠右
+            const isMe = data.user === username;
+            msgDiv.className = `msg ${isMe ? 'me' : 'other'}`;
+            
+            const senderDiv = document.createElement('div');
+            senderDiv.className = 'sender';
+            senderDiv.innerText = data.user;
+            
+            const textDiv = document.createElement('div');
+            textDiv.innerText = data.text;
+            
+            if(!isMe) msgDiv.appendChild(senderDiv); // 别人的消息才显示名字
+            msgDiv.appendChild(textDiv);
+        }
+        
+        const messagesContainer = document.getElementById('messages');
+        messagesContainer.appendChild(msgDiv);
+        
+        // 发送或收到新消息时，滚动条自动滑到最底部
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
     }
 </script>
 </body>
