@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gamma Math Club — Gammath.xyz</title>
-  <!-- 引入 Google 一键登录官方高级安全组件库 -->
   <script src="https://accounts.google.com/gsi/client" async defer></script>
   <style>
     :root {
@@ -31,6 +30,7 @@
       min-height: 100vh;
     }
 
+    /* Multi-language selective displays */
     body.lang-en .lang-zh { display: none !important; }
     body.lang-zh .lang-en { display: none !important; }
 
@@ -47,41 +47,17 @@
       justify-content: space-between;
     }
 
-    .logo {
-      font-size: 1.4rem;
-      font-weight: 700;
-      color: var(--accent-blue);
-      text-decoration: none;
-      letter-spacing: -0.5px;
-      display: flex;
-      align-items: center;
-      gap: 0.25rem;
-    }
+    .logo { font-size: 1.4rem; font-weight: 700; color: var(--accent-blue); text-decoration: none; letter-spacing: -0.5px; display: flex; align-items: center; gap: 0.25rem; }
     .logo span { color: var(--text-muted); font-weight: 400; }
     .nav-container { display: flex; align-items: center; gap: 1.5rem; }
-    nav { display: flex; gap: 1.2rem; }
-    nav a {
-      color: var(--text-muted);
-      text-decoration: none;
-      font-weight: 500;
-      font-size: 0.9rem;
-      transition: color 0.2s, border-color 0.2s;
-      padding: 0.4rem 0;
-      border-bottom: 2px solid transparent;
-    }
-    nav a:hover, nav a.active {
-      color: var(--accent-blue);
-      border-bottom-color: var(--accent-blue);
-    }
+    nav { display: flex; gap: 1.5rem; }
+    nav a { color: var(--text-muted); text-decoration: none; font-weight: 500; font-size: 0.9rem; transition: color 0.2s, border-color 0.2s; padding: 0.4rem 0; border-bottom: 2px solid transparent; }
+    nav a:hover, nav a.active { color: var(--accent-blue); border-bottom-color: var(--accent-blue); }
 
     main { max-width: 1000px; margin: 0 auto; padding: 3rem 1.5rem 5rem; }
     .section { display: none; animation: fadeIn 0.25s ease-out; }
     .section.active { display: block; }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(6px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
 
     h1 { font-size: 2.5rem; font-weight: 800; letter-spacing: -0.75px; color: var(--accent-blue); margin-bottom: 1rem; }
     h2 { font-size: 1.6rem; font-weight: 700; color: var(--text-main); margin: 2.5rem 0 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; }
@@ -89,23 +65,10 @@
     p { color: var(--text-muted); margin-bottom: 1rem; font-size: 1rem; }
 
     .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin: 1.5rem 0; }
-    .card {
-      background: var(--bg-secondary);
-      border: 1px solid var(--border-color);
-      border-radius: var(--card-radius);
-      padding: 1.5rem;
-      box-shadow: var(--card-shadow);
-      transition: transform 0.2s, border-color 0.2s;
-    }
+    .card { background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--card-radius); padding: 1.5rem; box-shadow: var(--card-shadow); transition: transform 0.2s, border-color 0.2s; }
     .card:hover { border-color: var(--accent-blue); transform: translateY(-2px); }
 
-    .btn {
-      display: inline-flex; align-items: center; justify-content: center;
-      background-color: var(--accent-blue); color: #ffffff; font-weight: 600;
-      padding: 0.6rem 1.2rem; border-radius: 6px; text-decoration: none;
-      transition: background-color 0.15s, transform 0.1s; cursor: pointer;
-      border: none; font-size: 0.9rem;
-    }
+    .btn { display: inline-flex; align-items: center; justify-content: center; background-color: var(--accent-blue); color: #ffffff; font-weight: 600; padding: 0.6rem 1.2rem; border-radius: 6px; text-decoration: none; transition: background-color 0.15s, transform 0.1s; cursor: pointer; border: none; font-size: 0.9rem; }
     .btn:hover { background-color: var(--accent-blue-hover); }
     .btn:active { transform: scale(0.98); }
     .btn.secondary { background-color: var(--bg-secondary); color: var(--text-main); border: 1px solid var(--border-color); }
@@ -113,33 +76,42 @@
     .btn.success { background-color: #10b981; color: #ffffff; }
     .btn.success:hover { background-color: #059669; }
 
-    input, textarea, select {
-      background-color: var(--bg-secondary); border: 1px solid var(--border-color);
-      padding: 0.75rem; border-radius: 6px; color: var(--text-main);
-      width: 100%; margin: 0.5rem 0 1.25rem; font-family: inherit; font-size: 0.95rem;
-      transition: border-color 0.2s;
-    }
+    input, textarea, select { background-color: var(--bg-secondary); border: 1px solid var(--border-color); padding: 0.75rem; border-radius: 6px; color: var(--text-main); width: 100%; margin: 0.5rem 0 1.25rem; font-family: inherit; font-size: 0.95rem; transition: border-color 0.2s; }
     input:focus, textarea:focus, select:focus { outline: none; border-color: var(--border-focus); }
 
     .problem-box { background-color: var(--bg-secondary); border: 1px solid var(--border-color); border-left: 4px solid var(--accent-blue); padding: 1.5rem; border-radius: var(--card-radius); box-shadow: var(--card-shadow); margin: 1.5rem 0; }
+    .hint-box { background-color: var(--accent-light); border: 1px dashed #bfdbfe; padding: 1rem; border-radius: 6px; margin-top: 1rem; font-size: 0.9rem; color: var(--accent-blue); display: none; }
     
+    .challenge-hall { background-color: var(--bg-secondary); border: 1px solid var(--border-color); padding: 2rem; border-radius: var(--card-radius); box-shadow: var(--card-shadow); margin: 2rem 0; }
+    .challenge-entry { background-color: var(--bg-primary); border: 1px solid var(--border-color); padding: 1rem; border-radius: 6px; margin-bottom: 1rem; border-left: 3px solid var(--accent-blue); }
+
     .timeline { border-left: 2px solid var(--border-color); padding-left: 1.5rem; margin: 2rem 0; }
-    .timeline-item { position: relative; margin-bottom: 2rem; }
+    .timeline-item { position: relative; margin-bottom: 2rem; cursor: pointer; }
     .timeline-item::before { content: ""; position: absolute; left: calc(-1.5rem - 6px); top: 0.25rem; width: 10px; height: 10px; border-radius: 50%; background-color: var(--accent-blue); border: 2px solid var(--bg-primary); }
     .timeline-date { font-weight: 700; color: var(--accent-blue); font-size: 0.9rem; }
     .timeline-title { font-weight: 600; margin: 0.25rem 0; }
+    .timeline-detail { display: none; font-size: 0.9rem; color: var(--text-muted); margin-top: 0.5rem; background-color: var(--bg-secondary); padding: 0.75rem; border-radius: 6px; border: 1px solid var(--border-color); }
 
     .video-card { background-color: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--card-radius); padding: 1.5rem; box-shadow: var(--card-shadow); margin: 2rem 0; }
     .mock-screen { background-color: #0f172a; color: #94a3b8; aspect-ratio: 16/9; border-radius: 6px; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; overflow: hidden; margin-bottom: 1rem; border: 1px solid #1e293b; }
-    .play-trigger { font-size: 3.5rem; cursor: pointer; }
+    .play-trigger { font-size: 3.5rem; cursor: pointer; transition: transform 0.1s; z-index: 2; }
+    .play-trigger:hover { transform: scale(1.1); }
+    .player-progress-container { position: absolute; bottom: 0; left: 0; width: 100%; height: 4px; background-color: #334155; }
+    .player-progress-bar { height: 100%; width: 0%; background-color: var(--accent-blue); transition: width 0.1s linear; }
+
+    .receipt-card { background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--accent-light) 100%); border: 2px solid var(--accent-blue); border-radius: var(--card-radius); padding: 2rem; box-shadow: var(--card-shadow); margin-top: 2rem; animation: scaleIn 0.3s ease-out; }
+    @keyframes scaleIn { from { transform: scale(0.97); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
     footer { border-top: 1px solid var(--border-color); background-color: var(--bg-secondary); padding: 3rem 1.5rem; text-align: center; font-size: 0.85rem; color: var(--text-muted); }
+    .footer-links { display: flex; justify-content: center; gap: 1.5rem; margin-top: 0.75rem; }
+    .footer-links a { color: var(--text-muted); text-decoration: none; }
+    .footer-links a:hover { color: var(--accent-blue); }
 
     #login-screen { display: flex; align-items: center; justify-content: center; min-height: 100vh; background-color: var(--bg-primary); padding: 1.5rem; }
     .login-box { background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--card-radius); padding: 2.5rem 2rem; box-shadow: var(--card-shadow); width: 100%; max-width: 420px; text-align: center; }
     .lang-selector-header { margin-bottom: 1.5rem; display: flex; justify-content: flex-end; }
 
-    /* 聊天专属样式 */
+    /* Chat bubble styles */
     .chat-bubble { max-width: 75%; padding: 0.6rem 1rem; border-radius: 12px; font-size: 0.95rem; margin-bottom: 0.2rem; }
     .chat-bubble.self { background-color: var(--accent-blue); color: #ffffff; align-self: flex-end; border-bottom-right-radius: 2px; }
     .chat-bubble.other { background-color: var(--bg-secondary); color: var(--text-main); border: 1px solid var(--border-color); align-self: flex-start; border-bottom-left-radius: 2px; }
@@ -147,7 +119,6 @@
 </head>
 <body class="lang-en">
 
-  <!-- 安全登录与姓名激活看板 -->
   <div id="login-screen">
     <div class="login-box">
       <div class="lang-selector-header">
@@ -158,25 +129,21 @@
       </div>
       <div style="font-size: 2.5rem; color: var(--accent-blue); margin-bottom: 0.5rem; font-weight: 700;">Γ</div>
       
-      <h2 style="border: none; padding: 0; margin: 0 0 0.5rem 0;">
+      <h2 id="auth-main-title" style="border: none; padding: 0; margin: 0 0 0.5rem 0;">
         <span class="lang-en">Gamma Math Club</span>
         <span class="lang-zh">伽马数学社</span>
       </h2>
 
-      <!-- 一键登录主入口面板 -->
       <div id="login-form-wrapper">
         <p style="font-size: 0.9rem; margin-bottom: 2rem;">
           <span class="lang-en">Sign in securely using your institution Google account</span>
           <span class="lang-zh">请使用您的学校或个人 Google 账户一键安全登录</span>
         </p>
-        
-        <!-- 谷歌官方渲染托管节点 -->
         <div style="display: flex; justify-content: center; margin: 2rem 0;">
           <div id="google-btn-container"></div>
         </div>
       </div>
 
-      <!-- 首次登录弹出的真实姓名录入面板 -->
       <div id="name-prompt-wrapper" style="display: none; text-align: left; animation: fadeIn 0.3s ease-in-out;">
         <h3 class="lang-en" style="margin-bottom: 0.5rem; color: var(--accent-blue);">Please enter your full name</h3>
         <h3 class="lang-zh" style="margin-bottom: 0.5rem; color: var(--accent-blue);">请输入您的真实姓名</h3>
@@ -195,22 +162,33 @@
         </form>
       </div>
 
-      <p id="auth-status-msg" style="font-size: 0.85rem; margin-top: 1.25rem; display: none; padding: 0.5rem; border-radius: 4px; background-color: #fef2f2; color: #ef4444;"></p>
+      <p id="auth-status-msg" style="font-size: 0.85rem; margin-top: 1.25rem; display: none; padding: 0.5rem; border-radius: 4px;"></p>
     </div>
   </div>
 
-  <!-- 主系统应用 -->
   <div id="main-app-container" style="display: none;">
     <header>
-      <a href="#" class="logo">Γ<span>ammath.xyz</span></a>
+      <a href="#" class="logo" id="header-logo-link">Γ<span>ammath.xyz</span></a>
       <div class="nav-container">
         <nav id="nav-menu">
-          <a href="#about" class="nav-item"><span class="lang-en">X. About</span><span class="lang-zh">X. 关于我们</span></a>
-          <a href="#activities" class="nav-item"><span class="lang-en">Y. Activities</span><span class="lang-zh">Y. 学术活动</span></a>
-          <a href="#chat" class="nav-item"><span class="lang-en">W. Chat Room</span><span class="lang-zh">W. 交流社区</span></a>
-          <a href="#cas" class="nav-item"><span class="lang-en">Z. CAS Project</span><span class="lang-zh">Z. CAS 项目</span></a>
-          <a href="#join" class="nav-item"><span class="lang-en">∫ Join Us</span><span class="lang-zh">∫ 加入我们</span></a>
-          <a href="#media" class="nav-item"><span class="lang-en">∑ Media</span><span class="lang-zh">∑ 媒体资源</span></a>
+          <a href="#about" class="nav-item">
+            <span class="lang-en">X. About</span><span class="lang-zh">X. 关于我们</span>
+          </a>
+          <a href="#activities" class="nav-item">
+            <span class="lang-en">Y. Activities</span><span class="lang-zh">Y. 学术活动</span>
+          </a>
+          <a href="#chat" class="nav-item">
+            <span class="lang-en">W. Chat Room</span><span class="lang-zh">W. 交流社区</span>
+          </a>
+          <a href="#cas" class="nav-item">
+            <span class="lang-en">Z. CAS Project</span><span class="lang-zh">Z. CAS 项目</span>
+          </a>
+          <a href="#join" class="nav-item">
+            <span class="lang-en">∫ Join Us</span><span class="lang-zh">∫ 加入我们</span>
+          </a>
+          <a href="#media" class="nav-item">
+            <span class="lang-en">∑ Media</span><span class="lang-zh">∑ 媒体资源</span>
+          </a>
         </nav>
         <select class="lang-switcher" style="width: auto; margin: 0; padding: 0.3rem 0.6rem; font-size: 0.85rem; border-radius: 4px; border: 1px solid var(--border-color); cursor: pointer; background: var(--bg-secondary); color: var(--text-main);">
           <option value="en">English</option>
@@ -220,14 +198,15 @@
     </header>
 
     <main id="view-container">
-      <!-- 主页 -->
+
       <section id="home" class="section active">
         <div style="margin-bottom: 3rem;">
           <span style="font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; font-size: 0.8rem; color: var(--accent-blue);">
-            <span class="lang-en">Gamma Math Club</span>
-            <span class="lang-zh">伽马数学社</span>
+            <span class="lang-en">Gamma Math Club</span><span class="lang-zh">伽马数学社</span>
           </span>
-          <h1 style="margin-top: 0.5rem; font-size: 3.2rem; line-height: 1.1;">Where Gamma meets X, Y, Z.</h1>
+          <h1 style="margin-top: 0.5rem; font-size: 3.2rem; line-height: 1.1;">
+            <span class="lang-en">Where Gamma meets X, Y, Z.</span><span class="lang-zh">Where Gamma meets X, Y, Z.</span>
+          </h1>
           <p style="font-size: 1.25rem; max-width: 700px; color: var(--text-muted); margin-top: 1rem;">
             <span class="lang-en">We bridge mathematical inquiry with global collaboration. Organized by high school students connecting Rome and Beijing.</span>
             <span class="lang-zh">我们连接数学探究与全球协作。由连接罗马与北京的高中生共同组织。</span>
@@ -238,138 +217,377 @@
           <div class="card">
             <div style="font-size: 1.5rem; margin-bottom: 0.75rem;">📅</div>
             <h3 class="lang-en">Bi-Weekly Seminars</h3><h3 class="lang-zh">双周研讨会</h3>
-            <p style="font-size: 0.9rem;" class="lang-en">Interact during 60-minute exploration sessions addressing Algebra, Geometry, and Number Theory.</p>
-            <p style="font-size: 0.9rem;" class="lang-zh">在代数、几何和数论相关的60分钟探索会议中进行学术探讨与互动。</p>
-            <a href="#activities" class="btn secondary" style="width: 100%; margin-top: 0.5rem;">Explore Seminars</a>
+            <p style="font-size: 0.9rem;" class="lang-en">Interact during 60-minute exploration sessions addressing Algebra, Geometry, Analysis, and Number Theory.</p>
+            <p style="font-size: 0.9rem;" class="lang-zh">在代数、几何、分析和数论相关的60分钟探索会议中进行学术探讨与互动。</p>
+            <a href="#activities" class="btn secondary nav-router" data-dest="activities" style="width: 100%; margin-top: 0.5rem;">
+              <span class="lang-en">Explore Seminars</span><span class="lang-zh">探索研讨会</span>
+            </a>
           </div>
           <div class="card">
-            <div style="font-size: 1.5rem; margin-bottom: 0.75rem;">💬</div>
-            <h3 class="lang-en">Global Chat Room</h3><h3 class="lang-zh">跨国界交流社区</h3>
-            <p style="font-size: 0.9rem;" class="lang-en">Connect and chat instantly with mathematics lovers from different chapters online.</p>
-            <p style="font-size: 0.9rem;" class="lang-zh">与来自全球各地的数学爱好者们在线建立实时连接，探讨疑难学术痛点。</p>
-            <a href="#chat" class="btn secondary" style="width: 100%; margin-top: 0.5rem;">Enter Chat Hub</a>
+            <div style="font-size: 1.5rem; margin-bottom: 0.75rem;">⚔️</div>
+            <h3 class="lang-en">Peer Challenges</h3><h3 class="lang-zh">同伴挑战板</h3>
+            <p style="font-size: 0.9rem;" class="lang-en">Engage in designated high school syllabus peer-challenges (AP, IB, A-Level, and national curriculums).</p>
+            <p style="font-size: 0.9rem;" class="lang-zh">参与针对高中教学大纲（AP、IB、A-Level及国内高考）的同伴学术挑战。</p>
+            <a href="#activities" class="btn secondary nav-router" data-dest="activities" style="width: 100%; margin-top: 0.5rem;">
+              <span class="lang-en">Challenge Board</span><span class="lang-zh">进入挑战板</span>
+            </a>
           </div>
           <div class="card">
             <div style="font-size: 1.5rem; margin-bottom: 0.75rem;">🧩</div>
             <h3 class="lang-en">Weekly Problem</h3><h3 class="lang-zh">每周一题</h3>
-            <p style="font-size: 0.9rem;" class="lang-en">View our weekly select mathematical puzzle curated within secondary school boundaries.</p>
+            <p style="font-size: 0.9rem;" class="lang-en">View our weekly select mathematical puzzle. Conceptualized to puzzle, curated not to exceed high school scope.</p>
             <p style="font-size: 0.9rem;" class="lang-zh">探索我们每周精选的数学谜题。专为启发理性逻辑而设计，且难度不超出高中范围。</p>
-            <a href="#activities" class="btn" style="width: 100%; margin-top: 0.5rem;">Solve Current Problem</a>
+            <button id="home-problem-btn" class="btn" style="width: 100%; margin-top: 0.5rem;">
+              <span class="lang-en">Solve Current Problem</span><span class="lang-zh">解答当前题目</span>
+            </button>
           </div>
         </div>
         <div id="home-problem-arena"></div>
       </section>
 
-      <!-- 关于我们 -->
       <section id="about" class="section">
         <h1 class="lang-en">X. About the Club</h1><h1 class="lang-zh">X. 关于数学社</h1>
-        <p style="font-size: 1.1rem; max-width: 800px; margin-bottom: 2rem;" class="lang-en">Gamma Math Club originated from a shared conviction that mathematical exploration thrives outside standard testing parameters. We form intellectual connections between international divisions in Beijing and European secondary schools.</p>
-        <p style="font-size: 1.1rem; max-width: 800px; margin-bottom: 2rem;" class="lang-zh">伽马数学社源于一个共同的信念，即数学探索不仅存在于标准化测试之中。我们在北京的国际教育资源与欧洲的中学之间搭建起学术桥梁，建立起国际化的互通合作平台。</p>
-        <h2>Co-Founders & Core Chapters</h2>
+        <p style="font-size: 1.1rem; max-width: 800px; margin-bottom: 2rem;" class="lang-en">
+          Gamma Math Club originated from a shared conviction that mathematical exploration thrives outside standard testing parameters. We form intellectual connections between international divisions in Beijing and European secondary schools, establishing a global communication channel.
+        </p>
+        <p style="font-size: 1.1rem; max-width: 800px; margin-bottom: 2rem;" class="lang-zh">
+          伽马数学社源于一个共同的信念，即数学探索不仅存在于标准化测试之中。我们在北京的国际教育资源与欧洲的中学之间搭建起学术桥梁，建立起国际化的互通合作平台。
+        </p>
+
+        <h2 class="lang-en">Co-Founders & Core Chapters</h2><h2 class="lang-zh">联合创始人与核心分部</h2>
         <div class="card-grid">
           <div class="card">
-            <h3>Marymount International School Rome</h3>
-            <p style="font-size: 0.9rem;" class="lang-en">Establishing core links with European international curriculums and local mathematics interest groups.</p>
+            <span style="font-size: 0.85rem; text-transform: uppercase; color: var(--accent-blue); font-weight: 750;" class="lang-en">Rome Chapter</span>
+            <span style="font-size: 0.85rem; text-transform: uppercase; color: var(--accent-blue); font-weight: 750;" class="lang-zh">罗马分部</span>
+            <h3 style="margin-top: 0.5rem; font-size: 1.3rem;" class="lang-en">Marymount International School Rome</h3>
+            <h3 style="margin-top: 0.5rem; font-size: 1.3rem;" class="lang-zh">罗马玛丽蒙特国际学校</h3>
+            <p style="font-size: 0.9rem; margin-top: 0.5rem;" class="lang-en">Establishing core links with European international curriculums and local mathematics interest groups.</p>
+            <p style="font-size: 0.9rem; margin-top: 0.5rem;" class="lang-zh">负责对接欧洲国际课程及当地的小型数学兴趣社群。</p>
           </div>
           <div class="card">
-            <h3>Yongkuo Chen & Zofia Grzelinska</h3>
-            <p style="font-size: 0.9rem;" class="lang-en">Co-founded to construct an inclusive, balanced academic workspace.</p>
+            <span style="font-size: 0.85rem; text-transform: uppercase; color: var(--accent-blue); font-weight: 750;" class="lang-en">Leadership Team</span>
+            <span style="font-size: 0.85rem; text-transform: uppercase; color: var(--accent-blue); font-weight: 750;" class="lang-zh">领导团队</span>
+            <h3 style="margin-top: 0.5rem; font-size: 1.3rem;">Yongkuo Chen & Zofia Grzelinska</h3>
+            <p style="font-size: 0.9rem; margin-top: 0.5rem;" class="lang-en">Co-founded by Yongkuo Chen (President) and Zofia Grzelinska (Vice President) to construct an inclusive, balanced academic workspace.</p>
+            <p style="font-size: 0.9rem; margin-top: 0.5rem;" class="lang-zh">由陈永阔（社长）和 Zofia Grzelinska（副社长）联合创立，旨在构建一个平等、包容的多元化学术空间。</p>
+          </div>
+        </div>
+
+        <h2 class="lang-en">Our Core Philosophies</h2><h2 class="lang-zh">核心发展理念</h2>
+        <div class="card-grid">
+          <div class="card">
+            <h3 class="lang-en">Transnational Exchange</h3><h3 class="lang-zh">跨国界交流</h3>
+            <p style="font-size: 0.9rem;" class="lang-en">Utilizing mathematics as an objective, shared language to communicate analytical ideas between peers from differing cultures.</p>
+            <p style="font-size: 0.9rem;" class="lang-zh">将数学作为一种客观中立的通用语言，在不同文化背景的同伴之间建立起思维碰撞的桥梁。</p>
+          </div>
+          <div class="card">
+            <h3 class="lang-en">Breaking STEM Stereotypes</h3><h3 class="lang-zh">打破理科刻板印象</h3>
+            <p style="font-size: 0.9rem;" class="lang-en">Actively encouraging female leadership and enrollment. Our founding executive structure and continuous seminar program maintain active gender balance.</p>
+            <p style="font-size: 0.9rem;" class="lang-zh">积极鼓励女性力量的展现。我们的初始管理架构和研讨会项目规划始终保持着积极的性别平衡。</p>
+          </div>
+          <div class="card">
+            <h3 class="lang-en">Clear Pedagogy</h3><h3 class="lang-zh">以教促学</h3>
+            <p style="font-size: 0.9rem;" class="lang-en">Developing students' presentation skills. Teaching mathematics to others is the most reliable way to formalize and master one's own understanding.</p>
+            <p style="font-size: 0.9rem;" class="lang-zh">培养学生的演讲展示技能。向他人清晰地讲述数学逻辑是深化并巩固自己理解的最可靠方式。</p>
           </div>
         </div>
       </section>
 
-      <!-- 学术活动 -->
       <section id="activities" class="section">
-        <h1>Y. Academic Activities</h1>
+        <h1 class="lang-en">Y. Academic Activities</h1><h1 class="lang-zh">Y. 学术活动</h1>
+        <p class="lang-en">We balance structured seminars with self-directed community problem challenges. Our scope is strictly high-school bounded (AP/IB/A-Level and domestic equivalents) to ensure accessibility.</p>
+        <p class="lang-zh">我们在结构化的研讨会与自主的社区解题挑战之间取得平衡。题目难度严格限定在高中知识领域（AP/IB/A-Level及同等国内水平）以保证活动的普适性。</p>
+
+        <h2 class="lang-en"> Bi-Weekly Theme Seminars</h2><h2 class="lang-zh"> 双周主题研讨会</h2>
+        <p style="margin-bottom: 1.5rem;" class="lang-en">Click "RSVP" to secure a placeholder seat. Registered sessions update your active CAS hours indicator.</p>
+        <p style="margin-bottom: 1.5rem;" class="lang-zh">点击“预约”锁定名额。成功登记的研讨会将自动同步更新您的 CAS 学时统计指标。</p>
         <div id="seminars-board" class="card-grid"></div>
+
+        <h2 class="lang-en"> Peer Challenge Board</h2><h2 class="lang-zh"> 同伴挑战榜</h2>
+        <div class="challenge-hall">
+          <p style="margin-bottom: 1.5rem; font-size: 0.95rem; border-left: 3px solid var(--accent-blue); padding-left: 0.75rem;" class="lang-en">
+            <strong>Challenge Protocols:</strong> Submit a mathematical query strictly bounded within standard advanced high school curriculums. Peers collaborate to formulate and post clear, step-by-step proofs.
+          </p>
+          <p style="margin-bottom: 1.5rem; font-size: 0.95rem; border-left: 3px solid var(--accent-blue); padding-left: 0.75rem;" class="lang-zh">
+            <strong>发布规则：</strong> 提交一道严格在高级高中课程范围内的数学难题。同伴们可以相互协作，提出并发布清晰、完整的步骤解析。
+          </p>
+
+          <div style="background-color: var(--bg-primary); padding: 1.5rem; border-radius: 6px; border: 1px solid var(--border-color); margin-bottom: 2rem;">
+            <h4 style="margin-bottom: 0.5rem; font-size: 1rem;" class="lang-en">Post an Academic Challenge</h4>
+            <h4 style="margin-bottom: 0.5rem; font-size: 1rem;" class="lang-zh">发布全新挑战</h4>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+              <div>
+                <label style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted);" class="lang-en">Your Name / Affiliation</label>
+                <label style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted);" class="lang-zh">您的姓名 / 所属学校</label>
+                <input type="text" id="form-challenger-name" placeholder="e.g. Chen (Marymount)">
+              </div>
+              <div>
+                <label style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted);" class="lang-en">Subject Domain</label>
+                <label style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted);" class="lang-zh">学科领域</label>
+                <select id="form-challenge-domain">
+                  <option value="Algebra">Algebra / Polynomials</option>
+                  <option value="Geometry">Classical Geometry / Vectors</option>
+                  <option value="Number Theory">Number Theory / Modular Arithmetic</option>
+                  <option value="Calculus">Calculus / Limits</option>
+                </select>
+              </div>
+            </div>
+            <div>
+              <label style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted);" class="lang-en">Problem Description</label>
+              <label style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted);" class="lang-zh">详细描述</label>
+              <textarea id="form-challenge-text" rows="3" placeholder="State your mathematical problem clearly..."></textarea>
+            </div>
+            <button id="post-challenge-btn" class="btn" style="width: 100%;">
+              <span class="lang-en">Submit to Challenge Board</span><span class="lang-zh">发布至挑战榜</span>
+            </button>
+          </div>
+          <h3 class="lang-en">Active Academic Challenges</h3><h3 class="lang-zh">当前活跃的挑战</h3>
+          <div id="peer-challenges-container" style="margin-top: 1rem;"></div>
+        </div>
+
+        <h2 class="lang-en"> Historical Problem Archive</h2><h2 class="lang-zh"> 历史真题归档</h2>
+        <div id="archive-problems-container"></div>
       </section>
 
-      <!-- 联机聊天模块 -->
       <section id="chat" class="section">
-        <h1>W. Connected Chat Hub</h1>
+        <h1 class="lang-en">W. Connected Chat Hub</h1><h1 class="lang-zh">W. 跨国界交流社区</h1>
+        <p class="lang-en">Connect and chat instantly with mathematics lovers from different chapters online.</p>
+        <p class="lang-zh">与来自全球各地的数学爱好者们在线建立实时连接，探讨疑难学术痛点。</p>
         <div style="background-color: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--card-radius); box-shadow: var(--card-shadow); display: flex; flex-direction: column; height: 520px; margin-top: 1.5rem;">
           <div id="chat-messages-box" style="flex: 1; padding: 1.5rem; overflow-y: auto; display: flex; flex-direction: column; gap: 0.8rem; background: #fdfdfd;"></div>
           <form id="chat-send-form" style="display: flex; gap: 0.75rem; padding: 1rem; border-top: 1px solid var(--border-color); background: var(--bg-secondary); margin: 0;">
             <input type="text" id="chat-message-input" placeholder="Type messages or academic query..." style="margin: 0; flex: 1;" required autocomplete="off">
-            <button type="submit" class="btn" style="white-space: nowrap; padding: 0 1.5rem;">Send</button>
+            <button type="submit" class="btn" style="white-space: nowrap; padding: 0 1.5rem;">
+              <span class="lang-en">Send</span><span class="lang-zh">发送</span>
+            </button>
           </form>
         </div>
       </section>
 
-      <!-- CAS 契合度 -->
       <section id="cas" class="section">
-        <h1>Z. CAS Alignment</h1>
+        <h1 class="lang-en">Z. CAS Alignment</h1><h1 class="lang-zh">Z. CAS 项目契合度</h1>
+        <p style="font-size: 1.1rem; max-width: 800px;" class="lang-en">As international curriculum candidates, our operations satisfy the guidelines of the <strong>CAS (Creativity, Activity, Service)</strong> project framework, creating demonstrable peer educational value.</p>
+        <p style="font-size: 1.1rem; max-width: 800px;" class="lang-zh">作为国际文凭项目候选人，我们的运营活动完全契合 <strong>CAS (Creativity 创造、Activity 活动、Service 服务)</strong> 的大纲指导，创造可量化的同伴教育核心价值。</p>
+        <div class="card-grid">
+          <div class="card">
+            <h3 style="color: var(--accent-blue);" class="lang-en">Creativity</h3><h3 style="color: var(--accent-blue);" class="lang-zh">创造</h3>
+            <p style="font-size: 0.9rem;" class="lang-en">Designing bilingual mathematical slides, scripting educational explanations, and managing a clean, modern digital community architecture.</p>
+            <p style="font-size: 0.9rem;" class="lang-zh">设计双语幻灯片、撰写教育解析脚本，以及开发维护简洁易用的数字化社群平台架构。</p>
+          </div>
+          <div class="card">
+            <h3 style="color: var(--accent-blue);" class="lang-en">Activity</h3><h3 style="color: var(--accent-blue);" class="lang-zh">活动</h3>
+            <p style="font-size: 0.9rem;" class="lang-en">Coordinating real-time academic operations across European and Asian time zones, organizing digital presentations, and managing structural assets.</p>
+            <p style="font-size: 0.9rem;" class="lang-zh">跨越欧亚时区协调实时学术活动、组织线上研讨演示，并主持数字化平台的日常运营统筹。</p>
+          </div>
+          <div class="card">
+            <h3 style="color: var(--accent-blue);" class="lang-en">Service</h3><h3 style="color: var(--accent-blue);" class="lang-zh">服务</h3>
+            <p style="font-size: 0.9rem;" class="lang-en">Delivering accessible tutoring and peer-review processes, lowering educational barriers, and fostering an inclusive platform for female mathematicians.</p>
+            <p style="font-size: 0.9rem;" class="lang-zh">提供无门槛的同伴辅导与作业互评，降低学术交流壁垒，并为女性数学爱好者提供包容平等的展示平台。</p>
+          </div>
+        </div>
+
+        <h2>
+          <span class="lang-en"> Community Growth Timeline <span style="font-size: 0.8rem; font-weight: normal; color: var(--text-muted);">(Click node for details)</span></span>
+          <span class="lang-zh"> 社区成长时间线 <span style="font-size: 0.8rem; font-weight: normal; color: var(--text-muted);">(点击节点查看详情)</span></span>
+        </h2>
         <div id="cas-timeline" class="timeline"></div>
+
+        <h2 class="lang-en">Quantitative Impact Summary</h2><h2 class="lang-zh">量化影响力总结</h2>
         <div class="card" style="background-color: var(--accent-light); border-color: #bfdbfe; margin-top: 1rem;">
           <div style="display: flex; justify-content: space-around; flex-wrap: wrap; gap: 1.5rem; text-align: center;">
             <div>
-              <div style="font-size: 2rem; font-weight: 800; color: var(--accent-blue);">4</div>
-              <div style="font-size: 0.8rem; font-weight: 600; text-transform: uppercase; color: var(--text-muted);">Seminars Planned</div>
+              <div style="font-size: 2rem; font-weight: 800; color: var(--accent-blue);" id="stat-countries">2</div>
+              <div style="font-size: 0.8rem; font-weight: 600; text-transform: uppercase; color: var(--text-muted);" class="lang-en">Core Nations</div>
+              <div style="font-size: 0.8rem; font-weight: 600; text-transform: uppercase; color: var(--text-muted);" class="lang-zh">核心国家</div>
+            </div>
+            <div>
+              <div style="font-size: 2rem; font-weight: 800; color: var(--accent-blue);" id="stat-seminars">4</div>
+              <div style="font-size: 0.8rem; font-weight: 600; text-transform: uppercase; color: var(--text-muted);" class="lang-en">Seminars Planned</div>
+              <div style="font-size: 0.8rem; font-weight: 600; text-transform: uppercase; color: var(--text-muted);" class="lang-zh">计划研讨会</div>
+            </div>
+            <div>
+              <div style="font-size: 2rem; font-weight: 800; color: var(--accent-blue);" id="stat-gender">45%</div>
+              <div style="font-size: 0.8rem; font-weight: 600; text-transform: uppercase; color: var(--text-muted);" class="lang-en">Female Leadership</div>
+              <div style="font-size: 0.8rem; font-weight: 600; text-transform: uppercase; color: var(--text-muted);" class="lang-zh">女性管理占比</div>
             </div>
             <div>
               <div style="font-size: 2rem; font-weight: 800; color: var(--accent-blue);" id="stat-rsvp">0</div>
-              <div style="font-size: 0.8rem; font-weight: 600; text-transform: uppercase; color: var(--text-muted);">Your RSVPs</div>
+              <div style="font-size: 0.8rem; font-weight: 600; text-transform: uppercase; color: var(--text-muted);" class="lang-en">Your RSVP Points</div>
+              <div style="font-size: 0.8rem; font-weight: 600; text-transform: uppercase; color: var(--text-muted);" class="lang-zh">您的预约次数</div>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- 加入我们 -->
       <section id="join" class="section">
-        <h1>∫ Join the Movement</h1>
-        <div style="background-color: var(--bg-secondary); border: 1px solid var(--border-color); padding: 2rem; border-radius: var(--card-radius);">
+        <h1 class="lang-en">∫ Join the Movement</h1><h1 class="lang-zh">∫ 加入我们</h1>
+        <p style="max-width: 800px;" class="lang-en">Gamma Math Club operates in close academic communication with international high schools. We invite bilingual students who possess a dedicated passion for logical structures to apply as continuous members or featured seminar hosts.</p>
+        <p style="max-width: 800px;" class="lang-zh">伽马数学社始终与国际化高中保持着密切的学术联系。我们欢迎充满热情、具备逻辑思维能力的双语同伴申请加入，成为常驻会员或主讲嘉宾。</p>
+        <div class="card-grid" style="margin-bottom: 2.5rem;">
+          <div class="card">
+            <h3 class="lang-en">Peer Communicators</h3><h3 class="lang-zh">同伴交流生</h3>
+            <p style="font-size: 0.9rem;" class="lang-en">Join our ongoing communication hub to review weekly problems, submit challenges, and collaborate on step-by-step proofs.</p>
+            <p style="font-size: 0.9rem;" class="lang-zh">加入我们的日常交流群，共同解析每周一题、发起挑战、合作编写严谨的解答证明。</p>
+            <span style="font-size: 0.85rem; font-weight: 700; color: var(--accent-blue);" class="lang-en">Contact: +39 3935795396</span>
+            <span style="font-size: 0.85rem; font-weight: 700; color: var(--accent-blue);" class="lang-zh">联系方式: +39 3935795396</span>
+          </div>
+          <div class="card">
+            <h3 class="lang-en">Featured Speakers</h3><h3 class="lang-zh">研讨讲座嘉宾</h3>
+            <p style="font-size: 0.9rem;" class="lang-en">Present during our bi-weekly seminar series. Topics can focus on analytical proof styles, modular structures, or geometry.</p>
+            <p style="font-size: 0.9rem;" class="lang-zh">在双周研讨会中担任主讲。主题可涵盖代数证明逻辑、模算术架构或解析几何等核心模块。</p>
+            <span style="font-size: 0.85rem; font-weight: 700; color: var(--accent-blue);" class="lang-en">Fulfills CAS Service/Creativity requirements</span>
+            <span style="font-size: 0.85rem; font-weight: 700; color: var(--accent-blue);" class="lang-zh">完美符合 CAS 项目服务/创造模块核心要求</span>
+          </div>
+        </div>
+
+        <h2 class="lang-en">Submit Speaker Application</h2><h2 class="lang-zh">提交主讲人席位申请</h2>
+        <div id="join-workflow-container" style="background-color: var(--bg-secondary); border: 1px solid var(--border-color); padding: 2rem; border-radius: var(--card-radius); box-shadow: var(--card-shadow);">
           <form id="speaker-application-form">
-            <div><label>Full Name</label><input type="text" required></div>
-            <div><label>Proposed Theme</label><textarea rows="3" required></textarea></div>
-            <button type="submit" class="btn" style="width: 100%;">Submit Application</button>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+              <div>
+                <label style="font-weight: 600; font-size: 0.85rem;" class="lang-en">Full Name</label>
+                <label style="font-weight: 600; font-size: 0.85rem;" class="lang-zh">真实姓名</label>
+                <input type="text" id="app-name" placeholder="e.g. Zofia Grzelinska" required>
+              </div>
+              <div>
+                <label style="font-weight: 600; font-size: 0.85rem;" class="lang-en">Contact Email</label>
+                <label style="font-weight: 600; font-size: 0.85rem;" class="lang-zh">电子邮箱</label>
+                <input type="email" id="app-email" placeholder="e.g. address@example.com" required>
+              </div>
+            </div>
+            <div>
+              <label style="font-weight: 600; font-size: 0.85rem;" class="lang-en">Affiliated High School</label>
+              <label style="font-weight: 600; font-size: 0.85rem;" class="lang-zh">就读高中</label>
+              <input type="text" id="app-school" placeholder="e.g. Marymount International School Rome" required>
+            </div>
+            <div>
+              <label style="font-weight: 600; font-size: 0.85rem;" class="lang-en">Proposed Mathematical Theme</label>
+              <label style="font-weight: 600; font-size: 0.85rem;" class="lang-zh">拟定分享主题</label>
+              <textarea id="app-subject" rows="4" placeholder="Briefly introduce the theorem, proof method, or specific puzzle domain you plan to present..." required></textarea>
+            </div>
+            <button type="submit" class="btn" style="width: 100%; padding: 0.8rem;">
+              <span class="lang-en">Submit Formal Application</span><span class="lang-zh">提交正式申请</span>
+            </button>
           </form>
         </div>
       </section>
 
-      <!-- 媒体资源 -->
       <section id="media" class="section">
-        <h1>∑ Resource Archives</h1>
+        <h1 class="lang-en">∑ Resource & Session Archives</h1><h1 class="lang-zh">∑ 教学资源与录像归档</h1>
+        <p class="lang-en">We index recordings of select seminars to provide high-quality reference material for the student community.</p>
+        <p class="lang-zh">我们在这里索引部分精品研讨会的公开录像片段，为学生社群提供高质量的参考学习资料。</p>
         <div class="video-card">
-          <div class="mock-screen">[ Video Stream Vault Closed ]</div>
+          <div class="mock-screen" id="seminar-video-box">
+            <span id="video-play-icon" class="play-trigger">▶</span>
+            <div style="margin-top: 1rem; text-align: center; font-family: monospace; font-size: 0.85rem; padding: 0 1rem;" id="video-display-status">
+              [ Seminar #02: Introduction to Symmetries & Groups in Platonic Solids ]
+            </div>
+            <div class="player-progress-container"><div class="player-progress-bar" id="video-progress-fill"></div></div>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
+            <div>
+              <h3 id="video-current-title">Symmetry & Permutations in Rubik's Group</h3>
+              <p style="font-size: 0.85rem; margin: 0; color: var(--text-muted);" class="lang-en">Recorded presentation from Rome & Beijing Joint Chapters</p>
+              <p style="font-size: 0.85rem; margin: 0; color: var(--text-muted);" class="lang-zh">由罗马及北京分部联合提供的座谈录像</p>
+            </div>
+            <button id="video-control-btn" class="btn">Start Recording Playback</button>
+          </div>
+        </div>
+
+        <h2 class="lang-en">Academic References</h2><h2 class="lang-zh">学术参考书目推荐</h2>
+        <div class="card-grid">
+          <div class="card">
+            <h3 class="lang-en">"What is Mathematics?"</h3><h3 class="lang-zh">《什么是数学？》</h3>
+            <p style="font-size: 0.85rem; margin: 0;" class="lang-en">A classic overview of real, analytical mathematics by Courant and Robbins. Ideal foundational reading for new members.</p>
+            <p style="font-size: 0.85rem; margin: 0;" class="lang-zh">由 Courant 和 Robbins 编写的解析数学经典著作。是新人建立数学思想的入门基石。</p>
+          </div>
+          <div class="card">
+            <h3>3Blue1Brown</h3>
+            <p style="font-size: 0.85rem; margin: 0;" class="lang-en">Recommended digital visualization resource. Highly useful for developing intuition in calculus and linear mappings.</p>
+            <p style="font-size: 0.85rem; margin: 0;" class="lang-zh">备受推崇的视频化直观学习资源。对于建立微积分与线性映射的直觉性理解非常重要。</p>
+          </div>
         </div>
       </section>
     </main>
 
-    <footer><p>© 2026 Gammath.xyz. Powered by Cloudflare D1 Systems.</p></footer>
+    <footer>
+      <div style="font-weight: 700; color: var(--accent-blue); margin-bottom: 0.5rem;" class="lang-en">Gamma Math Club (Gammath.xyz)</div>
+      <div style="font-weight: 700; color: var(--accent-blue); margin-bottom: 0.5rem;" class="lang-zh">伽马数学社 (Gammath.xyz)</div>
+      <p style="margin-bottom: 1rem;" class="lang-en">Coordinated in partnership with Marymount International School Rome</p>
+      <p style="margin-bottom: 1rem;" class="lang-zh">与罗马玛丽蒙特国际学校联合合作</p>
+      <div class="footer-links">
+        <a href="#about" class="footer-nav"><span class="lang-en">About Us</span><span class="lang-zh">关于我们</span></a>
+        <a href="#activities" class="footer-nav"><span class="lang-en">Seminars & Challenges</span><span class="lang-zh">研讨会与挑战</span></a>
+        <a href="#join" class="footer-nav"><span class="lang-en">Contact Registration</span><span class="lang-zh">联系与申请报名</span></a>
+      </div>
+      <p style="margin-top: 1.5rem; font-size: 0.75rem; color: #94a3b8;" class="lang-en">© 2026 Gammath.xyz. All institutional intellectual property strictly respected.</p>
+      <p style="margin-top: 1.5rem; font-size: 0.75rem; color: #94a3b8;" class="lang-zh">© 2026 Gammath.xyz. 严格遵守并保护所有合作学校机构的知识产权。</p>
+    </footer>
   </div>
 
   <script>
     (function() {
+      // --- LOCAL DATABASE (BILINGUAL) ---
       const localData = {
         en: {
           seminars: [
-            { id: 1, topic: "Algebra & Group Symmetry", speaker: "Yongkuo Chen", date: "Oct 12, 2026", desc: "Understanding abstract symmetries and basic permutations through algebraic structures." },
-            { id: 2, topic: "Number Theory Mysteries", speaker: "Zofia Grzelinska", date: "Oct 26, 2026", desc: "An elegant walkthrough of modular arithmetic and prime verification techniques." },
-            { id: 3, topic: "Analytic Geometry & Vectors", speaker: "Yongkuo Chen", date: "Nov 09, 2026", desc: "Simplifying geometric proofs through matrix operations and vector transformations." },
-            { id: 4, topic: "Graph Theory Foundations", speaker: "Guest Panelist", date: "Nov 23, 2026", desc: "Eulerian paths, vertex optimization, and applications in modern network layouts." }
+            { id: 1, topic: "Algebra & Group Symmetry", speaker: "Yongkuo Chen", school: "Marymount Rome", date: "Oct 12, 2026", duration: "60 Mins", desc: "Understanding abstract symmetries and basic permutations through algebraic structures." },
+            { id: 2, topic: "Number Theory Mysteries", speaker: "Zofia Grzelinska", school: "Marymount Rome", date: "Oct 26, 2026", duration: "60 Mins", desc: "An elegant walkthrough of modular arithmetic and prime verification techniques." },
+            { id: 3, topic: "Analytic Geometry & Vectors", speaker: "Yongkuo Chen", school: "Marymount Rome", date: "Nov 09, 2026", duration: "60 Mins", desc: "Simplifying geometric proofs through matrix operations and vector transformations." },
+            { id: 4, topic: "Graph Theory Foundations", speaker: "Guest Panelist", school: "Beijing Chapter Link", date: "Nov 23, 2026", duration: "60 Mins", desc: "Eulerian paths, vertex optimization, and applications in modern network layouts." }
           ],
-          weeklyProblems: [{ q: "For a real parameters, solve the system: x + y = 3, x³ + y³ = 9.", hint: "Factorize to obtain solutions (1,2) and (2,1)." }],
-          milestones: [{ date: "June 2026", title: "Global Collaboration Kick-Off", text: "Linking Marymount Rome with Beijing-based peer networks." }],
-          ui: { rtext: "Registered ✓", rsvp: "RSVP (Reserve Seat)" }
+          defaultChallenges: [
+            { domain: "Algebra", challenger: "Yongkuo Chen (Rome)", text: "Prove that for all real positive a, b, c, the inequality (a+b)(b+c)(c+a) ≥ 8abc holds.", solver: "Zofia & Rome Chapter (Solved via AM-GM Inequality)", status: "Completed" },
+            { domain: "Number Theory", challenger: "Zofia Grzelinska (Rome)", text: "Let p be a prime number greater than 3. Show that p² - 1 is always divisible by 24.", solver: "Open Community Consultation (Hint: analyze modular values of 3 and 8)", status: "Active" }
+          ],
+          weeklyProblems: [
+            { q: "For a real parameters, solve the system: x + y = 3, x³ + y³ = 9.", hint: "Factorize: x³ + y³ = (x+y)(x² - xy + y²). Given x+y=3, then 9 = 3(x² - xy + y²), which yields x² - xy + y² = 3. Expand (x+y)² = 9 to reveal 2xy = 6 - xy, obtaining solutions (1,2) and (2,1)." },
+            { q: "Let S be a set of 5 distinct integer points inside a unit square. Show that at least two points exist within a distance of √2 / 2.", hint: "Applying the Pigeonhole Principle. Divide the unit square into 4 equal quadrant squares of side length 1/2. Because there are 5 points, at least 2 points must reside within the same 1/2-by-1/2 square. The maximum distance in such a square is its diagonal, which measures exactly √2 / 2." }
+          ],
+          milestones: [
+            { date: "June 2026", title: "Global Collaboration Kick-Off", text: "Yongkuo and Zofia establish structural project metrics, linking Marymount Rome with Beijing-based peer mathematics networks." },
+            { date: "August 2026", title: "Academic Scope Formalization", text: "Curriculum requirements aligned to AP/IB systems, setting the core standard of math challenges to encourage broad participation." },
+            { date: "September 2026", title: "Launch of Gammath.xyz Portal", text: "The clean blue-white portal goes live, initiating the interactive digital reservation system for all seminars." }
+          ],
+          ui: {
+            sessionID: "Session ID", speaker: "Speaker", dateTime: "Date/Time", duration: "Duration", rsvp: "RSVP (Reserve Seat)", registered: "Registered ✓", activeChallenges: "Active Academic Challenges", postedBy: "Posted by", resolutionStatus: "Resolution Status", selectWeekly: "🧩 Select Weekly Problem Box", loadAlt: "Load Alternative Problem", expandHint: "Expand Conceptual Hint & Key", collapseHint: "Collapse Solution Details", conceptMechanics: "Concept Mechanics", openProof: "Open for verification (Peer Proof Phase)", classicInquiry: "Classic Inquiry", validationInProgress: "Validation in Progress", speakerCreds: "Speaker Credentials Generated", voucherCode: "Registration Hash", affiliation: "Affiliation", proposedLecture: "Proposed Lecture Title", activeReviewStage: "Active Review Stage", altAbstract: "Submit Alternative Abstract", credsText: "Your abstract submission has been verified. The academic committee will perform validation and schedule scheduling.", streamingActive: "[ Streaming Active: Group Symmetries & Rubik Mappings ]", streamingPaused: "[ Seminar #02: Paused ]", startPlayback: "Start Recording Playback", pauseSession: "Pause Session", allCriteriaRequired: "All challenge formulation criteria must be fully satisfied.", defaultStatusActive: "Active", defaultStatusCompleted: "Completed", week: "Week"
+          }
         },
         zh: {
           seminars: [
-            { id: 1, topic: "代数与群对称性", speaker: "陈永阔", date: "2026年10月12日", desc: "通过代数结构来理解抽象的对称性和基本排列变换。" },
-            { id: 2, topic: "数论的奥秘", speaker: "Zofia Grzelinska", date: "2026年10月26日", desc: "对模算术和素数验证等数论技术的优雅演练。" },
-            { id: 3, topic: "解析几何与向量", speaker: "陈永阔", date: "2026年11月09日", desc: "利用矩阵运算和向量变换简化传统的几何证明。" },
-            { id: 4, topic: "图论基础入门", speaker: "特邀主讲人", date: "2026年11月23日", desc: "欧拉路径、顶点优化以及它们在网络布局中的应用。" }
+            { id: 1, topic: "代数与群对称性", speaker: "陈永阔", school: "罗马玛丽蒙特", date: "2026年10月12日", duration: "60分钟", desc: "通过代数结构来理解抽象的对称性和基本排列变换。" },
+            { id: 2, topic: "数论的奥秘", speaker: "Zofia Grzelinska", school: "罗马玛丽蒙特", date: "2026年10月26日", duration: "60分钟", desc: "对模算术和素数验证等数论技术的优雅演练。" },
+            { id: 3, topic: "解析几何与向量", speaker: "陈永阔", school: "罗马玛丽蒙特", date: "2026年11月09日", duration: "60分钟", desc: "利用矩阵运算和向量变换简化传统的几何证明。" },
+            { id: 4, topic: "图论基础入门", speaker: "特邀主讲人", school: "北京分部连线", date: "2026年11月23日", duration: "60分钟", desc: "欧拉路径、顶点优化以及它们在现代网络布局中的应用。" }
           ],
-          weeklyProblems: [{ q: "在实数范围内解方程组: x + y = 3, x³ + y³ = 9。", hint: "因式分解联立，解得唯一解组为 (1,2) 与 (2,1)。" }],
-          milestones: [{ date: "2026年6月", title: "跨国学术协同启动", text: "成功连接罗马玛丽蒙特与北京的同伴高中生数学网络。" }],
-          ui: { rtext: "已登记 ✓", rsvp: "预约 (锁定席位)" }
+          defaultChallenges: [
+            { domain: "代数多项式", challenger: "陈永阔 (罗马分部)", text: "证明对于所有正实数 a, b, c，不等式 (a+b)(b+c)(c+a) ≥ 8abc 恒成立。", solver: "Zofia及罗马分部 (通过使用基本不等式 AM-GM 成功证明)", status: "已完成" },
+            { domain: "数论运算", challenger: "Zofia Grzelinska (罗马分部)", text: "已知 p 是大于 3 的素数。证明 p² - 1 总是能被 24 整除。", solver: "向社区开放探讨 (提示：分别讨论模 3 和模 8 的同余特征)", status: "活跃中" }
+          ],
+          weeklyProblems: [
+            { q: "在实数范围内解方程组: x + y = 3, x³ + y³ = 9。", hint: "因式分解：x³ + y³ = (x+y)(x² - xy + y²)。已知 x+y=3，代入得 9 = 3(x² - xy + y²)，化简得 x² - xy + y² = 3。展开 (x+y)² = 9，联立可得 2xy = 6 - xy，解得唯一解组为 (1,2) 与 (2,1)。" },
+            { q: "设 S 是位于单位正方形内部的 5 个互不相同的整点构成的集合。证明其中必然存在至少两点，它们的距离不超过 √2 / 2。", hint: "应用抽屉原理。将单位正方形平分为 4 个边长为 1/2 的小正方形。由于共有 5 个点，根据抽屉原理，至少有 2 个点落在同一个 1/2 乘以 1/2 的小正方形中。此小正方形内可能的最大距离即为其对角线长度，即 √2 / 2。" }
+          ],
+          milestones: [
+            { date: "2026年6月", title: "跨国协作启动", text: "陈永阔与 Zofia 制定了初期的项目指标与框架，成功连接罗马玛丽蒙特与北京的同伴高中生数学网络。" },
+            { date: "2026年8月", title: "学术范围基准确立", text: "将课程要求与 AP/IB 教育体系对齐，确立挑战题难度，鼓励广泛参与、避免过度的内卷题目。" },
+            { date: "2026年9月", title: "Gammath.xyz 门户发布", text: "整洁的蓝白主题官方站点正式上线，所有研讨会的在线预约系统随之启用。" }
+          ],
+          ui: {
+            sessionID: "研讨会编号", speaker: "主讲人", dateTime: "日期/时间", duration: "会议时长", rsvp: "预约 (锁定席位)", registered: "已登记 ✓", activeChallenges: "当前活跃的学术挑战", postedBy: "发布者", resolutionStatus: "解答进度", selectWeekly: "🧩 精选每周一题", loadAlt: "换一道题目", expandHint: "展开解析与解题思路", collapseHint: "收起解答详情", conceptMechanics: "核心理论与解题步骤", openProof: "向社群开放 (同伴证明阶段)", classicInquiry: "经典探究题", validationInProgress: "审核中", speakerCreds: "演讲者凭证已生成", voucherCode: "登记授权哈希码", affiliation: "所属高中机构", proposedLecture: "拟定演讲题目", activeReviewStage: "审核进度", altAbstract: "提交其他摘要", credsText: "您的摘要提交已被确认。学术委员会将进行审核并安排日程表。", streamingActive: "[ 实时广播中：群对称与 Rubik 映射 ]", streamingPaused: "[ 研讨会 #02: 已暂停 ]", startPlayback: "开始录像回放", pauseSession: "暂停回放", allCriteriaRequired: "所有挑战发布表格字段必须填写完整。", defaultStatusActive: "活跃中", defaultStatusCompleted: "已完成", week: "第"
+          }
         }
       };
 
+      // --- APP STATE ---
       let currentLang = localStorage.getItem('gammath_lang') || 'en';
       let rsvpedSeminars = new Set();
-      let cachedGoogleIdToken = null; // 临时缓存凭证
+      let activeChallenges = JSON.parse(localStorage.getItem('gammath_challenges_store_v2')) || null;
+      let activeProblemIndex = 0;
+      let cachedGoogleIdToken = null;
       let chatPollInterval = null;
 
+      // --- AUTHENTICATION FLOW (MERGED GOOGLE OAUTH) ---
       function getAuthHeaders() {
         const token = sessionStorage.getItem('gammath_token');
         return { 'Content-Type': 'application/json', 'Authorization': token ? `Bearer ${token}` : '' };
@@ -377,19 +595,21 @@
 
       function checkAuth() {
         const token = sessionStorage.getItem('gammath_token');
+        const loginScreen = document.getElementById('login-screen');
+        const mainApp = document.getElementById('main-app-container');
+
         if (token) {
-          document.getElementById('login-screen').style.display = 'none';
-          document.getElementById('main-app-container').style.display = 'block';
+          if (loginScreen) loginScreen.style.display = 'none';
+          if (mainApp) mainApp.style.display = 'block';
           initializeUI();
         } else {
-          document.getElementById('login-screen').style.display = 'flex';
-          document.getElementById('main-app-container').style.display = 'none';
+          if (loginScreen) loginScreen.style.display = 'flex';
+          if (mainApp) mainApp.style.display = 'none';
           if (chatPollInterval) clearInterval(chatPollInterval);
           initGoogleButton();
         }
       }
 
-      // 初始化渲染 Google 一键登录按钮
       function initGoogleButton() {
         if (typeof google !== 'undefined') {
           google.accounts.id.initialize({
@@ -405,7 +625,6 @@
         }
       }
 
-      // 核心鉴权回调
       async function handleGoogleCredential(response) {
         const id_token = response.credential;
         cachedGoogleIdToken = id_token;
@@ -424,21 +643,19 @@
             sessionStorage.setItem('gammath_username', data.username);
             checkAuth();
           } else if (data.needName) {
-            // 是全新用户：隐藏登录，探出起名界面
             document.getElementById('login-form-wrapper').style.display = 'none';
             document.getElementById('name-prompt-wrapper').style.display = 'block';
             msg.style.display = 'none';
           } else {
             msg.textContent = data.error || "Authentication failed";
-            msg.style.display = 'block';
+            msg.style.backgroundColor = '#fef2f2'; msg.style.color = '#ef4444'; msg.style.display = 'block';
           }
         } catch {
           msg.textContent = "Server connection timeout"; msg.style.display = 'block';
         }
       }
 
-      // 新用户提名字表单
-      document.getElementById('name-submit-form').addEventListener('submit', async (e) => {
+      document.getElementById('name-submit-form')?.addEventListener('submit', async (e) => {
         e.preventDefault();
         const fullName = document.getElementById('user-full-name').value.trim();
         const msg = document.getElementById('auth-status-msg');
@@ -464,21 +681,50 @@
         }
       });
 
+      // --- ROUTER SYSTEM ---
       function handleRoute() {
         let hash = window.location.hash.slice(1) || 'home';
-        if (!['home', 'about', 'activities', 'chat', 'cas', 'join', 'media'].includes(hash)) hash = 'home';
+        const validViews = ['home', 'about', 'activities', 'chat', 'cas', 'join', 'media'];
+        if (!validViews.includes(hash)) hash = 'home';
+
         document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
-        const target = document.getElementById(hash);
-        if (target) target.classList.add('active');
-        document.querySelectorAll('#nav-menu a').forEach(link => {
-          link.classList.toggle('active', link.getAttribute('href') === '#' + hash);
+        const targetView = document.getElementById(hash);
+        if (targetView) targetView.classList.add('active');
+
+        document.querySelectorAll('#nav-menu a').forEach(navLink => {
+          if (navLink.getAttribute('href') === '#' + hash) navLink.classList.add('active');
+          else navLink.classList.remove('active');
         });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       }
+
       window.addEventListener('hashchange', handleRoute);
 
-      document.querySelectorAll('.lang-switcher').forEach(sel => {
-        sel.value = currentLang;
-        sel.addEventListener('change', (e) => {
+      document.addEventListener('click', function(e) {
+        const routeTrigger = e.target.closest('.nav-router');
+        if (routeTrigger) {
+          e.preventDefault();
+          const target = routeTrigger.getAttribute('data-dest');
+          if (target) window.location.hash = target;
+        }
+      });
+
+      document.getElementById('header-logo-link').addEventListener('click', function(e) {
+        e.preventDefault(); window.location.hash = 'home';
+      });
+
+      document.querySelectorAll('.footer-nav').forEach(link => {
+        link.addEventListener('click', function(e) {
+          e.preventDefault();
+          const dest = this.getAttribute('href').slice(1);
+          window.location.hash = dest;
+        });
+      });
+
+      // --- LANGUAGE SWITCHER CONTROLLERS ---
+      document.querySelectorAll('.lang-switcher').forEach(select => {
+        select.value = currentLang;
+        select.addEventListener('change', function(e) {
           currentLang = e.target.value;
           localStorage.setItem('gammath_lang', currentLang);
           document.querySelectorAll('.lang-switcher').forEach(el => el.value = currentLang);
@@ -489,9 +735,33 @@
       function applyLanguage() {
         document.body.className = 'lang-' + currentLang;
         renderSeminars();
+        renderPeerChallenges();
         renderWeeklyProblemArea();
+        renderProblemArchive();
         renderCASRequirements();
+        updateStatistics();
+        updatePlaceholders();
       }
+
+      function updatePlaceholders() {
+        const en = currentLang === 'en';
+        const chalName = document.getElementById('form-challenger-name');
+        if (chalName) chalName.placeholder = en ? "e.g. Chen (Marymount)" : "例如：张三 (罗马分部)";
+        const chalText = document.getElementById('form-challenge-text');
+        if (chalText) chalText.placeholder = en ? "State your mathematical problem clearly..." : "清晰描述您的数学挑战...";
+        const appName = document.getElementById('app-name');
+        if (appName) appName.placeholder = en ? "e.g. Zofia Grzelinska" : "例如：Zofia Grzelinska";
+        const appEmail = document.getElementById('app-email');
+        if (appEmail) appEmail.placeholder = en ? "e.g. address@example.com" : "例如：email@domain.com";
+        const appSchool = document.getElementById('app-school');
+        if (appSchool) appSchool.placeholder = en ? "e.g. Marymount International School Rome" : "例如：罗马玛丽蒙特国际学校";
+        const appSubject = document.getElementById('app-subject');
+        if (appSubject) appSubject.placeholder = en ? 
+          "Briefly introduce the theorem, proof method, or specific puzzle domain you plan to present..." : 
+          "简要描述您计划展示的定理、证明方法或特定数学领域...";
+      }
+
+      // --- COMPONENT RENDERERS ---
 
       async function syncRSVPs() {
         try {
@@ -500,7 +770,7 @@
             const data = await res.json();
             rsvpedSeminars = new Set(data.rsvps);
             renderSeminars();
-            document.getElementById('stat-rsvp').textContent = rsvpedSeminars.size;
+            updateStatistics();
           }
         } catch {}
       }
@@ -508,23 +778,31 @@
       function renderSeminars() {
         const board = document.getElementById('seminars-board');
         if (!board) return;
+
         const data = localData[currentLang];
         board.innerHTML = data.seminars.map(sem => {
-          const isR = rsvpedSeminars.has(sem.id);
+          const isRSVPed = rsvpedSeminars.has(sem.id);
+          const btnClass = isRSVPed ? "btn success" : "btn secondary";
+          const btnLabel = isRSVPed ? data.ui.registered : data.ui.rsvp;
+
           return `
-            <div class="card">
-              <h3>${sem.topic}</h3>
-              <p style="font-size:0.85rem;"><strong>Speaker:</strong> ${sem.speaker} | <strong>Date:</strong> ${sem.date}</p>
-              <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:1rem;">${sem.desc}</p>
-              <button class="btn ${isR ? 'success':'secondary'} rsvp-btn" data-id="${sem.id}" style="width:100%; font-size:0.8rem;">
-                ${isR ? data.ui.rtext : data.ui.rsvp}
-              </button>
+            <div class="card" id="sem-card-${sem.id}">
+              <span style="font-size: 0.8rem; font-weight: 700; color: var(--accent-blue); text-transform: uppercase;">${data.ui.sessionID}: 0${sem.id}</span>
+              <h3 style="margin: 0.4rem 0 0.25rem;">${sem.topic}</h3>
+              <p style="font-size: 0.85rem; margin-bottom: 0.5rem; color: var(--text-main);">
+                <strong>${data.ui.speaker}:</strong> ${sem.speaker} (${sem.school})
+              </p>
+              <p style="font-size: 0.85rem; margin-bottom: 0.5rem;">
+                <strong>${data.ui.dateTime}:</strong> ${sem.date} | <strong>${data.ui.duration}:</strong> ${sem.duration}
+              </p>
+              <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.4; margin-bottom: 1rem;">${sem.desc}</p>
+              <button class="rsvp-action-btn ${btnClass}" data-id="${sem.id}" style="width: 100%; font-size: 0.8rem; padding: 0.5rem;">${btnLabel}</button>
             </div>
           `;
         }).join('');
 
-        board.querySelectorAll('.rsvp-btn').forEach(btn => {
-          btn.addEventListener('click', async function() {
+        board.querySelectorAll('.rsvp-action-btn').forEach(button => {
+          button.addEventListener('click', async function() {
             const seminarId = parseInt(this.getAttribute('data-id'));
             try {
               const res = await fetch('/api/rsvp', {
@@ -538,6 +816,151 @@
         });
       }
 
+      function updateStatistics() {
+        const rsvpCounter = document.getElementById('stat-rsvp');
+        const seminarCounter = document.getElementById('stat-seminars');
+        if (rsvpCounter) rsvpCounter.textContent = rsvpedSeminars.size;
+        if (seminarCounter) seminarCounter.textContent = localData[currentLang].seminars.length;
+      }
+
+      function renderPeerChallenges() {
+        const container = document.getElementById('peer-challenges-container');
+        if (!container) return;
+        const data = localData[currentLang];
+        const list = activeChallenges || data.defaultChallenges;
+
+        container.innerHTML = list.map((item, idx) => `
+          <div class="challenge-entry">
+            <div style="display: flex; justify-content: space-between; flex-wrap: wrap; margin-bottom: 0.5rem;">
+              <span style="font-weight: 700; font-size: 0.85rem; text-transform: uppercase; color: var(--accent-blue);">${item.domain}</span>
+              <span style="font-size: 0.75rem; background-color: var(--bg-secondary); padding: 0.2rem 0.5rem; border-radius: 4px; border: 1px solid var(--border-color); color: var(--text-muted); font-weight: 600;">
+                ${item.status}
+              </span>
+            </div>
+            <p style="font-family: monospace; font-size: 0.95rem; background-color: var(--bg-secondary); padding: 0.75rem; border-radius: 4px; border: 1px solid var(--border-color); color: var(--text-main);">
+              ${item.text}
+            </p>
+            <p style="font-size: 0.85rem; margin-top: 0.5rem; color: var(--text-muted);">
+              <strong>${data.ui.postedBy}:</strong> ${item.challenger} &nbsp;|&nbsp; <strong>${data.ui.resolutionStatus}:</strong> ${item.solver}
+            </p>
+          </div>
+        `).join('');
+      }
+
+      document.getElementById('post-challenge-btn')?.addEventListener('click', function() {
+        const nameInput = document.getElementById('form-challenger-name');
+        const textInput = document.getElementById('form-challenge-text');
+        const domainInput = document.getElementById('form-challenge-domain');
+        const data = localData[currentLang];
+
+        if (!nameInput.value.trim() || !textInput.value.trim()) {
+          alert(data.ui.allCriteriaRequired);
+          return;
+        }
+
+        const newChallenge = {
+          domain: domainInput.options[domainInput.selectedIndex].text,
+          challenger: nameInput.value.trim(),
+          text: textInput.value.trim(),
+          solver: data.ui.openProof,
+          status: data.ui.defaultStatusActive
+        };
+
+        if (!activeChallenges) activeChallenges = [...data.defaultChallenges];
+        activeChallenges.unshift(newChallenge);
+        localStorage.setItem('gammath_challenges_store_v2', JSON.stringify(activeChallenges));
+        renderPeerChallenges();
+        nameInput.value = ''; textInput.value = '';
+      });
+
+      function renderWeeklyProblemArea() {
+        const host = document.getElementById('home-problem-arena');
+        if (!host) return;
+        const data = localData[currentLang];
+        host.innerHTML = `
+          <div class="problem-box">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+              <h3 style="margin: 0; color: var(--accent-blue);">${data.ui.selectWeekly}</h3>
+              <button id="generator-random-btn" class="btn secondary" style="padding: 0.35rem 0.75rem; font-size: 0.75rem;">${data.ui.loadAlt}</button>
+            </div>
+            <div id="problem-text-target" style="font-family: monospace; font-size: 1.05rem; margin: 1rem 0; color: var(--text-main);"></div>
+            <button id="toggle-solution-btn" class="btn secondary" style="font-size: 0.8rem; padding: 0.4rem 0.8rem;">${data.ui.expandHint}</button>
+            <div id="hint-display-box" class="hint-box"></div>
+          </div>
+        `;
+
+        changeProblem(activeProblemIndex);
+        document.getElementById('generator-random-btn').addEventListener('click', function() {
+          activeProblemIndex = (activeProblemIndex + 1) % data.weeklyProblems.length;
+          changeProblem(activeProblemIndex);
+        });
+
+        document.getElementById('toggle-solution-btn').addEventListener('click', function() {
+          const hintPanel = document.getElementById('hint-display-box');
+          if (hintPanel.style.display === 'block') {
+            hintPanel.style.display = 'none';
+            this.textContent = data.ui.expandHint;
+          } else {
+            hintPanel.style.display = 'block';
+            this.textContent = data.ui.collapseHint;
+          }
+        });
+      }
+
+      function changeProblem(index) {
+        const targetText = document.getElementById('problem-text-target');
+        const targetHint = document.getElementById('hint-display-box');
+        const hintPanel = document.getElementById('hint-display-box');
+        const toggleBtn = document.getElementById('toggle-solution-btn');
+        const data = localData[currentLang];
+
+        if (targetText && targetHint) {
+          targetText.textContent = data.weeklyProblems[index].q;
+          targetHint.innerHTML = `<strong>${data.ui.conceptMechanics}:</strong> ` + data.weeklyProblems[index].hint;
+          if (hintPanel) hintPanel.style.display = 'none';
+          if (toggleBtn) toggleBtn.textContent = data.ui.expandHint;
+        }
+      }
+
+      document.getElementById('home-problem-btn')?.addEventListener('click', function() {
+        const element = document.getElementById('home-problem-arena');
+        if (element) element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+
+      function renderProblemArchive() {
+        const archive = document.getElementById('archive-problems-container');
+        if (!archive) return;
+        const data = localData[currentLang];
+        archive.innerHTML = data.weeklyProblems.map((prob, i) => `
+          <div class="problem-box" style="margin-bottom: 1rem;">
+            <strong>${data.ui.week} ${i + 1} ${data.ui.classicInquiry}:</strong>
+            <p style="font-family: monospace; font-size: 1rem; color: var(--text-main); margin-top: 0.5rem;">${prob.q}</p>
+          </div>
+        `).join('');
+      }
+
+      function renderCASRequirements() {
+        const host = document.getElementById('cas-timeline');
+        if (!host) return;
+        const data = localData[currentLang];
+        host.innerHTML = data.milestones.map((item, i) => `
+          <div class="timeline-item" data-id="${i}">
+            <div class="timeline-date">${item.date}</div>
+            <div class="timeline-title">${item.title}</div>
+            <div class="timeline-detail" id="timeline-detail-${i}">${item.text}</div>
+          </div>
+        `).join('');
+
+        host.querySelectorAll('.timeline-item').forEach(el => {
+          el.addEventListener('click', function() {
+            const id = this.getAttribute('data-id');
+            const panel = document.getElementById(`timeline-detail-${id}`);
+            panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
+          });
+        });
+      }
+
+      // Live Chat Logic
       async function fetchChatMessages() {
         try {
           const res = await fetch('/api/chat', { headers: getAuthHeaders() });
@@ -562,7 +985,7 @@
         } catch {}
       }
 
-      document.getElementById('chat-send-form').addEventListener('submit', async (e) => {
+      document.getElementById('chat-send-form')?.addEventListener('submit', async (e) => {
         e.preventDefault();
         const input = document.getElementById('chat-message-input');
         const message = input.value.trim();
@@ -577,30 +1000,76 @@
         } catch {}
       });
 
-      function renderWeeklyProblemArea() {
-        const host = document.getElementById('home-problem-arena');
-        if (!host) return;
-        const data = localData[currentLang].weeklyProblems[0];
-        host.innerHTML = `
-          <div class="problem-box">
-            <h3>🧩 Selection of the Week</h3>
-            <p style="font-family:monospace; margin:0.5rem 0;">${data.q}</p>
-            <div style="font-size: 0.9rem; color: var(--accent-blue);"><strong>Hint:</strong> ${data.hint}</div>
+      // Application Form Mock Logic
+      document.getElementById('speaker-application-form')?.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const nameVal = document.getElementById('app-name').value;
+        const schoolVal = document.getElementById('app-school').value;
+        const subjectVal = document.getElementById('app-subject').value;
+        const targetAnchor = document.getElementById('join-workflow-container');
+        if (!targetAnchor) return;
+
+        const voucherCode = "M-" + Math.floor(100000 + Math.random() * 900000);
+        const data = localData[currentLang];
+
+        targetAnchor.innerHTML = `
+          <div class="receipt-card">
+            <h3 style="color: var(--accent-blue); margin-top: 0.5rem; font-size: 1.4rem;">${data.ui.speakerCreds}</h3>
+            <p style="font-size: 0.95rem; margin-bottom: 1.25rem;">
+              ${currentLang === 'zh' ?
+                `谢谢您，<strong>${nameVal}</strong>。${data.ui.credsText}` :
+                `Thank you, <strong>${nameVal}</strong>. ${data.ui.credsText}`}
+            </p>
+            <div style="background-color: var(--bg-secondary); border: 1px solid var(--border-color); padding: 1.25rem; border-radius: 6px; font-size: 0.85rem;">
+              <p style="margin-bottom: 0.5rem;"><strong>${data.ui.voucherCode}:</strong> <span style="font-family: monospace; color: var(--accent-blue);">${voucherCode}</span></p>
+              <p style="margin-bottom: 0.5rem;"><strong>${data.ui.affiliation}:</strong> ${schoolVal}</p>
+              <p style="margin-bottom: 0.5rem;"><strong>${data.ui.proposedLecture}:</strong> "${subjectVal}"</p>
+              <p style="margin-bottom: 0;"><strong>${data.ui.activeReviewStage}:</strong> <span style="color: #10b981; font-weight: bold;">${data.ui.validationInProgress}</span></p>
+            </div>
+            <button id="reset-application-btn" class="btn secondary" style="margin-top: 1.25rem; width: 100%;">${data.ui.altAbstract}</button>
           </div>
         `;
+        document.getElementById('reset-application-btn').addEventListener('click', function() { window.location.reload(); });
+      });
+
+      // Media Player Mock Logic
+      let videoInterval = null;
+      let activeProgress = 0;
+      let videoActive = false;
+
+      const actionBtn = document.getElementById('video-control-btn');
+      const actionIcon = document.getElementById('video-play-icon');
+      const fillBar = document.getElementById('video-progress-fill');
+      const playerTitle = document.getElementById('video-current-title');
+      const displayStatus = document.getElementById('video-display-status');
+
+      function managePlayback() {
+        const data = localData[currentLang];
+        if (!videoActive) {
+          videoActive = true;
+          actionBtn.textContent = data.ui.pauseSession;
+          actionBtn.className = "btn secondary";
+          actionIcon.textContent = "⏸";
+          playerTitle.style.color = "var(--accent-blue)";
+          displayStatus.textContent = data.ui.streamingActive;
+          videoInterval = setInterval(() => {
+            if (activeProgress >= 100) activeProgress = 0;
+            activeProgress += 0.4;
+            fillBar.style.width = activeProgress + "%";
+          }, 100);
+        } else {
+          videoActive = false;
+          actionBtn.textContent = data.ui.startPlayback;
+          actionBtn.className = "btn";
+          actionIcon.textContent = "▶";
+          playerTitle.style.color = "";
+          displayStatus.textContent = data.ui.streamingPaused;
+          clearInterval(videoInterval);
+        }
       }
 
-      function renderCASRequirements() {
-        const host = document.getElementById('cas-timeline');
-        if (!host) return;
-        host.innerHTML = localData[currentLang].milestones.map(m => `
-          <div class="timeline-item">
-            <div class="timeline-date">${m.date}</div>
-            <div class="timeline-title">${m.title}</div>
-            <p style="font-size:0.85rem; color:var(--text-muted);">${m.text}</p>
-          </div>
-        `).join('');
-      }
+      actionBtn?.addEventListener('click', managePlayback);
+      actionIcon?.addEventListener('click', managePlayback);
 
       function initializeUI() {
         applyLanguage();
@@ -611,7 +1080,11 @@
         chatPollInterval = setInterval(fetchChatMessages, 2500);
       }
 
-      window.addEventListener('DOMContentLoaded', checkAuth);
+      window.addEventListener('DOMContentLoaded', () => {
+        applyLanguage();
+        checkAuth();
+      });
+
     })();
   </script>
 </body>
