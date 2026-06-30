@@ -4,6 +4,20 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gamma Math Club — Gammath.xyz</title>
+  <script>
+    // Applied synchronously, before first paint, so the page never flashes
+    // the wrong theme on load. The main script block (end of <body>) reads
+    // this same data-theme attribute back rather than recomputing it.
+    (function() {
+      try {
+        var saved = localStorage.getItem('gammath_theme');
+        var theme = (saved === 'light' || saved === 'dark')
+          ? saved
+          : (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', theme);
+      } catch (e) {}
+    })();
+  </script>
   <script src="https://accounts.google.com/gsi/client" async defer></script>
   <style>
     :root {
@@ -11,13 +25,41 @@
       --bg-secondary: #ffffff;
       --text-main: #0f172a;
       --text-muted: #475569;
+      --text-faint: #94a3b8;
       --accent-blue: #1e40af;
       --accent-blue-hover: #1d4ed8;
+      --accent-text: #1e40af;
       --accent-light: #eff6ff;
+      --accent-border: #bfdbfe;
       --border-color: #e2e8f0;
       --border-focus: #3b82f6;
+      --header-bg: rgba(255, 255, 255, 0.9);
+      --error-bg: #fef2f2;
+      --error-text: #ef4444;
+      --success-text: #10b981;
       --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
       --card-radius: 8px;
+    }
+
+    :root[data-theme="dark"] {
+      color-scheme: dark;
+      --bg-primary: #0f172a;
+      --bg-secondary: #1e293b;
+      --text-main: #f1f5f9;
+      --text-muted: #94a3b8;
+      --text-faint: #94a3b8;
+      --accent-blue: #2563eb;
+      --accent-blue-hover: #3b82f6;
+      --accent-text: #60a5fa;
+      --accent-light: #1c3454;
+      --accent-border: #2c4870;
+      --border-color: #334155;
+      --border-focus: #60a5fa;
+      --header-bg: rgba(15, 23, 42, 0.85);
+      --error-bg: #3f1d1d;
+      --error-text: #f87171;
+      --success-text: #34d399;
+      --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.35), 0 2px 4px -2px rgba(0, 0, 0, 0.35);
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -28,6 +70,7 @@
       color: var(--text-main);
       line-height: 1.6;
       min-height: 100vh;
+      transition: background-color 0.2s ease, color 0.2s ease;
     }
 
     /* Multi-language selective displays */
@@ -35,7 +78,7 @@
     body.lang-zh .lang-en { display: none !important; }
 
     header {
-      background-color: rgba(255, 255, 255, 0.9);
+      background-color: var(--header-bg);
       backdrop-filter: blur(8px);
       border-bottom: 1px solid var(--border-color);
       position: sticky;
@@ -47,26 +90,26 @@
       justify-content: space-between;
     }
 
-    .logo { font-size: 1.4rem; font-weight: 700; color: var(--accent-blue); text-decoration: none; letter-spacing: -0.5px; display: flex; align-items: center; gap: 0.25rem; }
+    .logo { font-size: 1.4rem; font-weight: 700; color: var(--accent-text); text-decoration: none; letter-spacing: -0.5px; display: flex; align-items: center; gap: 0.25rem; }
     .logo span { color: var(--text-muted); font-weight: 400; }
     .nav-container { display: flex; align-items: center; gap: 1.5rem; }
     nav { display: flex; gap: 1.5rem; }
     nav a { color: var(--text-muted); text-decoration: none; font-weight: 500; font-size: 0.9rem; transition: color 0.2s, border-color 0.2s; padding: 0.4rem 0; border-bottom: 2px solid transparent; }
-    nav a:hover, nav a.active { color: var(--accent-blue); border-bottom-color: var(--accent-blue); }
+    nav a:hover, nav a.active { color: var(--accent-text); border-bottom-color: var(--accent-text); }
 
     main { max-width: 1000px; margin: 0 auto; padding: 3rem 1.5rem 5rem; }
     .section { display: none; animation: fadeIn 0.25s ease-out; }
     .section.active { display: block; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
 
-    h1 { font-size: 2.5rem; font-weight: 800; letter-spacing: -0.75px; color: var(--accent-blue); margin-bottom: 1rem; }
+    h1 { font-size: 2.5rem; font-weight: 800; letter-spacing: -0.75px; color: var(--accent-text); margin-bottom: 1rem; }
     h2 { font-size: 1.6rem; font-weight: 700; color: var(--text-main); margin: 2.5rem 0 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; }
     h3 { font-size: 1.15rem; font-weight: 600; color: var(--text-main); margin-bottom: 0.5rem; }
     p { color: var(--text-muted); margin-bottom: 1rem; font-size: 1rem; }
 
     .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin: 1.5rem 0; }
     .card { background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--card-radius); padding: 1.5rem; box-shadow: var(--card-shadow); transition: transform 0.2s, border-color 0.2s; }
-    .card:hover { border-color: var(--accent-blue); transform: translateY(-2px); }
+    .card:hover { border-color: var(--accent-text); transform: translateY(-2px); }
 
     .btn { display: inline-flex; align-items: center; justify-content: center; background-color: var(--accent-blue); color: #ffffff; font-weight: 600; padding: 0.6rem 1.2rem; border-radius: 6px; text-decoration: none; transition: background-color 0.15s, transform 0.1s; cursor: pointer; border: none; font-size: 0.9rem; }
     .btn:hover { background-color: var(--accent-blue-hover); }
@@ -79,16 +122,16 @@
     input, textarea, select { background-color: var(--bg-secondary); border: 1px solid var(--border-color); padding: 0.75rem; border-radius: 6px; color: var(--text-main); width: 100%; margin: 0.5rem 0 1.25rem; font-family: inherit; font-size: 0.95rem; transition: border-color 0.2s; }
     input:focus, textarea:focus, select:focus { outline: none; border-color: var(--border-focus); }
 
-    .problem-box { background-color: var(--bg-secondary); border: 1px solid var(--border-color); border-left: 4px solid var(--accent-blue); padding: 1.5rem; border-radius: var(--card-radius); box-shadow: var(--card-shadow); margin: 1.5rem 0; }
-    .hint-box { background-color: var(--accent-light); border: 1px dashed #bfdbfe; padding: 1rem; border-radius: 6px; margin-top: 1rem; font-size: 0.9rem; color: var(--accent-blue); display: none; }
+    .problem-box { background-color: var(--bg-secondary); border: 1px solid var(--border-color); border-left: 4px solid var(--accent-text); padding: 1.5rem; border-radius: var(--card-radius); box-shadow: var(--card-shadow); margin: 1.5rem 0; }
+    .hint-box { background-color: var(--accent-light); border: 1px dashed var(--accent-border); padding: 1rem; border-radius: 6px; margin-top: 1rem; font-size: 0.9rem; color: var(--accent-text); display: none; }
     
     .challenge-hall { background-color: var(--bg-secondary); border: 1px solid var(--border-color); padding: 2rem; border-radius: var(--card-radius); box-shadow: var(--card-shadow); margin: 2rem 0; }
-    .challenge-entry { background-color: var(--bg-primary); border: 1px solid var(--border-color); padding: 1rem; border-radius: 6px; margin-bottom: 1rem; border-left: 3px solid var(--accent-blue); }
+    .challenge-entry { background-color: var(--bg-primary); border: 1px solid var(--border-color); padding: 1rem; border-radius: 6px; margin-bottom: 1rem; border-left: 3px solid var(--accent-text); }
 
     .timeline { border-left: 2px solid var(--border-color); padding-left: 1.5rem; margin: 2rem 0; }
     .timeline-item { position: relative; margin-bottom: 2rem; cursor: pointer; }
     .timeline-item::before { content: ""; position: absolute; left: calc(-1.5rem - 6px); top: 0.25rem; width: 10px; height: 10px; border-radius: 50%; background-color: var(--accent-blue); border: 2px solid var(--bg-primary); }
-    .timeline-date { font-weight: 700; color: var(--accent-blue); font-size: 0.9rem; }
+    .timeline-date { font-weight: 700; color: var(--accent-text); font-size: 0.9rem; }
     .timeline-title { font-weight: 600; margin: 0.25rem 0; }
     .timeline-detail { display: none; font-size: 0.9rem; color: var(--text-muted); margin-top: 0.5rem; background-color: var(--bg-secondary); padding: 0.75rem; border-radius: 6px; border: 1px solid var(--border-color); }
 
@@ -99,17 +142,18 @@
     .player-progress-container { position: absolute; bottom: 0; left: 0; width: 100%; height: 4px; background-color: #334155; }
     .player-progress-bar { height: 100%; width: 0%; background-color: var(--accent-blue); transition: width 0.1s linear; }
 
-    .receipt-card { background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--accent-light) 100%); border: 2px solid var(--accent-blue); border-radius: var(--card-radius); padding: 2rem; box-shadow: var(--card-shadow); margin-top: 2rem; animation: scaleIn 0.3s ease-out; }
+    .receipt-card { background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--accent-light) 100%); border: 2px solid var(--accent-text); border-radius: var(--card-radius); padding: 2rem; box-shadow: var(--card-shadow); margin-top: 2rem; animation: scaleIn 0.3s ease-out; }
     @keyframes scaleIn { from { transform: scale(0.97); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
     footer { border-top: 1px solid var(--border-color); background-color: var(--bg-secondary); padding: 3rem 1.5rem; text-align: center; font-size: 0.85rem; color: var(--text-muted); }
     .footer-links { display: flex; justify-content: center; gap: 1.5rem; margin-top: 0.75rem; }
     .footer-links a { color: var(--text-muted); text-decoration: none; }
-    .footer-links a:hover { color: var(--accent-blue); }
+    .footer-links a:hover { color: var(--accent-text); }
 
     #login-screen { display: flex; align-items: center; justify-content: center; min-height: 100vh; background-color: var(--bg-primary); padding: 1.5rem; }
     .login-box { background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--card-radius); padding: 2.5rem 2rem; box-shadow: var(--card-shadow); width: 100%; max-width: 420px; text-align: center; }
-    .lang-selector-header { margin-bottom: 1.5rem; display: flex; justify-content: flex-end; }
+    .lang-selector-header { margin-bottom: 1.5rem; display: flex; justify-content: flex-end; align-items: center; gap: 0.5rem; }
+    .theme-toggle { line-height: 1; }
 
     /* Chat bubble styles */
     .chat-bubble { max-width: 75%; padding: 0.6rem 1rem; border-radius: 12px; font-size: 0.95rem; margin-bottom: 0.2rem; }
@@ -122,12 +166,13 @@
   <div id="login-screen">
     <div class="login-box">
       <div class="lang-selector-header">
+        <button type="button" class="theme-toggle btn secondary" id="theme-toggle-login" style="width: auto; padding: 0.35rem 0.65rem; font-size: 0.9rem;" aria-label="Toggle dark mode" title="Toggle dark mode">🌙</button>
         <select class="lang-switcher" style="width: auto; margin: 0; padding: 0.3rem 0.6rem; font-size: 0.8rem;">
           <option value="en">English</option>
           <option value="zh">中文</option>
         </select>
       </div>
-      <div style="font-size: 2.5rem; color: var(--accent-blue); margin-bottom: 0.5rem; font-weight: 700;">Γ</div>
+      <div style="font-size: 2.5rem; color: var(--accent-text); margin-bottom: 0.5rem; font-weight: 700;">Γ</div>
       
       <h2 id="auth-main-title" style="border: none; padding: 0; margin: 0 0 0.5rem 0;">
         <span class="lang-en">Gamma Math Club</span>
@@ -145,8 +190,8 @@
       </div>
 
       <div id="name-prompt-wrapper" style="display: none; text-align: left; animation: fadeIn 0.3s ease-in-out;">
-        <h3 class="lang-en" style="margin-bottom: 0.5rem; color: var(--accent-blue);">Please enter your full name</h3>
-        <h3 class="lang-zh" style="margin-bottom: 0.5rem; color: var(--accent-blue);">请输入您的真实姓名</h3>
+        <h3 class="lang-en" style="margin-bottom: 0.5rem; color: var(--accent-text);">Please enter your full name</h3>
+        <h3 class="lang-zh" style="margin-bottom: 0.5rem; color: var(--accent-text);">请输入您的真实姓名</h3>
         <p style="font-size: 0.85rem; margin-bottom: 1.5rem;">
           <span class="lang-en">Your full name will serve as your verified identity for seminar RSVPs and global chat records.</span>
           <span class="lang-zh">您的姓名将作为参与双周研讨会预约（登记学时）以及在社区发言时的唯一官方实名标识。</span>
@@ -190,6 +235,7 @@
             <span class="lang-en">∑ Media</span><span class="lang-zh">∑ 媒体资源</span>
           </a>
         </nav>
+        <button type="button" class="theme-toggle btn secondary" id="theme-toggle-main" style="width: auto; padding: 0.4rem 0.7rem; font-size: 0.95rem;" aria-label="Toggle dark mode" title="Toggle dark mode">🌙</button>
         <select class="lang-switcher" style="width: auto; margin: 0; padding: 0.3rem 0.6rem; font-size: 0.85rem; border-radius: 4px; border: 1px solid var(--border-color); cursor: pointer; background: var(--bg-secondary); color: var(--text-main);">
           <option value="en">English</option>
           <option value="zh">中文</option>
@@ -201,7 +247,7 @@
 
       <section id="home" class="section active">
         <div style="margin-bottom: 3rem;">
-          <span style="font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; font-size: 0.8rem; color: var(--accent-blue);">
+          <span style="font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; font-size: 0.8rem; color: var(--accent-text);">
             <span class="lang-en">Gamma Math Club</span><span class="lang-zh">伽马数学社</span>
           </span>
           <h1 style="margin-top: 0.5rem; font-size: 3.2rem; line-height: 1.1;">
@@ -257,16 +303,16 @@
         <h2 class="lang-en">Co-Founders & Core Chapters</h2><h2 class="lang-zh">联合创始人与核心分部</h2>
         <div class="card-grid">
           <div class="card">
-            <span style="font-size: 0.85rem; text-transform: uppercase; color: var(--accent-blue); font-weight: 750;" class="lang-en">Rome Chapter</span>
-            <span style="font-size: 0.85rem; text-transform: uppercase; color: var(--accent-blue); font-weight: 750;" class="lang-zh">罗马分部</span>
+            <span style="font-size: 0.85rem; text-transform: uppercase; color: var(--accent-text); font-weight: 750;" class="lang-en">Rome Chapter</span>
+            <span style="font-size: 0.85rem; text-transform: uppercase; color: var(--accent-text); font-weight: 750;" class="lang-zh">罗马分部</span>
             <h3 style="margin-top: 0.5rem; font-size: 1.3rem;" class="lang-en">Marymount International School Rome</h3>
             <h3 style="margin-top: 0.5rem; font-size: 1.3rem;" class="lang-zh">罗马玛丽蒙特国际学校</h3>
             <p style="font-size: 0.9rem; margin-top: 0.5rem;" class="lang-en">Establishing core links with European international curriculums and local mathematics interest groups.</p>
             <p style="font-size: 0.9rem; margin-top: 0.5rem;" class="lang-zh">负责对接欧洲国际课程及当地的小型数学兴趣社群。</p>
           </div>
           <div class="card">
-            <span style="font-size: 0.85rem; text-transform: uppercase; color: var(--accent-blue); font-weight: 750;" class="lang-en">Leadership Team</span>
-            <span style="font-size: 0.85rem; text-transform: uppercase; color: var(--accent-blue); font-weight: 750;" class="lang-zh">领导团队</span>
+            <span style="font-size: 0.85rem; text-transform: uppercase; color: var(--accent-text); font-weight: 750;" class="lang-en">Leadership Team</span>
+            <span style="font-size: 0.85rem; text-transform: uppercase; color: var(--accent-text); font-weight: 750;" class="lang-zh">领导团队</span>
             <h3 style="margin-top: 0.5rem; font-size: 1.3rem;">Yongkuo Chen & Zofia Grzelinska</h3>
             <p style="font-size: 0.9rem; margin-top: 0.5rem;" class="lang-en">Co-founded by Yongkuo Chen (President) and Zofia Grzelinska (Vice President) to construct an inclusive, balanced academic workspace.</p>
             <p style="font-size: 0.9rem; margin-top: 0.5rem;" class="lang-zh">由陈永阔（社长）和 Zofia Grzelinska（副社长）联合创立，旨在构建一个平等、包容的多元化学术空间。</p>
@@ -305,10 +351,10 @@
 
         <h2 class="lang-en"> Peer Challenge Board</h2><h2 class="lang-zh"> 同伴挑战榜</h2>
         <div class="challenge-hall">
-          <p style="margin-bottom: 1.5rem; font-size: 0.95rem; border-left: 3px solid var(--accent-blue); padding-left: 0.75rem;" class="lang-en">
+          <p style="margin-bottom: 1.5rem; font-size: 0.95rem; border-left: 3px solid var(--accent-text); padding-left: 0.75rem;" class="lang-en">
             <strong>Challenge Protocols:</strong> Submit a mathematical query strictly bounded within standard advanced high school curriculums. Peers collaborate to formulate and post clear, step-by-step proofs.
           </p>
-          <p style="margin-bottom: 1.5rem; font-size: 0.95rem; border-left: 3px solid var(--accent-blue); padding-left: 0.75rem;" class="lang-zh">
+          <p style="margin-bottom: 1.5rem; font-size: 0.95rem; border-left: 3px solid var(--accent-text); padding-left: 0.75rem;" class="lang-zh">
             <strong>发布规则：</strong> 提交一道严格在高级高中课程范围内的数学难题。同伴们可以相互协作，提出并发布清晰、完整的步骤解析。
           </p>
 
@@ -354,7 +400,7 @@
         <p class="lang-en">Connect and chat instantly with mathematics lovers from different chapters online.</p>
         <p class="lang-zh">与来自全球各地的数学爱好者们在线建立实时连接，探讨疑难学术痛点。</p>
         <div style="background-color: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--card-radius); box-shadow: var(--card-shadow); display: flex; flex-direction: column; height: 520px; margin-top: 1.5rem;">
-          <div id="chat-messages-box" style="flex: 1; padding: 1.5rem; overflow-y: auto; display: flex; flex-direction: column; gap: 0.8rem; background: #fdfdfd;"></div>
+          <div id="chat-messages-box" style="flex: 1; padding: 1.5rem; overflow-y: auto; display: flex; flex-direction: column; gap: 0.8rem; background: var(--bg-secondary);"></div>
           <form id="chat-send-form" style="display: flex; gap: 0.75rem; padding: 1rem; border-top: 1px solid var(--border-color); background: var(--bg-secondary); margin: 0;">
             <input type="text" id="chat-message-input" placeholder="Type messages or academic query..." style="margin: 0; flex: 1;" required autocomplete="off">
             <button type="submit" class="btn" style="white-space: nowrap; padding: 0 1.5rem;">
@@ -370,17 +416,17 @@
         <p style="font-size: 1.1rem; max-width: 800px;" class="lang-zh">作为国际文凭项目候选人，我们的运营活动完全契合 <strong>CAS (Creativity 创造、Activity 活动、Service 服务)</strong> 的大纲指导，创造可量化的同伴教育核心价值。</p>
         <div class="card-grid">
           <div class="card">
-            <h3 style="color: var(--accent-blue);" class="lang-en">Creativity</h3><h3 style="color: var(--accent-blue);" class="lang-zh">创造</h3>
+            <h3 style="color: var(--accent-text);" class="lang-en">Creativity</h3><h3 style="color: var(--accent-text);" class="lang-zh">创造</h3>
             <p style="font-size: 0.9rem;" class="lang-en">Designing bilingual mathematical slides, scripting educational explanations, and managing a clean, modern digital community architecture.</p>
             <p style="font-size: 0.9rem;" class="lang-zh">设计双语幻灯片、撰写教育解析脚本，以及开发维护简洁易用的数字化社群平台架构。</p>
           </div>
           <div class="card">
-            <h3 style="color: var(--accent-blue);" class="lang-en">Activity</h3><h3 style="color: var(--accent-blue);" class="lang-zh">活动</h3>
+            <h3 style="color: var(--accent-text);" class="lang-en">Activity</h3><h3 style="color: var(--accent-text);" class="lang-zh">活动</h3>
             <p style="font-size: 0.9rem;" class="lang-en">Coordinating real-time academic operations across European and Asian time zones, organizing digital presentations, and managing structural assets.</p>
             <p style="font-size: 0.9rem;" class="lang-zh">跨越欧亚时区协调实时学术活动、组织线上研讨演示，并主持数字化平台的日常运营统筹。</p>
           </div>
           <div class="card">
-            <h3 style="color: var(--accent-blue);" class="lang-en">Service</h3><h3 style="color: var(--accent-blue);" class="lang-zh">服务</h3>
+            <h3 style="color: var(--accent-text);" class="lang-en">Service</h3><h3 style="color: var(--accent-text);" class="lang-zh">服务</h3>
             <p style="font-size: 0.9rem;" class="lang-en">Delivering accessible tutoring and peer-review processes, lowering educational barriers, and fostering an inclusive platform for female mathematicians.</p>
             <p style="font-size: 0.9rem;" class="lang-zh">提供无门槛的同伴辅导与作业互评，降低学术交流壁垒，并为女性数学爱好者提供包容平等的展示平台。</p>
           </div>
@@ -393,25 +439,25 @@
         <div id="cas-timeline" class="timeline"></div>
 
         <h2 class="lang-en">Quantitative Impact Summary</h2><h2 class="lang-zh">量化影响力总结</h2>
-        <div class="card" style="background-color: var(--accent-light); border-color: #bfdbfe; margin-top: 1rem;">
+        <div class="card" style="background-color: var(--accent-light); border-color: var(--accent-border); margin-top: 1rem;">
           <div style="display: flex; justify-content: space-around; flex-wrap: wrap; gap: 1.5rem; text-align: center;">
             <div>
-              <div style="font-size: 2rem; font-weight: 800; color: var(--accent-blue);" id="stat-countries">2</div>
+              <div style="font-size: 2rem; font-weight: 800; color: var(--accent-text);" id="stat-countries">2</div>
               <div style="font-size: 0.8rem; font-weight: 600; text-transform: uppercase; color: var(--text-muted);" class="lang-en">Core Nations</div>
               <div style="font-size: 0.8rem; font-weight: 600; text-transform: uppercase; color: var(--text-muted);" class="lang-zh">核心国家</div>
             </div>
             <div>
-              <div style="font-size: 2rem; font-weight: 800; color: var(--accent-blue);" id="stat-seminars">4</div>
+              <div style="font-size: 2rem; font-weight: 800; color: var(--accent-text);" id="stat-seminars">4</div>
               <div style="font-size: 0.8rem; font-weight: 600; text-transform: uppercase; color: var(--text-muted);" class="lang-en">Seminars Planned</div>
               <div style="font-size: 0.8rem; font-weight: 600; text-transform: uppercase; color: var(--text-muted);" class="lang-zh">计划研讨会</div>
             </div>
             <div>
-              <div style="font-size: 2rem; font-weight: 800; color: var(--accent-blue);" id="stat-gender">45%</div>
+              <div style="font-size: 2rem; font-weight: 800; color: var(--accent-text);" id="stat-gender">45%</div>
               <div style="font-size: 0.8rem; font-weight: 600; text-transform: uppercase; color: var(--text-muted);" class="lang-en">Female Leadership</div>
               <div style="font-size: 0.8rem; font-weight: 600; text-transform: uppercase; color: var(--text-muted);" class="lang-zh">女性管理占比</div>
             </div>
             <div>
-              <div style="font-size: 2rem; font-weight: 800; color: var(--accent-blue);" id="stat-rsvp">0</div>
+              <div style="font-size: 2rem; font-weight: 800; color: var(--accent-text);" id="stat-rsvp">0</div>
               <div style="font-size: 0.8rem; font-weight: 600; text-transform: uppercase; color: var(--text-muted);" class="lang-en">Your RSVP Points</div>
               <div style="font-size: 0.8rem; font-weight: 600; text-transform: uppercase; color: var(--text-muted);" class="lang-zh">您的预约次数</div>
             </div>
@@ -428,15 +474,15 @@
             <h3 class="lang-en">Peer Communicators</h3><h3 class="lang-zh">同伴交流生</h3>
             <p style="font-size: 0.9rem;" class="lang-en">Join our ongoing communication hub to review weekly problems, submit challenges, and collaborate on step-by-step proofs.</p>
             <p style="font-size: 0.9rem;" class="lang-zh">加入我们的日常交流群，共同解析每周一题、发起挑战、合作编写严谨的解答证明。</p>
-            <span style="font-size: 0.85rem; font-weight: 700; color: var(--accent-blue);" class="lang-en">Contact: +39 3935795396</span>
-            <span style="font-size: 0.85rem; font-weight: 700; color: var(--accent-blue);" class="lang-zh">联系方式: +39 3935795396</span>
+            <span style="font-size: 0.85rem; font-weight: 700; color: var(--accent-text);" class="lang-en">Contact: +39 3935795396</span>
+            <span style="font-size: 0.85rem; font-weight: 700; color: var(--accent-text);" class="lang-zh">联系方式: +39 3935795396</span>
           </div>
           <div class="card">
             <h3 class="lang-en">Featured Speakers</h3><h3 class="lang-zh">研讨讲座嘉宾</h3>
             <p style="font-size: 0.9rem;" class="lang-en">Present during our bi-weekly seminar series. Topics can focus on analytical proof styles, modular structures, or geometry.</p>
             <p style="font-size: 0.9rem;" class="lang-zh">在双周研讨会中担任主讲。主题可涵盖代数证明逻辑、模算术架构或解析几何等核心模块。</p>
-            <span style="font-size: 0.85rem; font-weight: 700; color: var(--accent-blue);" class="lang-en">Fulfills CAS Service/Creativity requirements</span>
-            <span style="font-size: 0.85rem; font-weight: 700; color: var(--accent-blue);" class="lang-zh">完美符合 CAS 项目服务/创造模块核心要求</span>
+            <span style="font-size: 0.85rem; font-weight: 700; color: var(--accent-text);" class="lang-en">Fulfills CAS Service/Creativity requirements</span>
+            <span style="font-size: 0.85rem; font-weight: 700; color: var(--accent-text);" class="lang-zh">完美符合 CAS 项目服务/创造模块核心要求</span>
           </div>
         </div>
 
@@ -511,8 +557,8 @@
     </main>
 
     <footer>
-      <div style="font-weight: 700; color: var(--accent-blue); margin-bottom: 0.5rem;" class="lang-en">Gamma Math Club (Gammath.xyz)</div>
-      <div style="font-weight: 700; color: var(--accent-blue); margin-bottom: 0.5rem;" class="lang-zh">伽马数学社 (Gammath.xyz)</div>
+      <div style="font-weight: 700; color: var(--accent-text); margin-bottom: 0.5rem;" class="lang-en">Gamma Math Club (Gammath.xyz)</div>
+      <div style="font-weight: 700; color: var(--accent-text); margin-bottom: 0.5rem;" class="lang-zh">伽马数学社 (Gammath.xyz)</div>
       <p style="margin-bottom: 1rem;" class="lang-en">Coordinated in partnership with Marymount International School Rome</p>
       <p style="margin-bottom: 1rem;" class="lang-zh">与罗马玛丽蒙特国际学校联合合作</p>
       <div class="footer-links">
@@ -520,8 +566,8 @@
         <a href="#activities" class="footer-nav"><span class="lang-en">Seminars & Challenges</span><span class="lang-zh">研讨会与挑战</span></a>
         <a href="#join" class="footer-nav"><span class="lang-en">Contact Registration</span><span class="lang-zh">联系与申请报名</span></a>
       </div>
-      <p style="margin-top: 1.5rem; font-size: 0.75rem; color: #94a3b8;" class="lang-en">© 2026 Gammath.xyz. All institutional intellectual property strictly respected.</p>
-      <p style="margin-top: 1.5rem; font-size: 0.75rem; color: #94a3b8;" class="lang-zh">© 2026 Gammath.xyz. 严格遵守并保护所有合作学校机构的知识产权。</p>
+      <p style="margin-top: 1.5rem; font-size: 0.75rem; color: var(--text-faint);" class="lang-en">© 2026 Gammath.xyz. All institutional intellectual property strictly respected.</p>
+      <p style="margin-top: 1.5rem; font-size: 0.75rem; color: var(--text-faint);" class="lang-zh">© 2026 Gammath.xyz. 严格遵守并保护所有合作学校机构的知识产权。</p>
     </footer>
   </div>
 
@@ -581,11 +627,39 @@
 
       // --- APP STATE ---
       let currentLang = localStorage.getItem('gammath_lang') || 'en';
+      let currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
       let rsvpedSeminars = new Set();
       let activeChallenges = JSON.parse(localStorage.getItem('gammath_challenges_store_v2')) || null;
       let activeProblemIndex = 0;
       let cachedGoogleIdToken = null;
       let chatPollInterval = null;
+
+      // --- THEME SWITCHER (LIGHT / DARK) ---
+      // The theme is already applied synchronously by the inline <head> script
+      // (before first paint) to avoid a flash of the wrong theme. This block
+      // keeps currentTheme in sync, updates the toggle buttons, and persists
+      // changes so the preference survives refreshes and new sessions.
+      function applyTheme(theme) {
+        currentTheme = theme;
+        document.documentElement.setAttribute('data-theme', theme);
+        const icon = theme === 'dark' ? '☀️' : '🌙';
+        const label = theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode';
+        document.querySelectorAll('.theme-toggle').forEach(btn => {
+          btn.textContent = icon;
+          btn.setAttribute('aria-label', label);
+          btn.setAttribute('title', label);
+        });
+      }
+
+      function toggleTheme() {
+        applyTheme(currentTheme === 'dark' ? 'light' : 'dark');
+        localStorage.setItem('gammath_theme', currentTheme);
+      }
+
+      document.querySelectorAll('.theme-toggle').forEach(btn => {
+        btn.addEventListener('click', toggleTheme);
+      });
+      applyTheme(currentTheme);
 
       // --- AUTHENTICATION FLOW (MERGED GOOGLE OAUTH) ---
       function getAuthHeaders() {
@@ -648,7 +722,7 @@
             msg.style.display = 'none';
           } else {
             msg.textContent = data.error || "Authentication failed";
-            msg.style.backgroundColor = '#fef2f2'; msg.style.color = '#ef4444'; msg.style.display = 'block';
+            msg.style.backgroundColor = 'var(--error-bg)'; msg.style.color = 'var(--error-text)'; msg.style.display = 'block';
           }
         } catch {
           msg.textContent = "Server connection timeout"; msg.style.display = 'block';
@@ -787,7 +861,7 @@
 
           return `
             <div class="card" id="sem-card-${sem.id}">
-              <span style="font-size: 0.8rem; font-weight: 700; color: var(--accent-blue); text-transform: uppercase;">${data.ui.sessionID}: 0${sem.id}</span>
+              <span style="font-size: 0.8rem; font-weight: 700; color: var(--accent-text); text-transform: uppercase;">${data.ui.sessionID}: 0${sem.id}</span>
               <h3 style="margin: 0.4rem 0 0.25rem;">${sem.topic}</h3>
               <p style="font-size: 0.85rem; margin-bottom: 0.5rem; color: var(--text-main);">
                 <strong>${data.ui.speaker}:</strong> ${sem.speaker} (${sem.school})
@@ -832,7 +906,7 @@
         container.innerHTML = list.map((item, idx) => `
           <div class="challenge-entry">
             <div style="display: flex; justify-content: space-between; flex-wrap: wrap; margin-bottom: 0.5rem;">
-              <span style="font-weight: 700; font-size: 0.85rem; text-transform: uppercase; color: var(--accent-blue);">${item.domain}</span>
+              <span style="font-weight: 700; font-size: 0.85rem; text-transform: uppercase; color: var(--accent-text);">${item.domain}</span>
               <span style="font-size: 0.75rem; background-color: var(--bg-secondary); padding: 0.2rem 0.5rem; border-radius: 4px; border: 1px solid var(--border-color); color: var(--text-muted); font-weight: 600;">
                 ${item.status}
               </span>
@@ -880,7 +954,7 @@
         host.innerHTML = `
           <div class="problem-box">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
-              <h3 style="margin: 0; color: var(--accent-blue);">${data.ui.selectWeekly}</h3>
+              <h3 style="margin: 0; color: var(--accent-text);">${data.ui.selectWeekly}</h3>
               <button id="generator-random-btn" class="btn secondary" style="padding: 0.35rem 0.75rem; font-size: 0.75rem;">${data.ui.loadAlt}</button>
             </div>
             <div id="problem-text-target" style="font-family: monospace; font-size: 1.05rem; margin: 1rem 0; color: var(--text-main);"></div>
@@ -1014,17 +1088,17 @@
 
         targetAnchor.innerHTML = `
           <div class="receipt-card">
-            <h3 style="color: var(--accent-blue); margin-top: 0.5rem; font-size: 1.4rem;">${data.ui.speakerCreds}</h3>
+            <h3 style="color: var(--accent-text); margin-top: 0.5rem; font-size: 1.4rem;">${data.ui.speakerCreds}</h3>
             <p style="font-size: 0.95rem; margin-bottom: 1.25rem;">
               ${currentLang === 'zh' ?
                 `谢谢您，<strong>${nameVal}</strong>。${data.ui.credsText}` :
                 `Thank you, <strong>${nameVal}</strong>. ${data.ui.credsText}`}
             </p>
             <div style="background-color: var(--bg-secondary); border: 1px solid var(--border-color); padding: 1.25rem; border-radius: 6px; font-size: 0.85rem;">
-              <p style="margin-bottom: 0.5rem;"><strong>${data.ui.voucherCode}:</strong> <span style="font-family: monospace; color: var(--accent-blue);">${voucherCode}</span></p>
+              <p style="margin-bottom: 0.5rem;"><strong>${data.ui.voucherCode}:</strong> <span style="font-family: monospace; color: var(--accent-text);">${voucherCode}</span></p>
               <p style="margin-bottom: 0.5rem;"><strong>${data.ui.affiliation}:</strong> ${schoolVal}</p>
               <p style="margin-bottom: 0.5rem;"><strong>${data.ui.proposedLecture}:</strong> "${subjectVal}"</p>
-              <p style="margin-bottom: 0;"><strong>${data.ui.activeReviewStage}:</strong> <span style="color: #10b981; font-weight: bold;">${data.ui.validationInProgress}</span></p>
+              <p style="margin-bottom: 0;"><strong>${data.ui.activeReviewStage}:</strong> <span style="color: var(--success-text); font-weight: bold;">${data.ui.validationInProgress}</span></p>
             </div>
             <button id="reset-application-btn" class="btn secondary" style="margin-top: 1.25rem; width: 100%;">${data.ui.altAbstract}</button>
           </div>
@@ -1050,7 +1124,7 @@
           actionBtn.textContent = data.ui.pauseSession;
           actionBtn.className = "btn secondary";
           actionIcon.textContent = "⏸";
-          playerTitle.style.color = "var(--accent-blue)";
+          playerTitle.style.color = "var(--accent-text)";
           displayStatus.textContent = data.ui.streamingActive;
           videoInterval = setInterval(() => {
             if (activeProgress >= 100) activeProgress = 0;
