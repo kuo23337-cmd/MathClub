@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,25 +18,6 @@
       --border-focus: #3b82f6;
       --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
       --card-radius: 8px;
-      --header-bg: rgba(255, 255, 255, 0.9);
-      --chat-bg: #fdfdfd;
-      --hint-border: #bfdbfe;
-    }
-
-    [data-theme="dark"] {
-      --bg-primary: #0f172a;
-      --bg-secondary: #1e293b;
-      --text-main: #f8fafc;
-      --text-muted: #94a3b8;
-      --accent-blue: #60a5fa;
-      --accent-blue-hover: #93c5fd;
-      --accent-light: #172554;
-      --border-color: #334155;
-      --border-focus: #93c5fd;
-      --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -2px rgba(0, 0, 0, 0.5);
-      --header-bg: rgba(30, 41, 59, 0.9);
-      --chat-bg: #0b1121;
-      --hint-border: #1e3a8a;
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -47,7 +28,6 @@
       color: var(--text-main);
       line-height: 1.6;
       min-height: 100vh;
-      transition: background-color 0.3s, color 0.3s;
     }
 
     /* Multi-language selective displays */
@@ -55,7 +35,7 @@
     body.lang-zh .lang-en { display: none !important; }
 
     header {
-      background-color: var(--header-bg);
+      background-color: rgba(255, 255, 255, 0.9);
       backdrop-filter: blur(8px);
       border-bottom: 1px solid var(--border-color);
       position: sticky;
@@ -65,7 +45,6 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      transition: background-color 0.3s, border-color 0.3s;
     }
 
     .logo { font-size: 1.4rem; font-weight: 700; color: var(--accent-blue); text-decoration: none; letter-spacing: -0.5px; display: flex; align-items: center; gap: 0.25rem; }
@@ -86,7 +65,7 @@
     p { color: var(--text-muted); margin-bottom: 1rem; font-size: 1rem; }
 
     .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin: 1.5rem 0; }
-    .card { background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--card-radius); padding: 1.5rem; box-shadow: var(--card-shadow); transition: transform 0.2s, border-color 0.2s, background-color 0.3s; }
+    .card { background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--card-radius); padding: 1.5rem; box-shadow: var(--card-shadow); transition: transform 0.2s, border-color 0.2s; }
     .card:hover { border-color: var(--accent-blue); transform: translateY(-2px); }
 
     .btn { display: inline-flex; align-items: center; justify-content: center; background-color: var(--accent-blue); color: #ffffff; font-weight: 600; padding: 0.6rem 1.2rem; border-radius: 6px; text-decoration: none; transition: background-color 0.15s, transform 0.1s; cursor: pointer; border: none; font-size: 0.9rem; }
@@ -97,25 +76,25 @@
     .btn.success { background-color: #10b981; color: #ffffff; }
     .btn.success:hover { background-color: #059669; }
 
-    input, textarea, select { background-color: var(--bg-secondary); border: 1px solid var(--border-color); padding: 0.75rem; border-radius: 6px; color: var(--text-main); width: 100%; margin: 0.5rem 0 1.25rem; font-family: inherit; font-size: 0.95rem; transition: border-color 0.2s, background-color 0.3s, color 0.3s; }
+    input, textarea, select { background-color: var(--bg-secondary); border: 1px solid var(--border-color); padding: 0.75rem; border-radius: 6px; color: var(--text-main); width: 100%; margin: 0.5rem 0 1.25rem; font-family: inherit; font-size: 0.95rem; transition: border-color 0.2s; }
     input:focus, textarea:focus, select:focus { outline: none; border-color: var(--border-focus); }
 
-    .problem-box { background-color: var(--bg-secondary); border: 1px solid var(--border-color); border-left: 4px solid var(--accent-blue); padding: 1.5rem; border-radius: var(--card-radius); box-shadow: var(--card-shadow); margin: 1.5rem 0; transition: background-color 0.3s; }
-    .hint-box { background-color: var(--accent-light); border: 1px dashed var(--hint-border); padding: 1rem; border-radius: 6px; margin-top: 1rem; font-size: 0.9rem; color: var(--accent-blue); display: none; transition: background-color 0.3s; }
+    .problem-box { background-color: var(--bg-secondary); border: 1px solid var(--border-color); border-left: 4px solid var(--accent-blue); padding: 1.5rem; border-radius: var(--card-radius); box-shadow: var(--card-shadow); margin: 1.5rem 0; }
+    .hint-box { background-color: var(--accent-light); border: 1px dashed #bfdbfe; padding: 1rem; border-radius: 6px; margin-top: 1rem; font-size: 0.9rem; color: var(--accent-blue); display: none; }
     
-    .challenge-hall { background-color: var(--bg-secondary); border: 1px solid var(--border-color); padding: 2rem; border-radius: var(--card-radius); box-shadow: var(--card-shadow); margin: 2rem 0; transition: background-color 0.3s; }
-    .challenge-entry { background-color: var(--bg-primary); border: 1px solid var(--border-color); padding: 1rem; border-radius: 6px; margin-bottom: 1rem; border-left: 3px solid var(--accent-blue); transition: background-color 0.3s; }
+    .challenge-hall { background-color: var(--bg-secondary); border: 1px solid var(--border-color); padding: 2rem; border-radius: var(--card-radius); box-shadow: var(--card-shadow); margin: 2rem 0; }
+    .challenge-entry { background-color: var(--bg-primary); border: 1px solid var(--border-color); padding: 1rem; border-radius: 6px; margin-bottom: 1rem; border-left: 3px solid var(--accent-blue); }
 
     .timeline { border-left: 2px solid var(--border-color); padding-left: 1.5rem; margin: 2rem 0; }
     .timeline-item { position: relative; margin-bottom: 2rem; cursor: pointer; }
     .timeline-item::before { content: ""; position: absolute; left: calc(-1.5rem - 6px); top: 0.25rem; width: 10px; height: 10px; border-radius: 50%; background-color: var(--accent-blue); border: 2px solid var(--bg-primary); }
     .timeline-date { font-weight: 700; color: var(--accent-blue); font-size: 0.9rem; }
     .timeline-title { font-weight: 600; margin: 0.25rem 0; }
-    .timeline-detail { display: none; font-size: 0.9rem; color: var(--text-muted); margin-top: 0.5rem; background-color: var(--bg-secondary); padding: 0.75rem; border-radius: 6px; border: 1px solid var(--border-color); transition: background-color 0.3s; }
+    .timeline-detail { display: none; font-size: 0.9rem; color: var(--text-muted); margin-top: 0.5rem; background-color: var(--bg-secondary); padding: 0.75rem; border-radius: 6px; border: 1px solid var(--border-color); }
 
-    .video-card { background-color: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--card-radius); padding: 1.5rem; box-shadow: var(--card-shadow); margin: 2rem 0; transition: background-color 0.3s; }
-    .mock-screen { background-color: #000000; color: #94a3b8; aspect-ratio: 16/9; border-radius: 6px; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; overflow: hidden; margin-bottom: 1rem; border: 1px solid #1e293b; }
-    .play-trigger { font-size: 3.5rem; cursor: pointer; transition: transform 0.1s; z-index: 2; color: #ffffff; }
+    .video-card { background-color: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--card-radius); padding: 1.5rem; box-shadow: var(--card-shadow); margin: 2rem 0; }
+    .mock-screen { background-color: #0f172a; color: #94a3b8; aspect-ratio: 16/9; border-radius: 6px; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; overflow: hidden; margin-bottom: 1rem; border: 1px solid #1e293b; }
+    .play-trigger { font-size: 3.5rem; cursor: pointer; transition: transform 0.1s; z-index: 2; }
     .play-trigger:hover { transform: scale(1.1); }
     .player-progress-container { position: absolute; bottom: 0; left: 0; width: 100%; height: 4px; background-color: #334155; }
     .player-progress-bar { height: 100%; width: 0%; background-color: var(--accent-blue); transition: width 0.1s linear; }
@@ -123,22 +102,19 @@
     .receipt-card { background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--accent-light) 100%); border: 2px solid var(--accent-blue); border-radius: var(--card-radius); padding: 2rem; box-shadow: var(--card-shadow); margin-top: 2rem; animation: scaleIn 0.3s ease-out; }
     @keyframes scaleIn { from { transform: scale(0.97); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
-    footer { border-top: 1px solid var(--border-color); background-color: var(--bg-secondary); padding: 3rem 1.5rem; text-align: center; font-size: 0.85rem; color: var(--text-muted); transition: background-color 0.3s; }
+    footer { border-top: 1px solid var(--border-color); background-color: var(--bg-secondary); padding: 3rem 1.5rem; text-align: center; font-size: 0.85rem; color: var(--text-muted); }
     .footer-links { display: flex; justify-content: center; gap: 1.5rem; margin-top: 0.75rem; }
     .footer-links a { color: var(--text-muted); text-decoration: none; }
     .footer-links a:hover { color: var(--accent-blue); }
 
-    #login-screen { display: flex; align-items: center; justify-content: center; min-height: 100vh; background-color: var(--bg-primary); padding: 1.5rem; transition: background-color 0.3s; }
-    .login-box { background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--card-radius); padding: 2.5rem 2rem; box-shadow: var(--card-shadow); width: 100%; max-width: 420px; text-align: center; transition: background-color 0.3s; }
-    .lang-selector-header { margin-bottom: 1.5rem; display: flex; justify-content: flex-end; align-items: center; gap: 0.75rem; }
+    #login-screen { display: flex; align-items: center; justify-content: center; min-height: 100vh; background-color: var(--bg-primary); padding: 1.5rem; }
+    .login-box { background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--card-radius); padding: 2.5rem 2rem; box-shadow: var(--card-shadow); width: 100%; max-width: 420px; text-align: center; }
+    .lang-selector-header { margin-bottom: 1.5rem; display: flex; justify-content: flex-end; }
 
     /* Chat bubble styles */
     .chat-bubble { max-width: 75%; padding: 0.6rem 1rem; border-radius: 12px; font-size: 0.95rem; margin-bottom: 0.2rem; }
     .chat-bubble.self { background-color: var(--accent-blue); color: #ffffff; align-self: flex-end; border-bottom-right-radius: 2px; }
     .chat-bubble.other { background-color: var(--bg-secondary); color: var(--text-main); border: 1px solid var(--border-color); align-self: flex-start; border-bottom-left-radius: 2px; }
-    
-    .theme-toggle-btn { background: transparent; border: none; cursor: pointer; font-size: 1.1rem; padding: 0.3rem; transition: transform 0.2s; color: var(--text-main); }
-    .theme-toggle-btn:hover { transform: scale(1.1); }
   </style>
 </head>
 <body class="lang-en">
@@ -150,7 +126,6 @@
           <option value="en">English</option>
           <option value="zh">中文</option>
         </select>
-        <button class="theme-toggle-btn" aria-label="Toggle Dark Mode">🌙</button>
       </div>
       <div style="font-size: 2.5rem; color: var(--accent-blue); margin-bottom: 0.5rem; font-weight: 700;">Γ</div>
       
@@ -215,13 +190,10 @@
             <span class="lang-en">∑ Media</span><span class="lang-zh">∑ 媒体资源</span>
           </a>
         </nav>
-        <div style="display: flex; align-items: center; gap: 0.75rem;">
-          <select class="lang-switcher" style="width: auto; margin: 0; padding: 0.3rem 0.6rem; font-size: 0.85rem; border-radius: 4px; border: 1px solid var(--border-color); cursor: pointer; background: var(--bg-secondary); color: var(--text-main);">
-            <option value="en">English</option>
-            <option value="zh">中文</option>
-          </select>
-          <button class="theme-toggle-btn" aria-label="Toggle Dark Mode">🌙</button>
-        </div>
+        <select class="lang-switcher" style="width: auto; margin: 0; padding: 0.3rem 0.6rem; font-size: 0.85rem; border-radius: 4px; border: 1px solid var(--border-color); cursor: pointer; background: var(--bg-secondary); color: var(--text-main);">
+          <option value="en">English</option>
+          <option value="zh">中文</option>
+        </select>
       </div>
     </header>
 
@@ -382,8 +354,8 @@
         <p class="lang-en">Connect and chat instantly with mathematics lovers from different chapters online.</p>
         <p class="lang-zh">与来自全球各地的数学爱好者们在线建立实时连接，探讨疑难学术痛点。</p>
         <div style="background-color: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--card-radius); box-shadow: var(--card-shadow); display: flex; flex-direction: column; height: 520px; margin-top: 1.5rem;">
-          <div id="chat-messages-box" style="flex: 1; padding: 1.5rem; overflow-y: auto; display: flex; flex-direction: column; gap: 0.8rem; background: var(--chat-bg); transition: background-color 0.3s;"></div>
-          <form id="chat-send-form" style="display: flex; gap: 0.75rem; padding: 1rem; border-top: 1px solid var(--border-color); background: var(--bg-secondary); margin: 0; transition: background-color 0.3s;">
+          <div id="chat-messages-box" style="flex: 1; padding: 1.5rem; overflow-y: auto; display: flex; flex-direction: column; gap: 0.8rem; background: #fdfdfd;"></div>
+          <form id="chat-send-form" style="display: flex; gap: 0.75rem; padding: 1rem; border-top: 1px solid var(--border-color); background: var(--bg-secondary); margin: 0;">
             <input type="text" id="chat-message-input" placeholder="Type messages or academic query..." style="margin: 0; flex: 1;" required autocomplete="off">
             <button type="submit" class="btn" style="white-space: nowrap; padding: 0 1.5rem;">
               <span class="lang-en">Send</span><span class="lang-zh">发送</span>
@@ -421,7 +393,7 @@
         <div id="cas-timeline" class="timeline"></div>
 
         <h2 class="lang-en">Quantitative Impact Summary</h2><h2 class="lang-zh">量化影响力总结</h2>
-        <div class="card" style="background-color: var(--accent-light); border-color: var(--hint-border); margin-top: 1rem;">
+        <div class="card" style="background-color: var(--accent-light); border-color: #bfdbfe; margin-top: 1rem;">
           <div style="display: flex; justify-content: space-around; flex-wrap: wrap; gap: 1.5rem; text-align: center;">
             <div>
               <div style="font-size: 2rem; font-weight: 800; color: var(--accent-blue);" id="stat-countries">2</div>
@@ -469,7 +441,7 @@
         </div>
 
         <h2 class="lang-en">Submit Speaker Application</h2><h2 class="lang-zh">提交主讲人席位申请</h2>
-        <div id="join-workflow-container" style="background-color: var(--bg-secondary); border: 1px solid var(--border-color); padding: 2rem; border-radius: var(--card-radius); box-shadow: var(--card-shadow); transition: background-color 0.3s;">
+        <div id="join-workflow-container" style="background-color: var(--bg-secondary); border: 1px solid var(--border-color); padding: 2rem; border-radius: var(--card-radius); box-shadow: var(--card-shadow);">
           <form id="speaker-application-form">
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
               <div>
@@ -615,28 +587,6 @@
       let cachedGoogleIdToken = null;
       let chatPollInterval = null;
 
-      // --- THEME MANAGEMENT ---
-      function initTheme() {
-        const storedTheme = localStorage.getItem('gammath_theme');
-        const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-        const currentTheme = storedTheme || (prefersDark ? 'dark' : 'light');
-        document.documentElement.setAttribute('data-theme', currentTheme);
-        updateThemeIcons(currentTheme);
-      }
-
-      function toggleTheme() {
-        const currentTheme = document.documentElement.getAttribute('data-theme');
-        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-        document.documentElement.setAttribute('data-theme', newTheme);
-        localStorage.setItem('gammath_theme', newTheme);
-        updateThemeIcons(newTheme);
-      }
-
-      function updateThemeIcons(theme) {
-        const icon = theme === 'dark' ? '☀️' : '🌙';
-        document.querySelectorAll('.theme-toggle-btn').forEach(btn => btn.textContent = icon);
-      }
-
       // --- AUTHENTICATION FLOW (MERGED GOOGLE OAUTH) ---
       function getAuthHeaders() {
         const token = sessionStorage.getItem('gammath_token');
@@ -668,7 +618,7 @@
           });
           google.accounts.id.renderButton(
             document.getElementById("google-btn-container"),
-            { theme: document.documentElement.getAttribute('data-theme') === 'dark' ? 'filled_black' : 'outline', size: "large", width: "300" }
+            { theme: "outline", size: "large", width: "300" }
           );
         } else {
           setTimeout(initGoogleButton, 250);
@@ -1113,4 +1063,29 @@
           actionBtn.className = "btn";
           actionIcon.textContent = "▶";
           playerTitle.style.color = "";
-          displayStatus.textContent =
+          displayStatus.textContent = data.ui.streamingPaused;
+          clearInterval(videoInterval);
+        }
+      }
+
+      actionBtn?.addEventListener('click', managePlayback);
+      actionIcon?.addEventListener('click', managePlayback);
+
+      function initializeUI() {
+        applyLanguage();
+        handleRoute();
+        syncRSVPs();
+        fetchChatMessages();
+        if (chatPollInterval) clearInterval(chatPollInterval);
+        chatPollInterval = setInterval(fetchChatMessages, 2500);
+      }
+
+      window.addEventListener('DOMContentLoaded', () => {
+        applyLanguage();
+        checkAuth();
+      });
+
+    })();
+  </script>
+</body>
+</html>
