@@ -5,13 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gamma Math Club — Gammath.xyz</title>
   <script src="https://accounts.google.com/gsi/client" async defer></script>
-  <script>
-    // Inline script to prevent theme flickering on page load
-    (function() {
-      const savedTheme = localStorage.getItem('theme') || 'light';
-      document.documentElement.setAttribute('data-theme', savedTheme);
-    })();
-  </script>
   <style>
     :root {
       --bg-primary: #f8fafc;
@@ -27,842 +20,1050 @@
       --card-radius: 8px;
     }
 
-    /* Dark Mode Theme Variables */
-    [data-theme="dark"] {
-      --bg-primary: #0f172a;
-      --bg-secondary: #1e293b;
-      --text-main: #f8fafc;
-      --text-muted: #94a3b8;
-      --accent-blue: #3b82f6;
-      --accent-blue-hover: #60a5fa;
-      --accent-light: #1e293b;
-      --border-color: #334155;
-      --border-focus: #60a5fa;
-      --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -2px rgba(0, 0, 0, 0.4);
-    }
-
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
       background-color: var(--bg-primary);
       color: var(--text-main);
-      line-height: 1.5;
-      padding: 20px;
-      transition: background-color 0.2s, color 0.2s;
+      line-height: 1.6;
+      min-height: 100vh;
     }
 
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-    }
+    /* Multi-language selective displays */
+    body.lang-en .lang-zh { display: none !important; }
+    body.lang-zh .lang-en { display: none !important; }
 
     header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding-bottom: 20px;
+      background-color: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(8px);
       border-bottom: 1px solid var(--border-color);
-      margin-bottom: 30px;
-    }
-
-    .logo {
-      font-size: 1.5rem;
-      font-weight: bold;
-      color: var(--accent-blue);
-      text-decoration: none;
-    }
-
-    .nav-controls {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      padding: 1rem 2rem;
       display: flex;
       align-items: center;
-      gap: 15px;
-    }
-
-    select, input, button, textarea {
-      font-family: inherit;
-      font-size: 0.95rem;
-    }
-
-    select {
-      padding: 6px 12px;
-      border-radius: var(--card-radius);
-      border: 1px solid var(--border-color);
-      background-color: var(--bg-secondary);
-      color: var(--text-main);
-      cursor: pointer;
-      outline: none;
-    }
-
-    .btn {
-      background-color: var(--accent-blue);
-      color: white;
-      border: none;
-      padding: 8px 16px;
-      border-radius: var(--card-radius);
-      cursor: pointer;
-      font-weight: 500;
-      transition: background-color 0.2s;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .btn:hover {
-      background-color: var(--accent-blue-hover);
-    }
-
-    .btn.secondary {
-      background-color: #ef4444;
-    }
-    .btn.secondary:hover {
-      background-color: #dc2626;
-    }
-
-    .btn.outline {
-      background-color: transparent;
-      border: 1px solid var(--border-color);
-      color: var(--text-muted);
-    }
-    .btn.outline:hover {
-      background-color: var(--bg-primary);
-      color: var(--text-main);
-    }
-
-    .theme-toggle-btn {
-      background-color: var(--bg-secondary);
-      border: 1px solid var(--border-color);
-      color: var(--text-main);
-      padding: 6px 12px;
-      border-radius: var(--card-radius);
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.1rem;
-      transition: background-color 0.2s, border-color 0.2s;
-    }
-    .theme-toggle-btn:hover {
-      background-color: var(--accent-light);
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 24px;
-    }
-
-    @media (min-width: 768px) {
-      .grid {
-        grid-template-columns: 2fr 1fr;
-      }
-    }
-
-    .card {
-      background-color: var(--bg-secondary);
-      border-radius: var(--card-radius);
-      border: 1px solid var(--border-color);
-      box-shadow: var(--card-shadow);
-      padding: 24px;
-      margin-bottom: 24px;
-      transition: background-color 0.2s, border-color 0.2s, box-shadow 0.2s;
-    }
-
-    .card h2 {
-      margin-bottom: 16px;
-      font-size: 1.25rem;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .auth-view {
-      max-width: 400px;
-      margin: 60px auto;
-    }
-
-    .form-group {
-      margin-bottom: 16px;
-    }
-
-    .form-group label {
-      display: block;
-      margin-bottom: 6px;
-      font-weight: 500;
-      font-size: 0.9rem;
-      color: var(--text-muted);
-    }
-
-    .form-control {
-      width: 100%;
-      padding: 10px 12px;
-      border-radius: var(--card-radius);
-      border: 1px solid var(--border-color);
-      background-color: var(--bg-secondary);
-      color: var(--text-main);
-      transition: border-color 0.2s, background-color 0.2s, color 0.2s;
-    }
-
-    .form-control:focus {
-      outline: none;
-      border-color: var(--border-focus);
-    }
-
-    .auth-toggle {
-      text-align: center;
-      margin-top: 16px;
-      font-size: 0.9rem;
-      color: var(--text-muted);
-    }
-
-    .auth-toggle span {
-      color: var(--accent-blue);
-      cursor: pointer;
-      text-decoration: underline;
-    }
-
-    .seminar-item {
-      display: flex;
       justify-content: space-between;
-      align-items: center;
-      padding: 16px 0;
-      border-bottom: 1px solid var(--border-color);
     }
 
-    .seminar-item:last-child {
-      border-bottom: none;
-      padding-bottom: 0;
-    }
+    .logo { font-size: 1.4rem; font-weight: 700; color: var(--accent-blue); text-decoration: none; letter-spacing: -0.5px; display: flex; align-items: center; gap: 0.25rem; }
+    .logo span { color: var(--text-muted); font-weight: 400; }
+    .nav-container { display: flex; align-items: center; gap: 1.5rem; }
+    nav { display: flex; gap: 1.5rem; }
+    nav a { color: var(--text-muted); text-decoration: none; font-weight: 500; font-size: 0.9rem; transition: color 0.2s, border-color 0.2s; padding: 0.4rem 0; border-bottom: 2px solid transparent; }
+    nav a:hover, nav a.active { color: var(--accent-blue); border-bottom-color: var(--accent-blue); }
 
-    .seminar-info h3 {
-      font-size: 1.05rem;
-      margin-bottom: 4px;
-    }
+    main { max-width: 1000px; margin: 0 auto; padding: 3rem 1.5rem 5rem; }
+    .section { display: none; animation: fadeIn 0.25s ease-out; }
+    .section.active { display: block; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
 
-    .seminar-info p {
-      font-size: 0.875rem;
-      color: var(--text-muted);
-    }
+    h1 { font-size: 2.5rem; font-weight: 800; letter-spacing: -0.75px; color: var(--accent-blue); margin-bottom: 1rem; }
+    h2 { font-size: 1.6rem; font-weight: 700; color: var(--text-main); margin: 2.5rem 0 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; }
+    h3 { font-size: 1.15rem; font-weight: 600; color: var(--text-main); margin-bottom: 0.5rem; }
+    p { color: var(--text-muted); margin-bottom: 1rem; font-size: 1rem; }
 
-    .player-box {
-      background: #000;
-      border-radius: var(--card-radius);
-      height: 200px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      color: #747d8c;
-      position: relative;
-      overflow: hidden;
-      margin-bottom: 16px;
-    }
+    .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin: 1.5rem 0; }
+    .card { background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--card-radius); padding: 1.5rem; box-shadow: var(--card-shadow); transition: transform 0.2s, border-color 0.2s; }
+    .card:hover { border-color: var(--accent-blue); transform: translateY(-2px); }
 
-    .player-icon {
-      font-size: 3rem;
-      cursor: pointer;
-      color: #f1f2f6;
-      z-index: 2;
-      transition: transform 0.1s;
-    }
+    .btn { display: inline-flex; align-items: center; justify-content: center; background-color: var(--accent-blue); color: #ffffff; font-weight: 600; padding: 0.6rem 1.2rem; border-radius: 6px; text-decoration: none; transition: background-color 0.15s, transform 0.1s; cursor: pointer; border: none; font-size: 0.9rem; }
+    .btn:hover { background-color: var(--accent-blue-hover); }
+    .btn:active { transform: scale(0.98); }
+    .btn.secondary { background-color: var(--bg-secondary); color: var(--text-main); border: 1px solid var(--border-color); }
+    .btn.secondary:hover { background-color: var(--bg-primary); border-color: var(--text-muted); }
+    .btn.success { background-color: #10b981; color: #ffffff; }
+    .btn.success:hover { background-color: #059669; }
 
-    .player-icon:hover {
-      transform: scale(1.1);
-    }
+    input, textarea, select { background-color: var(--bg-secondary); border: 1px solid var(--border-color); padding: 0.75rem; border-radius: 6px; color: var(--text-main); width: 100%; margin: 0.5rem 0 1.25rem; font-family: inherit; font-size: 0.95rem; transition: border-color 0.2s; }
+    input:focus, textarea:focus, select:focus { outline: none; border-color: var(--border-focus); }
 
-    .player-status {
-      margin-top: 10px;
-      font-size: 0.85rem;
-      color: #a4b0be;
-      z-index: 2;
-    }
+    .problem-box { background-color: var(--bg-secondary); border: 1px solid var(--border-color); border-left: 4px solid var(--accent-blue); padding: 1.5rem; border-radius: var(--card-radius); box-shadow: var(--card-shadow); margin: 1.5rem 0; }
+    .hint-box { background-color: var(--accent-light); border: 1px dashed #bfdbfe; padding: 1rem; border-radius: 6px; margin-top: 1rem; font-size: 0.9rem; color: var(--accent-blue); display: none; }
+    
+    .challenge-hall { background-color: var(--bg-secondary); border: 1px solid var(--border-color); padding: 2rem; border-radius: var(--card-radius); box-shadow: var(--card-shadow); margin: 2rem 0; }
+    .challenge-entry { background-color: var(--bg-primary); border: 1px solid var(--border-color); padding: 1rem; border-radius: 6px; margin-bottom: 1rem; border-left: 3px solid var(--accent-blue); }
 
-    .progress-bar {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 4px;
-      background-color: #2f3542;
-      z-index: 2;
-    }
+    .timeline { border-left: 2px solid var(--border-color); padding-left: 1.5rem; margin: 2rem 0; }
+    .timeline-item { position: relative; margin-bottom: 2rem; cursor: pointer; }
+    .timeline-item::before { content: ""; position: absolute; left: calc(-1.5rem - 6px); top: 0.25rem; width: 10px; height: 10px; border-radius: 50%; background-color: var(--accent-blue); border: 2px solid var(--bg-primary); }
+    .timeline-date { font-weight: 700; color: var(--accent-blue); font-size: 0.9rem; }
+    .timeline-title { font-weight: 600; margin: 0.25rem 0; }
+    .timeline-detail { display: none; font-size: 0.9rem; color: var(--text-muted); margin-top: 0.5rem; background-color: var(--bg-secondary); padding: 0.75rem; border-radius: 6px; border: 1px solid var(--border-color); }
 
-    .progress-fill {
-      height: 100%;
-      width: 0%;
-      background-color: var(--border-focus);
-      transition: width 0.1s linear;
-    }
+    .video-card { background-color: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--card-radius); padding: 1.5rem; box-shadow: var(--card-shadow); margin: 2rem 0; }
+    .mock-screen { background-color: #0f172a; color: #94a3b8; aspect-ratio: 16/9; border-radius: 6px; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; overflow: hidden; margin-bottom: 1rem; border: 1px solid #1e293b; }
+    .play-trigger { font-size: 3.5rem; cursor: pointer; transition: transform 0.1s; z-index: 2; }
+    .play-trigger:hover { transform: scale(1.1); }
+    .player-progress-container { position: absolute; bottom: 0; left: 0; width: 100%; height: 4px; background-color: #334155; }
+    .player-progress-bar { height: 100%; width: 0%; background-color: var(--accent-blue); transition: width 0.1s linear; }
 
-    .chat-container {
-      display: flex;
-      flex-direction: column;
-      height: 350px;
-    }
+    .receipt-card { background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--accent-light) 100%); border: 2px solid var(--accent-blue); border-radius: var(--card-radius); padding: 2rem; box-shadow: var(--card-shadow); margin-top: 2rem; animation: scaleIn 0.3s ease-out; }
+    @keyframes scaleIn { from { transform: scale(0.97); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
-    .chat-messages {
-      flex: 1;
-      overflow-y: auto;
-      padding: 12px;
-      background-color: var(--bg-primary);
-      border-radius: var(--card-radius);
-      border: 1px solid var(--border-color);
-      margin-bottom: 12px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      transition: background-color 0.2s, border-color 0.2s;
-    }
+    footer { border-top: 1px solid var(--border-color); background-color: var(--bg-secondary); padding: 3rem 1.5rem; text-align: center; font-size: 0.85rem; color: var(--text-muted); }
+    .footer-links { display: flex; justify-content: center; gap: 1.5rem; margin-top: 0.75rem; }
+    .footer-links a { color: var(--text-muted); text-decoration: none; }
+    .footer-links a:hover { color: var(--accent-blue); }
 
-    .chat-msg {
-      font-size: 0.9rem;
-      word-break: break-all;
-    }
+    #login-screen { display: flex; align-items: center; justify-content: center; min-height: 100vh; background-color: var(--bg-primary); padding: 1.5rem; }
+    .login-box { background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--card-radius); padding: 2.5rem 2rem; box-shadow: var(--card-shadow); width: 100%; max-width: 420px; text-align: center; }
+    .lang-selector-header { margin-bottom: 1.5rem; display: flex; justify-content: flex-end; }
 
-    .chat-msg .user {
-      font-weight: bold;
-      color: var(--accent-blue);
-      margin-right: 6px;
-    }
-
-    .chat-msg .time {
-      font-size: 0.75rem;
-      color: var(--text-muted);
-      margin-left: 6px;
-    }
-
-    .chat-input-box {
-      display: flex;
-      gap: 8px;
-    }
-
-    .chat-input-box textarea {
-      flex: 1;
-      resize: none;
-      padding: 8px;
-      border-radius: var(--card-radius);
-      border: 1px solid var(--border-color);
-      background-color: var(--bg-secondary);
-      color: var(--text-main);
-      height: 40px;
-      transition: background-color 0.2s, border-color 0.2s, color 0.2s;
-    }
-
-    .chat-input-box textarea:focus {
-      outline: none;
-      border-color: var(--border-focus);
-    }
-
-    .hidden { display: none !important; }
-
-    .user-profile {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 0.95rem;
-    }
-
-    .google-btn-wrapper {
-      display: flex;
-      justify-content: center;
-      margin-top: 12px;
-      padding-top: 12px;
-      border-top: 1px dashed var(--border-color);
-    }
+    /* Chat bubble styles */
+    .chat-bubble { max-width: 75%; padding: 0.6rem 1rem; border-radius: 12px; font-size: 0.95rem; margin-bottom: 0.2rem; }
+    .chat-bubble.self { background-color: var(--accent-blue); color: #ffffff; align-self: flex-end; border-bottom-right-radius: 2px; }
+    .chat-bubble.other { background-color: var(--bg-secondary); color: var(--text-main); border: 1px solid var(--border-color); align-self: flex-start; border-bottom-left-radius: 2px; }
   </style>
 </head>
-<body>
-  <div class="container">
-    <header>
-      <a href="#" class="logo">Gamma Math Club</a>
-      <div class="nav-controls">
-        <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle Theme">🌙</button>
-        <select id="langSelect">
+<body class="lang-en">
+
+  <div id="login-screen">
+    <div class="login-box">
+      <div class="lang-selector-header">
+        <select class="lang-switcher" style="width: auto; margin: 0; padding: 0.3rem 0.6rem; font-size: 0.8rem;">
           <option value="en">English</option>
-          <option value="zh">简体中文</option>
+          <option value="zh">中文</option>
         </select>
-        <div id="userProfile" class="user-profile hidden">
-          <span id="userInfo"></span>
-          <button id="logoutBtn" class="btn outline">Logout</button>
+      </div>
+      <div style="font-size: 2.5rem; color: var(--accent-blue); margin-bottom: 0.5rem; font-weight: 700;">Γ</div>
+      
+      <h2 id="auth-main-title" style="border: none; padding: 0; margin: 0 0 0.5rem 0;">
+        <span class="lang-en">Gamma Math Club</span>
+        <span class="lang-zh">伽马数学社</span>
+      </h2>
+
+      <div id="login-form-wrapper">
+        <p style="font-size: 0.9rem; margin-bottom: 2rem;">
+          <span class="lang-en">Sign in securely using your institution Google account</span>
+          <span class="lang-zh">请使用您的学校或个人 Google 账户一键安全登录</span>
+        </p>
+        <div style="display: flex; justify-content: center; margin: 2rem 0;">
+          <div id="google-btn-container"></div>
         </div>
+      </div>
+
+      <div id="name-prompt-wrapper" style="display: none; text-align: left; animation: fadeIn 0.3s ease-in-out;">
+        <h3 class="lang-en" style="margin-bottom: 0.5rem; color: var(--accent-blue);">Please enter your full name</h3>
+        <h3 class="lang-zh" style="margin-bottom: 0.5rem; color: var(--accent-blue);">请输入您的真实姓名</h3>
+        <p style="font-size: 0.85rem; margin-bottom: 1.5rem;">
+          <span class="lang-en">Your full name will serve as your verified identity for seminar RSVPs and global chat records.</span>
+          <span class="lang-zh">您的姓名将作为参与双周研讨会预约（登记学时）以及在社区发言时的唯一官方实名标识。</span>
+        </p>
+        <form id="name-submit-form" style="margin: 0;">
+          <label style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted);" class="lang-en">Full Name</label>
+          <label style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted);" class="lang-zh">真实姓名</label>
+          <input type="text" id="user-full-name" required placeholder="e.g. Yongkuo Chen" style="margin-bottom: 1.25rem;">
+          <button type="submit" class="btn" style="width: 100%; padding: 0.75rem;">
+            <span class="lang-en">Enter Portal</span>
+            <span class="lang-zh">进入门户系统</span>
+          </button>
+        </form>
+      </div>
+
+      <p id="auth-status-msg" style="font-size: 0.85rem; margin-top: 1.25rem; display: none; padding: 0.5rem; border-radius: 4px;"></p>
+    </div>
+  </div>
+
+  <div id="main-app-container" style="display: none;">
+    <header>
+      <a href="#" class="logo" id="header-logo-link">Γ<span>ammath.xyz</span></a>
+      <div class="nav-container">
+        <nav id="nav-menu">
+          <a href="#about" class="nav-item">
+            <span class="lang-en">X. About</span><span class="lang-zh">X. 关于我们</span>
+          </a>
+          <a href="#activities" class="nav-item">
+            <span class="lang-en">Y. Activities</span><span class="lang-zh">Y. 学术活动</span>
+          </a>
+          <a href="#chat" class="nav-item">
+            <span class="lang-en">W. Chat Room</span><span class="lang-zh">W. 交流社区</span>
+          </a>
+          <a href="#cas" class="nav-item">
+            <span class="lang-en">Z. CAS Project</span><span class="lang-zh">Z. CAS 项目</span>
+          </a>
+          <a href="#join" class="nav-item">
+            <span class="lang-en">∫ Join Us</span><span class="lang-zh">∫ 加入我们</span>
+          </a>
+          <a href="#media" class="nav-item">
+            <span class="lang-en">∑ Media</span><span class="lang-zh">∑ 媒体资源</span>
+          </a>
+        </nav>
+        <select class="lang-switcher" style="width: auto; margin: 0; padding: 0.3rem 0.6rem; font-size: 0.85rem; border-radius: 4px; border: 1px solid var(--border-color); cursor: pointer; background: var(--bg-secondary); color: var(--text-main);">
+          <option value="en">English</option>
+          <option value="zh">中文</option>
+        </select>
       </div>
     </header>
 
-    <div id="authView" class="card auth-view hidden">
-      <h2 id="authTitle">Login</h2>
-      <div class="form-group">
-        <label id="lblUsername" for="usernameInp">Username</label>
-        <input type="text" id="usernameInp" class="form-control">
-      </div>
-      <div class="form-group">
-        <label id="lblPassword" for="passwordInp">Password</label>
-        <input type="password" id="passwordInp" class="form-control">
-      </div>
-      <button id="authSubmitBtn" class="btn" style="width: 100%;">Login</button>
-      
-      <div class="google-btn-wrapper">
-        <div id="g_id_onload"
-             data-client_id="866299105374-u85gqp68mvs4v7qfllor96v34c4v5nba.apps.googleusercontent.com"
-             data-context="signin"
-             data-ux_mode="popup"
-             data-callback="handleGoogleAuth"
-             data-auto_prompt="false">
-        </div>
-        <div class="g_id_signin"
-             data-type="standard"
-             data-shape="rectangular"
-             data-theme="outline"
-             data-text="signin_with"
-             data-size="large"
-             data-logo_alignment="left">
-        </div>
-      </div>
+    <main id="view-container">
 
-      <div id="authToggleMsg" class="auth-toggle">
-        Don't have an account? <span id="authToggleBtn">Register here</span>
-      </div>
-    </div>
-
-    <div id="namePromptView" class="card auth-view hidden">
-      <h2 id="npTitle">Complete Your Profile</h2>
-      <p id="npDesc" style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 16px;"></p>
-      <div class="form-group">
-        <label id="npLabel" for="fullNameInp">Full Name</label>
-        <input type="text" id="fullNameInp" class="form-control">
-      </div>
-      <button id="npSubmitBtn" class="btn" style="width: 100%;">Finish and Enter</button>
-    </div>
-
-    <div id="mainView" class="grid hidden">
-      <div>
-        <div class="card">
-          <h2 id="secSeminarsTitle">Upcoming Seminars</h2>
-          <div id="seminarsList"></div>
+      <section id="home" class="section active">
+        <div style="margin-bottom: 3rem;">
+          <span style="font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; font-size: 0.8rem; color: var(--accent-blue);">
+            <span class="lang-en">Gamma Math Club</span><span class="lang-zh">伽马数学社</span>
+          </span>
+          <h1 style="margin-top: 0.5rem; font-size: 3.2rem; line-height: 1.1;">
+            <span class="lang-en">Where Gamma meets X, Y, Z.</span><span class="lang-zh">Where Gamma meets X, Y, Z.</span>
+          </h1>
+          <p style="font-size: 1.25rem; max-width: 700px; color: var(--text-muted); margin-top: 1rem;">
+            <span class="lang-en">We bridge mathematical inquiry with global collaboration. Organized by high school students connecting Rome and Beijing.</span>
+            <span class="lang-zh">我们连接数学探究与全球协作。由连接罗马与北京的高中生共同组织。</span>
+          </p>
         </div>
 
-        <div class="card">
-          <h2 id="secStreamTitle">Live Seminar Stream</h2>
-          <div class="player-box">
-            <div id="actionIcon" class="player-icon">▶</div>
-            <div id="displayStatus" class="player-status">Streaming Paused (Idle)</div>
-            <div class="progress-bar">
-              <div id="fillBar" class="progress-fill"></div>
-            </div>
+        <div class="card-grid">
+          <div class="card">
+            <div style="font-size: 1.5rem; margin-bottom: 0.75rem;">📅</div>
+            <h3 class="lang-en">Bi-Weekly Seminars</h3><h3 class="lang-zh">双周研讨会</h3>
+            <p style="font-size: 0.9rem;" class="lang-en">Interact during 60-minute exploration sessions addressing Algebra, Geometry, Analysis, and Number Theory.</p>
+            <p style="font-size: 0.9rem;" class="lang-zh">在代数、几何、分析和数论相关的60分钟探索会议中进行学术探讨与互动。</p>
+            <a href="#activities" class="btn secondary nav-router" data-dest="activities" style="width: 100%; margin-top: 0.5rem;">
+              <span class="lang-en">Explore Seminars</span><span class="lang-zh">探索研讨会</span>
+            </a>
           </div>
-          <button id="actionBtn" class="btn">Start Playback</button>
-        </div>
-      </div>
-
-      <div>
-        <div class="card">
-          <h2 id="secChatTitle">Global Chat Room</h2>
-          <div class="chat-container">
-            <div id="chatMessages" class="chat-messages"></div>
-            <div class="chat-input-box">
-              <textarea id="chatInput" placeholder="Type a message..."></textarea>
-              <button id="chatSendBtn" class="btn">Send</button>
-            </div>
+          <div class="card">
+            <div style="font-size: 1.5rem; margin-bottom: 0.75rem;">⚔️</div>
+            <h3 class="lang-en">Peer Challenges</h3><h3 class="lang-zh">同伴挑战板</h3>
+            <p style="font-size: 0.9rem;" class="lang-en">Engage in designated high school syllabus peer-challenges (AP, IB, A-Level, and national curriculums).</p>
+            <p style="font-size: 0.9rem;" class="lang-zh">参与针对高中教学大纲（AP、IB、A-Level及国内高考）的同伴学术挑战。</p>
+            <a href="#activities" class="btn secondary nav-router" data-dest="activities" style="width: 100%; margin-top: 0.5rem;">
+              <span class="lang-en">Challenge Board</span><span class="lang-zh">进入挑战板</span>
+            </a>
+          </div>
+          <div class="card">
+            <div style="font-size: 1.5rem; margin-bottom: 0.75rem;">🧩</div>
+            <h3 class="lang-en">Weekly Problem</h3><h3 class="lang-zh">每周一题</h3>
+            <p style="font-size: 0.9rem;" class="lang-en">View our weekly select mathematical puzzle. Conceptualized to puzzle, curated not to exceed high school scope.</p>
+            <p style="font-size: 0.9rem;" class="lang-zh">探索我们每周精选的数学谜题。专为启发理性逻辑而设计，且难度不超出高中范围。</p>
+            <button id="home-problem-btn" class="btn" style="width: 100%; margin-top: 0.5rem;">
+              <span class="lang-en">Solve Current Problem</span><span class="lang-zh">解答当前题目</span>
+            </button>
           </div>
         </div>
+        <div id="home-problem-arena"></div>
+      </section>
+
+      <section id="about" class="section">
+        <h1 class="lang-en">X. About the Club</h1><h1 class="lang-zh">X. 关于数学社</h1>
+        <p style="font-size: 1.1rem; max-width: 800px; margin-bottom: 2rem;" class="lang-en">
+          Gamma Math Club originated from a shared conviction that mathematical exploration thrives outside standard testing parameters. We form intellectual connections between international divisions in Beijing and European secondary schools, establishing a global communication channel.
+        </p>
+        <p style="font-size: 1.1rem; max-width: 800px; margin-bottom: 2rem;" class="lang-zh">
+          伽马数学社源于一个共同的信念，即数学探索不仅存在于标准化测试之中。我们在北京的国际教育资源与欧洲的中学之间搭建起学术桥梁，建立起国际化的互通合作平台。
+        </p>
+
+        <h2 class="lang-en">Co-Founders & Core Chapters</h2><h2 class="lang-zh">联合创始人与核心分部</h2>
+        <div class="card-grid">
+          <div class="card">
+            <span style="font-size: 0.85rem; text-transform: uppercase; color: var(--accent-blue); font-weight: 750;" class="lang-en">Rome Chapter</span>
+            <span style="font-size: 0.85rem; text-transform: uppercase; color: var(--accent-blue); font-weight: 750;" class="lang-zh">罗马分部</span>
+            <h3 style="margin-top: 0.5rem; font-size: 1.3rem;" class="lang-en">Marymount International School Rome</h3>
+            <h3 style="margin-top: 0.5rem; font-size: 1.3rem;" class="lang-zh">罗马玛丽蒙特国际学校</h3>
+            <p style="font-size: 0.9rem; margin-top: 0.5rem;" class="lang-en">Establishing core links with European international curriculums and local mathematics interest groups.</p>
+            <p style="font-size: 0.9rem; margin-top: 0.5rem;" class="lang-zh">负责对接欧洲国际课程及当地的小型数学兴趣社群。</p>
+          </div>
+          <div class="card">
+            <span style="font-size: 0.85rem; text-transform: uppercase; color: var(--accent-blue); font-weight: 750;" class="lang-en">Leadership Team</span>
+            <span style="font-size: 0.85rem; text-transform: uppercase; color: var(--accent-blue); font-weight: 750;" class="lang-zh">领导团队</span>
+            <h3 style="margin-top: 0.5rem; font-size: 1.3rem;">Yongkuo Chen & Zofia Grzelinska</h3>
+            <p style="font-size: 0.9rem; margin-top: 0.5rem;" class="lang-en">Co-founded by Yongkuo Chen (President) and Zofia Grzelinska (Vice President) to construct an inclusive, balanced academic workspace.</p>
+            <p style="font-size: 0.9rem; margin-top: 0.5rem;" class="lang-zh">由陈永阔（社长）和 Zofia Grzelinska（副社长）联合创立，旨在构建一个平等、包容的多元化学术空间。</p>
+          </div>
+        </div>
+
+        <h2 class="lang-en">Our Core Philosophies</h2><h2 class="lang-zh">核心发展理念</h2>
+        <div class="card-grid">
+          <div class="card">
+            <h3 class="lang-en">Transnational Exchange</h3><h3 class="lang-zh">跨国界交流</h3>
+            <p style="font-size: 0.9rem;" class="lang-en">Utilizing mathematics as an objective, shared language to communicate analytical ideas between peers from differing cultures.</p>
+            <p style="font-size: 0.9rem;" class="lang-zh">将数学作为一种客观中立的通用语言，在不同文化背景的同伴之间建立起思维碰撞的桥梁。</p>
+          </div>
+          <div class="card">
+            <h3 class="lang-en">Breaking STEM Stereotypes</h3><h3 class="lang-zh">打破理科刻板印象</h3>
+            <p style="font-size: 0.9rem;" class="lang-en">Actively encouraging female leadership and enrollment. Our founding executive structure and continuous seminar program maintain active gender balance.</p>
+            <p style="font-size: 0.9rem;" class="lang-zh">积极鼓励女性力量的展现。我们的初始管理架构和研讨会项目规划始终保持着积极的性别平衡。</p>
+          </div>
+          <div class="card">
+            <h3 class="lang-en">Clear Pedagogy</h3><h3 class="lang-zh">以教促学</h3>
+            <p style="font-size: 0.9rem;" class="lang-en">Developing students' presentation skills. Teaching mathematics to others is the most reliable way to formalize and master one's own understanding.</p>
+            <p style="font-size: 0.9rem;" class="lang-zh">培养学生的演讲展示技能。向他人清晰地讲述数学逻辑是深化并巩固自己理解的最可靠方式。</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="activities" class="section">
+        <h1 class="lang-en">Y. Academic Activities</h1><h1 class="lang-zh">Y. 学术活动</h1>
+        <p class="lang-en">We balance structured seminars with self-directed community problem challenges. Our scope is strictly high-school bounded (AP/IB/A-Level and domestic equivalents) to ensure accessibility.</p>
+        <p class="lang-zh">我们在结构化的研讨会与自主的社区解题挑战之间取得平衡。题目难度严格限定在高中知识领域（AP/IB/A-Level及同等国内水平）以保证活动的普适性。</p>
+
+        <h2 class="lang-en"> Bi-Weekly Theme Seminars</h2><h2 class="lang-zh"> 双周主题研讨会</h2>
+        <p style="margin-bottom: 1.5rem;" class="lang-en">Click "RSVP" to secure a placeholder seat. Registered sessions update your active CAS hours indicator.</p>
+        <p style="margin-bottom: 1.5rem;" class="lang-zh">点击“预约”锁定名额。成功登记的研讨会将自动同步更新您的 CAS 学时统计指标。</p>
+        <div id="seminars-board" class="card-grid"></div>
+
+        <h2 class="lang-en"> Peer Challenge Board</h2><h2 class="lang-zh"> 同伴挑战榜</h2>
+        <div class="challenge-hall">
+          <p style="margin-bottom: 1.5rem; font-size: 0.95rem; border-left: 3px solid var(--accent-blue); padding-left: 0.75rem;" class="lang-en">
+            <strong>Challenge Protocols:</strong> Submit a mathematical query strictly bounded within standard advanced high school curriculums. Peers collaborate to formulate and post clear, step-by-step proofs.
+          </p>
+          <p style="margin-bottom: 1.5rem; font-size: 0.95rem; border-left: 3px solid var(--accent-blue); padding-left: 0.75rem;" class="lang-zh">
+            <strong>发布规则：</strong> 提交一道严格在高级高中课程范围内的数学难题。同伴们可以相互协作，提出并发布清晰、完整的步骤解析。
+          </p>
+
+          <div style="background-color: var(--bg-primary); padding: 1.5rem; border-radius: 6px; border: 1px solid var(--border-color); margin-bottom: 2rem;">
+            <h4 style="margin-bottom: 0.5rem; font-size: 1rem;" class="lang-en">Post an Academic Challenge</h4>
+            <h4 style="margin-bottom: 0.5rem; font-size: 1rem;" class="lang-zh">发布全新挑战</h4>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+              <div>
+                <label style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted);" class="lang-en">Your Name / Affiliation</label>
+                <label style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted);" class="lang-zh">您的姓名 / 所属学校</label>
+                <input type="text" id="form-challenger-name" placeholder="e.g. Chen (Marymount)">
+              </div>
+              <div>
+                <label style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted);" class="lang-en">Subject Domain</label>
+                <label style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted);" class="lang-zh">学科领域</label>
+                <select id="form-challenge-domain">
+                  <option value="Algebra">Algebra / Polynomials</option>
+                  <option value="Geometry">Classical Geometry / Vectors</option>
+                  <option value="Number Theory">Number Theory / Modular Arithmetic</option>
+                  <option value="Calculus">Calculus / Limits</option>
+                </select>
+              </div>
+            </div>
+            <div>
+              <label style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted);" class="lang-en">Problem Description</label>
+              <label style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted);" class="lang-zh">详细描述</label>
+              <textarea id="form-challenge-text" rows="3" placeholder="State your mathematical problem clearly..."></textarea>
+            </div>
+            <button id="post-challenge-btn" class="btn" style="width: 100%;">
+              <span class="lang-en">Submit to Challenge Board</span><span class="lang-zh">发布至挑战榜</span>
+            </button>
+          </div>
+          <h3 class="lang-en">Active Academic Challenges</h3><h3 class="lang-zh">当前活跃的挑战</h3>
+          <div id="peer-challenges-container" style="margin-top: 1rem;"></div>
+        </div>
+
+        <h2 class="lang-en"> Historical Problem Archive</h2><h2 class="lang-zh"> 历史真题归档</h2>
+        <div id="archive-problems-container"></div>
+      </section>
+
+      <section id="chat" class="section">
+        <h1 class="lang-en">W. Connected Chat Hub</h1><h1 class="lang-zh">W. 跨国界交流社区</h1>
+        <p class="lang-en">Connect and chat instantly with mathematics lovers from different chapters online.</p>
+        <p class="lang-zh">与来自全球各地的数学爱好者们在线建立实时连接，探讨疑难学术痛点。</p>
+        <div style="background-color: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--card-radius); box-shadow: var(--card-shadow); display: flex; flex-direction: column; height: 520px; margin-top: 1.5rem;">
+          <div id="chat-messages-box" style="flex: 1; padding: 1.5rem; overflow-y: auto; display: flex; flex-direction: column; gap: 0.8rem; background: #fdfdfd;"></div>
+          <form id="chat-send-form" style="display: flex; gap: 0.75rem; padding: 1rem; border-top: 1px solid var(--border-color); background: var(--bg-secondary); margin: 0;">
+            <input type="text" id="chat-message-input" placeholder="Type messages or academic query..." style="margin: 0; flex: 1;" required autocomplete="off">
+            <button type="submit" class="btn" style="white-space: nowrap; padding: 0 1.5rem;">
+              <span class="lang-en">Send</span><span class="lang-zh">发送</span>
+            </button>
+          </form>
+        </div>
+      </section>
+
+      <section id="cas" class="section">
+        <h1 class="lang-en">Z. CAS Alignment</h1><h1 class="lang-zh">Z. CAS 项目契合度</h1>
+        <p style="font-size: 1.1rem; max-width: 800px;" class="lang-en">As international curriculum candidates, our operations satisfy the guidelines of the <strong>CAS (Creativity, Activity, Service)</strong> project framework, creating demonstrable peer educational value.</p>
+        <p style="font-size: 1.1rem; max-width: 800px;" class="lang-zh">作为国际文凭项目候选人，我们的运营活动完全契合 <strong>CAS (Creativity 创造、Activity 活动、Service 服务)</strong> 的大纲指导，创造可量化的同伴教育核心价值。</p>
+        <div class="card-grid">
+          <div class="card">
+            <h3 style="color: var(--accent-blue);" class="lang-en">Creativity</h3><h3 style="color: var(--accent-blue);" class="lang-zh">创造</h3>
+            <p style="font-size: 0.9rem;" class="lang-en">Designing bilingual mathematical slides, scripting educational explanations, and managing a clean, modern digital community architecture.</p>
+            <p style="font-size: 0.9rem;" class="lang-zh">设计双语幻灯片、撰写教育解析脚本，以及开发维护简洁易用的数字化社群平台架构。</p>
+          </div>
+          <div class="card">
+            <h3 style="color: var(--accent-blue);" class="lang-en">Activity</h3><h3 style="color: var(--accent-blue);" class="lang-zh">活动</h3>
+            <p style="font-size: 0.9rem;" class="lang-en">Coordinating real-time academic operations across European and Asian time zones, organizing digital presentations, and managing structural assets.</p>
+            <p style="font-size: 0.9rem;" class="lang-zh">跨越欧亚时区协调实时学术活动、组织线上研讨演示，并主持数字化平台的日常运营统筹。</p>
+          </div>
+          <div class="card">
+            <h3 style="color: var(--accent-blue);" class="lang-en">Service</h3><h3 style="color: var(--accent-blue);" class="lang-zh">服务</h3>
+            <p style="font-size: 0.9rem;" class="lang-en">Delivering accessible tutoring and peer-review processes, lowering educational barriers, and fostering an inclusive platform for female mathematicians.</p>
+            <p style="font-size: 0.9rem;" class="lang-zh">提供无门槛的同伴辅导与作业互评，降低学术交流壁垒，并为女性数学爱好者提供包容平等的展示平台。</p>
+          </div>
+        </div>
+
+        <h2>
+          <span class="lang-en"> Community Growth Timeline <span style="font-size: 0.8rem; font-weight: normal; color: var(--text-muted);">(Click node for details)</span></span>
+          <span class="lang-zh"> 社区成长时间线 <span style="font-size: 0.8rem; font-weight: normal; color: var(--text-muted);">(点击节点查看详情)</span></span>
+        </h2>
+        <div id="cas-timeline" class="timeline"></div>
+
+        <h2 class="lang-en">Quantitative Impact Summary</h2><h2 class="lang-zh">量化影响力总结</h2>
+        <div class="card" style="background-color: var(--accent-light); border-color: #bfdbfe; margin-top: 1rem;">
+          <div style="display: flex; justify-content: space-around; flex-wrap: wrap; gap: 1.5rem; text-align: center;">
+            <div>
+              <div style="font-size: 2rem; font-weight: 800; color: var(--accent-blue);" id="stat-countries">2</div>
+              <div style="font-size: 0.8rem; font-weight: 600; text-transform: uppercase; color: var(--text-muted);" class="lang-en">Core Nations</div>
+              <div style="font-size: 0.8rem; font-weight: 600; text-transform: uppercase; color: var(--text-muted);" class="lang-zh">核心国家</div>
+            </div>
+            <div>
+              <div style="font-size: 2rem; font-weight: 800; color: var(--accent-blue);" id="stat-seminars">4</div>
+              <div style="font-size: 0.8rem; font-weight: 600; text-transform: uppercase; color: var(--text-muted);" class="lang-en">Seminars Planned</div>
+              <div style="font-size: 0.8rem; font-weight: 600; text-transform: uppercase; color: var(--text-muted);" class="lang-zh">计划研讨会</div>
+            </div>
+            <div>
+              <div style="font-size: 2rem; font-weight: 800; color: var(--accent-blue);" id="stat-gender">45%</div>
+              <div style="font-size: 0.8rem; font-weight: 600; text-transform: uppercase; color: var(--text-muted);" class="lang-en">Female Leadership</div>
+              <div style="font-size: 0.8rem; font-weight: 600; text-transform: uppercase; color: var(--text-muted);" class="lang-zh">女性管理占比</div>
+            </div>
+            <div>
+              <div style="font-size: 2rem; font-weight: 800; color: var(--accent-blue);" id="stat-rsvp">0</div>
+              <div style="font-size: 0.8rem; font-weight: 600; text-transform: uppercase; color: var(--text-muted);" class="lang-en">Your RSVP Points</div>
+              <div style="font-size: 0.8rem; font-weight: 600; text-transform: uppercase; color: var(--text-muted);" class="lang-zh">您的预约次数</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="join" class="section">
+        <h1 class="lang-en">∫ Join the Movement</h1><h1 class="lang-zh">∫ 加入我们</h1>
+        <p style="max-width: 800px;" class="lang-en">Gamma Math Club operates in close academic communication with international high schools. We invite bilingual students who possess a dedicated passion for logical structures to apply as continuous members or featured seminar hosts.</p>
+        <p style="max-width: 800px;" class="lang-zh">伽马数学社始终与国际化高中保持着密切的学术联系。我们欢迎充满热情、具备逻辑思维能力的双语同伴申请加入，成为常驻会员或主讲嘉宾。</p>
+        <div class="card-grid" style="margin-bottom: 2.5rem;">
+          <div class="card">
+            <h3 class="lang-en">Peer Communicators</h3><h3 class="lang-zh">同伴交流生</h3>
+            <p style="font-size: 0.9rem;" class="lang-en">Join our ongoing communication hub to review weekly problems, submit challenges, and collaborate on step-by-step proofs.</p>
+            <p style="font-size: 0.9rem;" class="lang-zh">加入我们的日常交流群，共同解析每周一题、发起挑战、合作编写严谨的解答证明。</p>
+            <span style="font-size: 0.85rem; font-weight: 700; color: var(--accent-blue);" class="lang-en">Contact: +39 3935795396</span>
+            <span style="font-size: 0.85rem; font-weight: 700; color: var(--accent-blue);" class="lang-zh">联系方式: +39 3935795396</span>
+          </div>
+          <div class="card">
+            <h3 class="lang-en">Featured Speakers</h3><h3 class="lang-zh">研讨讲座嘉宾</h3>
+            <p style="font-size: 0.9rem;" class="lang-en">Present during our bi-weekly seminar series. Topics can focus on analytical proof styles, modular structures, or geometry.</p>
+            <p style="font-size: 0.9rem;" class="lang-zh">在双周研讨会中担任主讲。主题可涵盖代数证明逻辑、模算术架构或解析几何等核心模块。</p>
+            <span style="font-size: 0.85rem; font-weight: 700; color: var(--accent-blue);" class="lang-en">Fulfills CAS Service/Creativity requirements</span>
+            <span style="font-size: 0.85rem; font-weight: 700; color: var(--accent-blue);" class="lang-zh">完美符合 CAS 项目服务/创造模块核心要求</span>
+          </div>
+        </div>
+
+        <h2 class="lang-en">Submit Speaker Application</h2><h2 class="lang-zh">提交主讲人席位申请</h2>
+        <div id="join-workflow-container" style="background-color: var(--bg-secondary); border: 1px solid var(--border-color); padding: 2rem; border-radius: var(--card-radius); box-shadow: var(--card-shadow);">
+          <form id="speaker-application-form">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+              <div>
+                <label style="font-weight: 600; font-size: 0.85rem;" class="lang-en">Full Name</label>
+                <label style="font-weight: 600; font-size: 0.85rem;" class="lang-zh">真实姓名</label>
+                <input type="text" id="app-name" placeholder="e.g. Zofia Grzelinska" required>
+              </div>
+              <div>
+                <label style="font-weight: 600; font-size: 0.85rem;" class="lang-en">Contact Email</label>
+                <label style="font-weight: 600; font-size: 0.85rem;" class="lang-zh">电子邮箱</label>
+                <input type="email" id="app-email" placeholder="e.g. address@example.com" required>
+              </div>
+            </div>
+            <div>
+              <label style="font-weight: 600; font-size: 0.85rem;" class="lang-en">Affiliated High School</label>
+              <label style="font-weight: 600; font-size: 0.85rem;" class="lang-zh">就读高中</label>
+              <input type="text" id="app-school" placeholder="e.g. Marymount International School Rome" required>
+            </div>
+            <div>
+              <label style="font-weight: 600; font-size: 0.85rem;" class="lang-en">Proposed Mathematical Theme</label>
+              <label style="font-weight: 600; font-size: 0.85rem;" class="lang-zh">拟定分享主题</label>
+              <textarea id="app-subject" rows="4" placeholder="Briefly introduce the theorem, proof method, or specific puzzle domain you plan to present..." required></textarea>
+            </div>
+            <button type="submit" class="btn" style="width: 100%; padding: 0.8rem;">
+              <span class="lang-en">Submit Formal Application</span><span class="lang-zh">提交正式申请</span>
+            </button>
+          </form>
+        </div>
+      </section>
+
+      <section id="media" class="section">
+        <h1 class="lang-en">∑ Resource & Session Archives</h1><h1 class="lang-zh">∑ 教学资源与录像归档</h1>
+        <p class="lang-en">We index recordings of select seminars to provide high-quality reference material for the student community.</p>
+        <p class="lang-zh">我们在这里索引部分精品研讨会的公开录像片段，为学生社群提供高质量的参考学习资料。</p>
+        <div class="video-card">
+          <div class="mock-screen" id="seminar-video-box">
+            <span id="video-play-icon" class="play-trigger">▶</span>
+            <div style="margin-top: 1rem; text-align: center; font-family: monospace; font-size: 0.85rem; padding: 0 1rem;" id="video-display-status">
+              [ Seminar #02: Introduction to Symmetries & Groups in Platonic Solids ]
+            </div>
+            <div class="player-progress-container"><div class="player-progress-bar" id="video-progress-fill"></div></div>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
+            <div>
+              <h3 id="video-current-title">Symmetry & Permutations in Rubik's Group</h3>
+              <p style="font-size: 0.85rem; margin: 0; color: var(--text-muted);" class="lang-en">Recorded presentation from Rome & Beijing Joint Chapters</p>
+              <p style="font-size: 0.85rem; margin: 0; color: var(--text-muted);" class="lang-zh">由罗马及北京分部联合提供的座谈录像</p>
+            </div>
+            <button id="video-control-btn" class="btn">Start Recording Playback</button>
+          </div>
+        </div>
+
+        <h2 class="lang-en">Academic References</h2><h2 class="lang-zh">学术参考书目推荐</h2>
+        <div class="card-grid">
+          <div class="card">
+            <h3 class="lang-en">"What is Mathematics?"</h3><h3 class="lang-zh">《什么是数学？》</h3>
+            <p style="font-size: 0.85rem; margin: 0;" class="lang-en">A classic overview of real, analytical mathematics by Courant and Robbins. Ideal foundational reading for new members.</p>
+            <p style="font-size: 0.85rem; margin: 0;" class="lang-zh">由 Courant 和 Robbins 编写的解析数学经典著作。是新人建立数学思想的入门基石。</p>
+          </div>
+          <div class="card">
+            <h3>3Blue1Brown</h3>
+            <p style="font-size: 0.85rem; margin: 0;" class="lang-en">Recommended digital visualization resource. Highly useful for developing intuition in calculus and linear mappings.</p>
+            <p style="font-size: 0.85rem; margin: 0;" class="lang-zh">备受推崇的视频化直观学习资源。对于建立微积分与线性映射的直觉性理解非常重要。</p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div style="font-weight: 700; color: var(--accent-blue); margin-bottom: 0.5rem;" class="lang-en">Gamma Math Club (Gammath.xyz)</div>
+      <div style="font-weight: 700; color: var(--accent-blue); margin-bottom: 0.5rem;" class="lang-zh">伽马数学社 (Gammath.xyz)</div>
+      <p style="margin-bottom: 1rem;" class="lang-en">Coordinated in partnership with Marymount International School Rome</p>
+      <p style="margin-bottom: 1rem;" class="lang-zh">与罗马玛丽蒙特国际学校联合合作</p>
+      <div class="footer-links">
+        <a href="#about" class="footer-nav"><span class="lang-en">About Us</span><span class="lang-zh">关于我们</span></a>
+        <a href="#activities" class="footer-nav"><span class="lang-en">Seminars & Challenges</span><span class="lang-zh">研讨会与挑战</span></a>
+        <a href="#join" class="footer-nav"><span class="lang-en">Contact Registration</span><span class="lang-zh">联系与申请报名</span></a>
       </div>
-    </div>
+      <p style="margin-top: 1.5rem; font-size: 0.75rem; color: #94a3b8;" class="lang-en">© 2026 Gammath.xyz. All institutional intellectual property strictly respected.</p>
+      <p style="margin-top: 1.5rem; font-size: 0.75rem; color: #94a3b8;" class="lang-zh">© 2026 Gammath.xyz. 严格遵守并保护所有合作学校机构的知识产权。</p>
+    </footer>
   </div>
 
   <script>
     (function() {
-      let currentLang = localStorage.getItem('lang') || 'en';
-      let isLoginMode = true;
-      let googleIdToken = null;
-      let videoActive = false;
-      let videoInterval = null;
-      let activeProgress = 0;
-      let chatPollInterval = null;
-
+      // --- LOCAL DATABASE (BILINGUAL) ---
       const localData = {
         en: {
-          title: "Gamma Math Club",
-          login: "Login",
-          register: "Register",
-          username: "Username",
-          password: "Password",
-          hasAccount: "Already have an account? ",
-          noAccount: "Don't have an account? ",
-          toRegister: "Register here",
-          toLogin: "Login here",
-          logout: "Logout",
-          seminarsTitle: "Upcoming Seminars",
-          streamTitle: "Live Seminar Stream",
-          chatTitle: "Global Chat Room",
-          rsvpBtn: "RSVP",
-          rsvpedBtn: "✓ RSVPed",
-          sendBtn: "Send",
-          chatPlaceholder: "Type a message...",
-          googleSignIn: "Sign in with Google",
-          namePromptTitle: "Complete Your Profile",
-          namePromptDesc: "Please enter your real full name to finalize your registration.",
-          namePromptLabel: "Full Name",
-          namePromptBtn: "Finish and Enter",
+          seminars: [
+            { id: 1, topic: "Algebra & Group Symmetry", speaker: "Yongkuo Chen", school: "Marymount Rome", date: "Oct 12, 2026", duration: "60 Mins", desc: "Understanding abstract symmetries and basic permutations through algebraic structures." },
+            { id: 2, topic: "Number Theory Mysteries", speaker: "Zofia Grzelinska", school: "Marymount Rome", date: "Oct 26, 2026", duration: "60 Mins", desc: "An elegant walkthrough of modular arithmetic and prime verification techniques." },
+            { id: 3, topic: "Analytic Geometry & Vectors", speaker: "Yongkuo Chen", school: "Marymount Rome", date: "Nov 09, 2026", duration: "60 Mins", desc: "Simplifying geometric proofs through matrix operations and vector transformations." },
+            { id: 4, topic: "Graph Theory Foundations", speaker: "Guest Panelist", school: "Beijing Chapter Link", date: "Nov 23, 2026", duration: "60 Mins", desc: "Eulerian paths, vertex optimization, and applications in modern network layouts." }
+          ],
+          defaultChallenges: [
+            { domain: "Algebra", challenger: "Yongkuo Chen (Rome)", text: "Prove that for all real positive a, b, c, the inequality (a+b)(b+c)(c+a) ≥ 8abc holds.", solver: "Zofia & Rome Chapter (Solved via AM-GM Inequality)", status: "Completed" },
+            { domain: "Number Theory", challenger: "Zofia Grzelinska (Rome)", text: "Let p be a prime number greater than 3. Show that p² - 1 is always divisible by 24.", solver: "Open Community Consultation (Hint: analyze modular values of 3 and 8)", status: "Active" }
+          ],
+          weeklyProblems: [
+            { q: "For a real parameters, solve the system: x + y = 3, x³ + y³ = 9.", hint: "Factorize: x³ + y³ = (x+y)(x² - xy + y²). Given x+y=3, then 9 = 3(x² - xy + y²), which yields x² - xy + y² = 3. Expand (x+y)² = 9 to reveal 2xy = 6 - xy, obtaining solutions (1,2) and (2,1)." },
+            { q: "Let S be a set of 5 distinct integer points inside a unit square. Show that at least two points exist within a distance of √2 / 2.", hint: "Applying the Pigeonhole Principle. Divide the unit square into 4 equal quadrant squares of side length 1/2. Because there are 5 points, at least 2 points must reside within the same 1/2-by-1/2 square. The maximum distance in such a square is its diagonal, which measures exactly √2 / 2." }
+          ],
+          milestones: [
+            { date: "June 2026", title: "Global Collaboration Kick-Off", text: "Yongkuo and Zofia establish structural project metrics, linking Marymount Rome with Beijing-based peer mathematics networks." },
+            { date: "August 2026", title: "Academic Scope Formalization", text: "Curriculum requirements aligned to AP/IB systems, setting the core standard of math challenges to encourage broad participation." },
+            { date: "September 2026", title: "Launch of Gammath.xyz Portal", text: "The clean blue-white portal goes live, initiating the interactive digital reservation system for all seminars." }
+          ],
           ui: {
-            startPlayback: "Start Playback",
-            pauseSession: "Pause Session",
-            streamingActive: "Live Streaming Active",
-            streamingPaused: "Streaming Paused (Idle)"
+            sessionID: "Session ID", speaker: "Speaker", dateTime: "Date/Time", duration: "Duration", rsvp: "RSVP (Reserve Seat)", registered: "Registered ✓", activeChallenges: "Active Academic Challenges", postedBy: "Posted by", resolutionStatus: "Resolution Status", selectWeekly: "🧩 Select Weekly Problem Box", loadAlt: "Load Alternative Problem", expandHint: "Expand Conceptual Hint & Key", collapseHint: "Collapse Solution Details", conceptMechanics: "Concept Mechanics", openProof: "Open for verification (Peer Proof Phase)", classicInquiry: "Classic Inquiry", validationInProgress: "Validation in Progress", speakerCreds: "Speaker Credentials Generated", voucherCode: "Registration Hash", affiliation: "Affiliation", proposedLecture: "Proposed Lecture Title", activeReviewStage: "Active Review Stage", altAbstract: "Submit Alternative Abstract", credsText: "Your abstract submission has been verified. The academic committee will perform validation and schedule scheduling.", streamingActive: "[ Streaming Active: Group Symmetries & Rubik Mappings ]", streamingPaused: "[ Seminar #02: Paused ]", startPlayback: "Start Recording Playback", pauseSession: "Pause Session", allCriteriaRequired: "All challenge formulation criteria must be fully satisfied.", defaultStatusActive: "Active", defaultStatusCompleted: "Completed", week: "Week"
           }
         },
         zh: {
-          title: "伽马数学社",
-          login: "登录",
-          register: "注册",
-          username: "用户名",
-          password: "密码",
-          hasAccount: "已有账号？",
-          noAccount: "还没有账号？",
-          toRegister: "立即注册",
-          toLogin: "立即登录",
-          logout: "退出登录",
-          seminarsTitle: "近期学术讲座",
-          streamTitle: "讲座在线直播",
-          chatTitle: "公屏互动聊天室",
-          rsvpBtn: "预约讲座",
-          rsvpedBtn: "✓ 已预约",
-          sendBtn: "发送",
-          chatPlaceholder: "说点什么吧...",
-          googleSignIn: "使用 Google 账号登录",
-          namePromptTitle: "完善个人资料",
-          namePromptDesc: "请输入您的真实姓名以完成注册流程。",
-          namePromptLabel: "真实姓名",
-          namePromptBtn: "完成并进入",
+          seminars: [
+            { id: 1, topic: "代数与群对称性", speaker: "陈永阔", school: "罗马玛丽蒙特", date: "2026年10月12日", duration: "60分钟", desc: "通过代数结构来理解抽象的对称性和基本排列变换。" },
+            { id: 2, topic: "数论的奥秘", speaker: "Zofia Grzelinska", school: "罗马玛丽蒙特", date: "2026年10月26日", duration: "60分钟", desc: "对模算术和素数验证等数论技术的优雅演练。" },
+            { id: 3, topic: "解析几何与向量", speaker: "陈永阔", school: "罗马玛丽蒙特", date: "2026年11月09日", duration: "60分钟", desc: "利用矩阵运算和向量变换简化传统的几何证明。" },
+            { id: 4, topic: "图论基础入门", speaker: "特邀主讲人", school: "北京分部连线", date: "2026年11月23日", duration: "60分钟", desc: "欧拉路径、顶点优化以及它们在现代网络布局中的应用。" }
+          ],
+          defaultChallenges: [
+            { domain: "代数多项式", challenger: "陈永阔 (罗马分部)", text: "证明对于所有正实数 a, b, c，不等式 (a+b)(b+c)(c+a) ≥ 8abc 恒成立。", solver: "Zofia及罗马分部 (通过使用基本不等式 AM-GM 成功证明)", status: "已完成" },
+            { domain: "数论运算", challenger: "Zofia Grzelinska (罗马分部)", text: "已知 p 是大于 3 的素数。证明 p² - 1 总是能被 24 整除。", solver: "向社区开放探讨 (提示：分别讨论模 3 和模 8 的同余特征)", status: "活跃中" }
+          ],
+          weeklyProblems: [
+            { q: "在实数范围内解方程组: x + y = 3, x³ + y³ = 9。", hint: "因式分解：x³ + y³ = (x+y)(x² - xy + y²)。已知 x+y=3，代入得 9 = 3(x² - xy + y²)，化简得 x² - xy + y² = 3。展开 (x+y)² = 9，联立可得 2xy = 6 - xy，解得唯一解组为 (1,2) 与 (2,1)。" },
+            { q: "设 S 是位于单位正方形内部的 5 个互不相同的整点构成的集合。证明其中必然存在至少两点，它们的距离不超过 √2 / 2。", hint: "应用抽屉原理。将单位正方形平分为 4 个边长为 1/2 的小正方形。由于共有 5 个点，根据抽屉原理，至少有 2 个点落在同一个 1/2 乘以 1/2 的小正方形中。此小正方形内可能的最大距离即为其对角线长度，即 √2 / 2。" }
+          ],
+          milestones: [
+            { date: "2026年6月", title: "跨国协作启动", text: "陈永阔与 Zofia 制定了初期的项目指标与框架，成功连接罗马玛丽蒙特与北京的同伴高中生数学网络。" },
+            { date: "2026年8月", title: "学术范围基准确立", text: "将课程要求与 AP/IB 教育体系对齐，确立挑战题难度，鼓励广泛参与、避免过度的内卷题目。" },
+            { date: "2026年9月", title: "Gammath.xyz 门户发布", text: "整洁的蓝白主题官方站点正式上线，所有研讨会的在线预约系统随之启用。" }
+          ],
           ui: {
-            startPlayback: "开始播放",
-            pauseSession: "暂停会话",
-            streamingActive: "直播流媒体传输中",
-            streamingPaused: "直播已暂停 (空闲)"
+            sessionID: "研讨会编号", speaker: "主讲人", dateTime: "日期/时间", duration: "会议时长", rsvp: "预约 (锁定席位)", registered: "已登记 ✓", activeChallenges: "当前活跃的学术挑战", postedBy: "发布者", resolutionStatus: "解答进度", selectWeekly: "🧩 精选每周一题", loadAlt: "换一道题目", expandHint: "展开解析与解题思路", collapseHint: "收起解答详情", conceptMechanics: "核心理论与解题步骤", openProof: "向社群开放 (同伴证明阶段)", classicInquiry: "经典探究题", validationInProgress: "审核中", speakerCreds: "演讲者凭证已生成", voucherCode: "登记授权哈希码", affiliation: "所属高中机构", proposedLecture: "拟定演讲题目", activeReviewStage: "审核进度", altAbstract: "提交其他摘要", credsText: "您的摘要提交已被确认。学术委员会将进行审核并安排日程表。", streamingActive: "[ 实时广播中：群对称与 Rubik 映射 ]", streamingPaused: "[ 研讨会 #02: 已暂停 ]", startPlayback: "开始录像回放", pauseSession: "暂停回放", allCriteriaRequired: "所有挑战发布表格字段必须填写完整。", defaultStatusActive: "活跃中", defaultStatusCompleted: "已完成", week: "第"
           }
         }
       };
 
-      const seminars = [
-        { id: 1, enTitle: "An Introduction to Modern Algebraic Geometry", zhTitle: "现代代数几何导论", enTime: "Every Tuesday 14:00 - 16:00", zhTime: "每周二 14:00 - 16:00" },
-        { id: 2, enTitle: "Category Theory and Functional Programming Foundations", zhTitle: "范畴论与函数式编程基础", enTime: "Every Thursday 10:00 - 12:00", zhTime: "每周四 10:00 - 12:00" },
-        { id: 3, enTitle: "Stochastic Processes & High-Frequency Financial Modeling", zhTitle: "随机过程与高频金融建模", enTime: "Every Friday 15:30 - 17:30", zhTime: "每周五 15:30 - 17:30" }
-      ];
+      // --- APP STATE ---
+      let currentLang = localStorage.getItem('gammath_lang') || 'en';
+      let rsvpedSeminars = new Set();
+      let activeChallenges = JSON.parse(localStorage.getItem('gammath_challenges_store_v2')) || null;
+      let activeProblemIndex = 0;
+      let cachedGoogleIdToken = null;
+      let chatPollInterval = null;
 
-      // Cache DOM Elements
-      const langSelect = document.getElementById('langSelect');
-      const authView = document.getElementById('authView');
-      const mainView = document.getElementById('mainView');
-      const namePromptView = document.getElementById('namePromptView');
-      const userProfile = document.getElementById('userProfile');
-      const userInfo = document.getElementById('userInfo');
-      const logoutBtn = document.getElementById('logoutBtn');
-      
-      const authTitle = document.getElementById('authTitle');
-      const lblUsername = document.getElementById('lblUsername');
-      const usernameInp = document.getElementById('usernameInp');
-      const lblPassword = document.getElementById('lblPassword');
-      const passwordInp = document.getElementById('passwordInp');
-      const authSubmitBtn = document.getElementById('authSubmitBtn');
-      const authToggleMsg = document.getElementById('authToggleMsg');
+      // --- AUTHENTICATION FLOW (MERGED GOOGLE OAUTH) ---
+      function getAuthHeaders() {
+        const token = sessionStorage.getItem('gammath_token');
+        return { 'Content-Type': 'application/json', 'Authorization': token ? `Bearer ${token}` : '' };
+      }
 
-      const npTitle = document.getElementById('npTitle');
-      const npDesc = document.getElementById('npDesc');
-      const npLabel = document.getElementById('npLabel');
-      const fullNameInp = document.getElementById('fullNameInp');
-      const npSubmitBtn = document.getElementById('npSubmitBtn');
+      function checkAuth() {
+        const token = sessionStorage.getItem('gammath_token');
+        const loginScreen = document.getElementById('login-screen');
+        const mainApp = document.getElementById('main-app-container');
 
-      const secSeminarsTitle = document.getElementById('secSeminarsTitle');
-      const secStreamTitle = document.getElementById('secStreamTitle');
-      const secChatTitle = document.getElementById('secChatTitle');
-      const chatMessages = document.getElementById('chatMessages');
-      const chatInput = document.getElementById('chatInput');
-      const chatSendBtn = document.getElementById('chatSendBtn');
+        if (token) {
+          if (loginScreen) loginScreen.style.display = 'none';
+          if (mainApp) mainApp.style.display = 'block';
+          initializeUI();
+        } else {
+          if (loginScreen) loginScreen.style.display = 'flex';
+          if (mainApp) mainApp.style.display = 'none';
+          if (chatPollInterval) clearInterval(chatPollInterval);
+          initGoogleButton();
+        }
+      }
 
-      const actionIcon = document.getElementById('actionIcon');
-      const displayStatus = document.getElementById('displayStatus');
-      const fillBar = document.getElementById('fillBar');
-      const actionBtn = document.getElementById('actionBtn');
-      const logoEl = document.querySelector('.logo');
-      const themeToggleBtn = document.getElementById('themeToggle');
+      function initGoogleButton() {
+        if (typeof google !== 'undefined') {
+          google.accounts.id.initialize({
+            client_id: "644634274465-npr1lvtfejdfr1ql5ctqao8219tkr0mg.apps.googleusercontent.com",
+            callback: handleGoogleCredential
+          });
+          google.accounts.id.renderButton(
+            document.getElementById("google-btn-container"),
+            { theme: "outline", size: "large", width: "300" }
+          );
+        } else {
+          setTimeout(initGoogleButton, 250);
+        }
+      }
+
+      async function handleGoogleCredential(response) {
+        const id_token = response.credential;
+        cachedGoogleIdToken = id_token;
+        const msg = document.getElementById('auth-status-msg');
+
+        try {
+          const res = await fetch('/api/google-auth', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id_token })
+          });
+          const data = await res.json();
+
+          if (res.ok && data.success) {
+            sessionStorage.setItem('gammath_token', data.token);
+            sessionStorage.setItem('gammath_username', data.username);
+            checkAuth();
+          } else if (data.needName) {
+            document.getElementById('login-form-wrapper').style.display = 'none';
+            document.getElementById('name-prompt-wrapper').style.display = 'block';
+            msg.style.display = 'none';
+          } else {
+            msg.textContent = data.error || "Authentication failed";
+            msg.style.backgroundColor = '#fef2f2'; msg.style.color = '#ef4444'; msg.style.display = 'block';
+          }
+        } catch {
+          msg.textContent = "Server connection timeout"; msg.style.display = 'block';
+        }
+      }
+
+      document.getElementById('name-submit-form')?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const fullName = document.getElementById('user-full-name').value.trim();
+        const msg = document.getElementById('auth-status-msg');
+        if (!fullName || !cachedGoogleIdToken) return;
+
+        try {
+          const res = await fetch('/api/google-auth', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id_token: cachedGoogleIdToken, fullName })
+          });
+          const data = await res.json();
+          if (res.ok && data.success) {
+            sessionStorage.setItem('gammath_token', data.token);
+            sessionStorage.setItem('gammath_username', data.username);
+            checkAuth();
+          } else {
+            msg.textContent = data.error || "Failed to finalize registration";
+            msg.style.display = 'block';
+          }
+        } catch {
+          msg.textContent = "Network transaction failed"; msg.style.display = 'block';
+        }
+      });
+
+      // --- ROUTER SYSTEM ---
+      function handleRoute() {
+        let hash = window.location.hash.slice(1) || 'home';
+        const validViews = ['home', 'about', 'activities', 'chat', 'cas', 'join', 'media'];
+        if (!validViews.includes(hash)) hash = 'home';
+
+        document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
+        const targetView = document.getElementById(hash);
+        if (targetView) targetView.classList.add('active');
+
+        document.querySelectorAll('#nav-menu a').forEach(navLink => {
+          if (navLink.getAttribute('href') === '#' + hash) navLink.classList.add('active');
+          else navLink.classList.remove('active');
+        });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      window.addEventListener('hashchange', handleRoute);
+
+      document.addEventListener('click', function(e) {
+        const routeTrigger = e.target.closest('.nav-router');
+        if (routeTrigger) {
+          e.preventDefault();
+          const target = routeTrigger.getAttribute('data-dest');
+          if (target) window.location.hash = target;
+        }
+      });
+
+      document.getElementById('header-logo-link').addEventListener('click', function(e) {
+        e.preventDefault(); window.location.hash = 'home';
+      });
+
+      document.querySelectorAll('.footer-nav').forEach(link => {
+        link.addEventListener('click', function(e) {
+          e.preventDefault();
+          const dest = this.getAttribute('href').slice(1);
+          window.location.hash = dest;
+        });
+      });
+
+      // --- LANGUAGE SWITCHER CONTROLLERS ---
+      document.querySelectorAll('.lang-switcher').forEach(select => {
+        select.value = currentLang;
+        select.addEventListener('change', function(e) {
+          currentLang = e.target.value;
+          localStorage.setItem('gammath_lang', currentLang);
+          document.querySelectorAll('.lang-switcher').forEach(el => el.value = currentLang);
+          applyLanguage();
+        });
+      });
 
       function applyLanguage() {
-        const data = localData[currentLang];
-        if (logoEl) logoEl.textContent = data.title;
-        if (authTitle) authTitle.textContent = isLoginMode ? data.login : data.register;
-        if (lblUsername) lblUsername.textContent = data.username;
-        if (lblPassword) lblPassword.textContent = data.password;
-        if (authSubmitBtn) authSubmitBtn.textContent = isLoginMode ? data.login : data.register;
-        
-        if (authToggleMsg) {
-          if (isLoginMode) {
-            authToggleMsg.innerHTML = data.noAccount + `<span id="authToggleBtn">${data.toRegister}</span>`;
-          } else {
-            authToggleMsg.innerHTML = data.hasAccount + `<span id="authToggleBtn">${data.toLogin}</span>`;
-          }
-          document.getElementById('authToggleBtn')?.addEventListener('click', toggleAuthMode);
-        }
-
-        if (npTitle) npTitle.textContent = data.namePromptTitle;
-        if (npDesc) npDesc.textContent = data.namePromptDesc;
-        if (npLabel) npLabel.textContent = data.namePromptLabel;
-        if (npSubmitBtn) npSubmitBtn.textContent = data.namePromptBtn;
-
-        if (secSeminarsTitle) secSeminarsTitle.textContent = data.seminarsTitle;
-        if (secStreamTitle) secStreamTitle.textContent = data.streamTitle;
-        if (secChatTitle) secChatTitle.textContent = data.chatTitle;
-        if (chatInput) chatInput.placeholder = data.chatPlaceholder;
-        if (chatSendBtn) chatSendBtn.textContent = data.sendBtn;
-        if (logoutBtn) logoutBtn.textContent = data.logout;
-
-        const playerTitle = document.getElementById('secStreamTitle');
-        if (!videoActive) {
-          if (actionBtn) actionBtn.textContent = data.ui.startPlayback;
-          if (displayStatus) displayStatus.textContent = data.ui.streamingPaused;
-        } else {
-          if (actionBtn) actionBtn.textContent = data.ui.pauseSession;
-          if (displayStatus) displayStatus.textContent = data.ui.streamingActive;
-        }
+        document.body.className = 'lang-' + currentLang;
+        renderSeminars();
+        renderPeerChallenges();
+        renderWeeklyProblemArea();
+        renderProblemArchive();
+        renderCASRequirements();
+        updateStatistics();
+        updatePlaceholders();
       }
 
-      function toggleAuthMode() {
-        isLoginMode = !isLoginMode;
-        applyLanguage();
+      function updatePlaceholders() {
+        const en = currentLang === 'en';
+        const chalName = document.getElementById('form-challenger-name');
+        if (chalName) chalName.placeholder = en ? "e.g. Chen (Marymount)" : "例如：张三 (罗马分部)";
+        const chalText = document.getElementById('form-challenge-text');
+        if (chalText) chalText.placeholder = en ? "State your mathematical problem clearly..." : "清晰描述您的数学挑战...";
+        const appName = document.getElementById('app-name');
+        if (appName) appName.placeholder = en ? "e.g. Zofia Grzelinska" : "例如：Zofia Grzelinska";
+        const appEmail = document.getElementById('app-email');
+        if (appEmail) appEmail.placeholder = en ? "e.g. address@example.com" : "例如：email@domain.com";
+        const appSchool = document.getElementById('app-school');
+        if (appSchool) appSchool.placeholder = en ? "e.g. Marymount International School Rome" : "例如：罗马玛丽蒙特国际学校";
+        const appSubject = document.getElementById('app-subject');
+        if (appSubject) appSubject.placeholder = en ? 
+          "Briefly introduce the theorem, proof method, or specific puzzle domain you plan to present..." : 
+          "简要描述您计划展示的定理、证明方法或特定数学领域...";
       }
 
-      langSelect?.addEventListener('change', (e) => {
-        currentLang = e.target.value;
-        localStorage.setItem('lang', currentLang);
-        applyLanguage();
-        if (localStorage.getItem('token')) {
-          syncRSVPs();
-        }
-      });
-
-      if (langSelect) langSelect.value = currentLang;
-
-      authSubmitBtn?.addEventListener('click', async () => {
-        const username = usernameInp.value.trim();
-        const password = passwordInp.value;
-        if (!username || !password) return alert('Please fill fields');
-
-        const endpoint = isLoginMode ? '/api/login' : '/api/register';
-        try {
-          const res = await fetch(endpoint, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username, password })
-          });
-          const data = await res.json();
-          if (!res.ok) return alert(data.error || 'Auth failed');
-
-          if (isLoginMode) {
-            localStorage.setItem('token', data.token);
-            localStorage.setItem('username', data.username);
-            checkAuth();
-          } else {
-            alert(currentLang === 'en' ? 'Registration success! Please login.' : '注册成功！请登录。');
-            isLoginMode = true;
-            applyLanguage();
-          }
-        } catch (err) {
-          alert(err.message);
-        }
-      });
-
-      window.handleGoogleAuth = async function(response) {
-        googleIdToken = response.credential;
-        try {
-          const res = await fetch('/api/google-auth', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ id_token: googleIdToken })
-          });
-          const data = await res.json();
-          if (!res.ok) return alert(data.error || 'Google auth error');
-
-          if (data.requireName) {
-            authView.classList.add('hidden');
-            namePromptView.classList.remove('hidden');
-          } else {
-            localStorage.setItem('token', data.token);
-            localStorage.setItem('username', data.username);
-            checkAuth();
-          }
-        } catch (err) {
-          alert(err.message);
-        }
-      };
-
-      npSubmitBtn?.addEventListener('click', async () => {
-        const name = fullNameInp.value.trim();
-        if (!name) return alert('Name required');
-
-        try {
-          const res = await fetch('/api/google-auth', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ id_token: googleIdToken, fullName: name })
-          });
-          const data = await res.json();
-          if (!res.ok) return alert(data.error || 'Profile update failed');
-
-          localStorage.setItem('token', data.token);
-          localStorage.setItem('username', data.username);
-          namePromptView.classList.add('hidden');
-          checkAuth();
-        } catch (err) {
-          alert(err.message);
-        }
-      });
-
-      logoutBtn?.addEventListener('click', () => {
-        localStorage.removeItem('token');
-        localStorage.removeItem('username');
-        if (videoInterval) clearInterval(videoInterval);
-        if (chatPollInterval) clearInterval(chatPollInterval);
-        videoActive = false;
-        activeProgress = 0;
-        if (fillBar) fillBar.style.width = '0%';
-        checkAuth();
-      });
+      // --- COMPONENT RENDERERS ---
 
       async function syncRSVPs() {
-        const token = localStorage.getItem('token');
-        if (!token) return;
         try {
-          const res = await fetch('/api/rsvp', {
-            headers: { 'Authorization': 'Bearer ' + token }
-          });
-          if (res.status === 401) {
-            logoutBtn.click();
-            return;
+          const res = await fetch('/api/rsvp', { headers: getAuthHeaders() });
+          if (res.ok) {
+            const data = await res.json();
+            rsvpedSeminars = new Set(data.rsvps);
+            renderSeminars();
+            updateStatistics();
           }
-          const data = await res.json();
-          renderSeminars(data.rsvps || []);
         } catch {}
       }
 
-      window.toggleRSVP = async function(seminarId) {
-        const token = localStorage.getItem('token');
-        if (!token) return;
-        try {
-          const res = await fetch('/api/rsvp', {
-            method: 'POST',
-            headers: {
-              'Authorization': 'Bearer ' + token,
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ seminarId })
-          });
-          if (res.ok) syncRSVPs();
-        } catch {}
-      };
+      function renderSeminars() {
+        const board = document.getElementById('seminars-board');
+        if (!board) return;
 
-      function renderSeminars(rsvpedList = []) {
-        const listContainer = document.getElementById('seminarsList');
-        if (!listContainer) return;
+        const data = localData[currentLang];
+        board.innerHTML = data.seminars.map(sem => {
+          const isRSVPed = rsvpedSeminars.has(sem.id);
+          const btnClass = isRSVPed ? "btn success" : "btn secondary";
+          const btnLabel = isRSVPed ? data.ui.registered : data.ui.rsvp;
 
-        listContainer.innerHTML = '';
-        seminars.forEach(s => {
-          const isRsvped = rsvpedList.includes(s.id);
-          const title = currentLang === 'en' ? s.enTitle : s.zhTitle;
-          const time = currentLang === 'en' ? s.enTime : s.zhTime;
-          
-          const item = document.createElement('div');
-          item.className = 'seminar-item';
-          item.innerHTML = `
-            <div class="seminar-info">
-              <h3>${title}</h3>
-              <p>${time}</p>
+          return `
+            <div class="card" id="sem-card-${sem.id}">
+              <span style="font-size: 0.8rem; font-weight: 700; color: var(--accent-blue); text-transform: uppercase;">${data.ui.sessionID}: 0${sem.id}</span>
+              <h3 style="margin: 0.4rem 0 0.25rem;">${sem.topic}</h3>
+              <p style="font-size: 0.85rem; margin-bottom: 0.5rem; color: var(--text-main);">
+                <strong>${data.ui.speaker}:</strong> ${sem.speaker} (${sem.school})
+              </p>
+              <p style="font-size: 0.85rem; margin-bottom: 0.5rem;">
+                <strong>${data.ui.dateTime}:</strong> ${sem.date} | <strong>${data.ui.duration}:</strong> ${sem.duration}
+              </p>
+              <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.4; margin-bottom: 1rem;">${sem.desc}</p>
+              <button class="rsvp-action-btn ${btnClass}" data-id="${sem.id}" style="width: 100%; font-size: 0.8rem; padding: 0.5rem;">${btnLabel}</button>
             </div>
-            <button class="btn ${isRsvped ? 'outline' : ''}" onclick="toggleRSVP(${s.id})">
-              ${isRsvped ? localData[currentLang].rsvpedBtn : localData[currentLang].rsvpBtn}
-            </button>
           `;
-          listContainer.appendChild(item);
+        }).join('');
+
+        board.querySelectorAll('.rsvp-action-btn').forEach(button => {
+          button.addEventListener('click', async function() {
+            const seminarId = parseInt(this.getAttribute('data-id'));
+            try {
+              const res = await fetch('/api/rsvp', {
+                method: 'POST',
+                headers: getAuthHeaders(),
+                body: JSON.stringify({ seminarId })
+              });
+              if (res.ok) syncRSVPs();
+            } catch (e) { console.error(e); }
+          });
         });
       }
 
-      async function fetchChatMessages() {
-        const token = localStorage.getItem('token');
-        if (!token) return;
-        try {
-          const res = await fetch('/api/chat', {
-            headers: { 'Authorization': 'Bearer ' + token }
+      function updateStatistics() {
+        const rsvpCounter = document.getElementById('stat-rsvp');
+        const seminarCounter = document.getElementById('stat-seminars');
+        if (rsvpCounter) rsvpCounter.textContent = rsvpedSeminars.size;
+        if (seminarCounter) seminarCounter.textContent = localData[currentLang].seminars.length;
+      }
+
+      function renderPeerChallenges() {
+        const container = document.getElementById('peer-challenges-container');
+        if (!container) return;
+        const data = localData[currentLang];
+        const list = activeChallenges || data.defaultChallenges;
+
+        container.innerHTML = list.map((item, idx) => `
+          <div class="challenge-entry">
+            <div style="display: flex; justify-content: space-between; flex-wrap: wrap; margin-bottom: 0.5rem;">
+              <span style="font-weight: 700; font-size: 0.85rem; text-transform: uppercase; color: var(--accent-blue);">${item.domain}</span>
+              <span style="font-size: 0.75rem; background-color: var(--bg-secondary); padding: 0.2rem 0.5rem; border-radius: 4px; border: 1px solid var(--border-color); color: var(--text-muted); font-weight: 600;">
+                ${item.status}
+              </span>
+            </div>
+            <p style="font-family: monospace; font-size: 0.95rem; background-color: var(--bg-secondary); padding: 0.75rem; border-radius: 4px; border: 1px solid var(--border-color); color: var(--text-main);">
+              ${item.text}
+            </p>
+            <p style="font-size: 0.85rem; margin-top: 0.5rem; color: var(--text-muted);">
+              <strong>${data.ui.postedBy}:</strong> ${item.challenger} &nbsp;|&nbsp; <strong>${data.ui.resolutionStatus}:</strong> ${item.solver}
+            </p>
+          </div>
+        `).join('');
+      }
+
+      document.getElementById('post-challenge-btn')?.addEventListener('click', function() {
+        const nameInput = document.getElementById('form-challenger-name');
+        const textInput = document.getElementById('form-challenge-text');
+        const domainInput = document.getElementById('form-challenge-domain');
+        const data = localData[currentLang];
+
+        if (!nameInput.value.trim() || !textInput.value.trim()) {
+          alert(data.ui.allCriteriaRequired);
+          return;
+        }
+
+        const newChallenge = {
+          domain: domainInput.options[domainInput.selectedIndex].text,
+          challenger: nameInput.value.trim(),
+          text: textInput.value.trim(),
+          solver: data.ui.openProof,
+          status: data.ui.defaultStatusActive
+        };
+
+        if (!activeChallenges) activeChallenges = [...data.defaultChallenges];
+        activeChallenges.unshift(newChallenge);
+        localStorage.setItem('gammath_challenges_store_v2', JSON.stringify(activeChallenges));
+        renderPeerChallenges();
+        nameInput.value = ''; textInput.value = '';
+      });
+
+      function renderWeeklyProblemArea() {
+        const host = document.getElementById('home-problem-arena');
+        if (!host) return;
+        const data = localData[currentLang];
+        host.innerHTML = `
+          <div class="problem-box">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+              <h3 style="margin: 0; color: var(--accent-blue);">${data.ui.selectWeekly}</h3>
+              <button id="generator-random-btn" class="btn secondary" style="padding: 0.35rem 0.75rem; font-size: 0.75rem;">${data.ui.loadAlt}</button>
+            </div>
+            <div id="problem-text-target" style="font-family: monospace; font-size: 1.05rem; margin: 1rem 0; color: var(--text-main);"></div>
+            <button id="toggle-solution-btn" class="btn secondary" style="font-size: 0.8rem; padding: 0.4rem 0.8rem;">${data.ui.expandHint}</button>
+            <div id="hint-display-box" class="hint-box"></div>
+          </div>
+        `;
+
+        changeProblem(activeProblemIndex);
+        document.getElementById('generator-random-btn').addEventListener('click', function() {
+          activeProblemIndex = (activeProblemIndex + 1) % data.weeklyProblems.length;
+          changeProblem(activeProblemIndex);
+        });
+
+        document.getElementById('toggle-solution-btn').addEventListener('click', function() {
+          const hintPanel = document.getElementById('hint-display-box');
+          if (hintPanel.style.display === 'block') {
+            hintPanel.style.display = 'none';
+            this.textContent = data.ui.expandHint;
+          } else {
+            hintPanel.style.display = 'block';
+            this.textContent = data.ui.collapseHint;
+          }
+        });
+      }
+
+      function changeProblem(index) {
+        const targetText = document.getElementById('problem-text-target');
+        const targetHint = document.getElementById('hint-display-box');
+        const hintPanel = document.getElementById('hint-display-box');
+        const toggleBtn = document.getElementById('toggle-solution-btn');
+        const data = localData[currentLang];
+
+        if (targetText && targetHint) {
+          targetText.textContent = data.weeklyProblems[index].q;
+          targetHint.innerHTML = `<strong>${data.ui.conceptMechanics}:</strong> ` + data.weeklyProblems[index].hint;
+          if (hintPanel) hintPanel.style.display = 'none';
+          if (toggleBtn) toggleBtn.textContent = data.ui.expandHint;
+        }
+      }
+
+      document.getElementById('home-problem-btn')?.addEventListener('click', function() {
+        const element = document.getElementById('home-problem-arena');
+        if (element) element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+
+      function renderProblemArchive() {
+        const archive = document.getElementById('archive-problems-container');
+        if (!archive) return;
+        const data = localData[currentLang];
+        archive.innerHTML = data.weeklyProblems.map((prob, i) => `
+          <div class="problem-box" style="margin-bottom: 1rem;">
+            <strong>${data.ui.week} ${i + 1} ${data.ui.classicInquiry}:</strong>
+            <p style="font-family: monospace; font-size: 1rem; color: var(--text-main); margin-top: 0.5rem;">${prob.q}</p>
+          </div>
+        `).join('');
+      }
+
+      function renderCASRequirements() {
+        const host = document.getElementById('cas-timeline');
+        if (!host) return;
+        const data = localData[currentLang];
+        host.innerHTML = data.milestones.map((item, i) => `
+          <div class="timeline-item" data-id="${i}">
+            <div class="timeline-date">${item.date}</div>
+            <div class="timeline-title">${item.title}</div>
+            <div class="timeline-detail" id="timeline-detail-${i}">${item.text}</div>
+          </div>
+        `).join('');
+
+        host.querySelectorAll('.timeline-item').forEach(el => {
+          el.addEventListener('click', function() {
+            const id = this.getAttribute('data-id');
+            const panel = document.getElementById(`timeline-detail-${id}`);
+            panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
           });
+        });
+      }
+
+      // Live Chat Logic
+      async function fetchChatMessages() {
+        try {
+          const res = await fetch('/api/chat', { headers: getAuthHeaders() });
           if (!res.ok) return;
           const messages = await res.json();
-          
-          if (chatMessages) {
-            const isAtBottom = chatMessages.scrollHeight - chatMessages.clientHeight <= chatMessages.scrollTop + 40;
-            chatMessages.innerHTML = '';
-            messages.forEach(msg => {
-              const div = document.createElement('div');
-              div.className = 'chat-msg';
-              const timeStr = new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-              div.innerHTML = `<span class="user">${msg.username}:</span><span>${msg.message}</span><span class="time">${timeStr}</span>`;
-              chatMessages.appendChild(div);
-            });
-            if (isAtBottom) {
-              chatMessages.scrollTop = chatMessages.scrollHeight;
-            }
-          }
+          const box = document.getElementById('chat-messages-box');
+          const currentLoggedUser = sessionStorage.getItem('gammath_username') || '';
+          const atBottom = box.scrollHeight - box.scrollTop <= box.clientHeight + 40;
+
+          box.innerHTML = messages.map(msg => {
+            const isSelf = msg.username.toLowerCase() === currentLoggedUser.toLowerCase();
+            return `
+              <div style="display:flex; flex-direction:column; align-items: ${isSelf ? 'flex-end':'flex-start'};">
+                <span style="font-size:0.75rem; color:var(--text-muted); margin-bottom:0.1rem; padding:0 0.2rem;">
+                  ${msg.username} (${new Date(msg.timestamp).toLocaleTimeString()})
+                </span>
+                <div class="chat-bubble ${isSelf ? 'self':'other'}">${msg.message}</div>
+              </div>
+            `;
+          }).join('');
+          if (atBottom) { box.scrollTop = box.scrollHeight; }
         } catch {}
       }
 
-      async function sendChatMessage() {
-        const text = chatInput.value.trim();
-        if (!text) return;
-        const token = localStorage.getItem('token');
+      document.getElementById('chat-send-form')?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const input = document.getElementById('chat-message-input');
+        const message = input.value.trim();
+        if (!message) return;
         try {
           const res = await fetch('/api/chat', {
             method: 'POST',
-            headers: {
-              'Authorization': 'Bearer ' + token,
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ message: text })
+            headers: getAuthHeaders(),
+            body: JSON.stringify({ message })
           });
-          if (res.ok) {
-            chatInput.value = '';
-            fetchChatMessages();
-          }
+          if (res.ok) { input.value = ''; fetchChatMessages(); }
         } catch {}
-      }
-
-      chatSendBtn?.addEventListener('click', sendChatMessage);
-      chatInput?.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' && !e.shiftKey) {
-          e.preventDefault();
-          sendChatMessage();
-        }
       });
+
+      // Application Form Mock Logic
+      document.getElementById('speaker-application-form')?.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const nameVal = document.getElementById('app-name').value;
+        const schoolVal = document.getElementById('app-school').value;
+        const subjectVal = document.getElementById('app-subject').value;
+        const targetAnchor = document.getElementById('join-workflow-container');
+        if (!targetAnchor) return;
+
+        const voucherCode = "M-" + Math.floor(100000 + Math.random() * 900000);
+        const data = localData[currentLang];
+
+        targetAnchor.innerHTML = `
+          <div class="receipt-card">
+            <h3 style="color: var(--accent-blue); margin-top: 0.5rem; font-size: 1.4rem;">${data.ui.speakerCreds}</h3>
+            <p style="font-size: 0.95rem; margin-bottom: 1.25rem;">
+              ${currentLang === 'zh' ?
+                `谢谢您，<strong>${nameVal}</strong>。${data.ui.credsText}` :
+                `Thank you, <strong>${nameVal}</strong>. ${data.ui.credsText}`}
+            </p>
+            <div style="background-color: var(--bg-secondary); border: 1px solid var(--border-color); padding: 1.25rem; border-radius: 6px; font-size: 0.85rem;">
+              <p style="margin-bottom: 0.5rem;"><strong>${data.ui.voucherCode}:</strong> <span style="font-family: monospace; color: var(--accent-blue);">${voucherCode}</span></p>
+              <p style="margin-bottom: 0.5rem;"><strong>${data.ui.affiliation}:</strong> ${schoolVal}</p>
+              <p style="margin-bottom: 0.5rem;"><strong>${data.ui.proposedLecture}:</strong> "${subjectVal}"</p>
+              <p style="margin-bottom: 0;"><strong>${data.ui.activeReviewStage}:</strong> <span style="color: #10b981; font-weight: bold;">${data.ui.validationInProgress}</span></p>
+            </div>
+            <button id="reset-application-btn" class="btn secondary" style="margin-top: 1.25rem; width: 100%;">${data.ui.altAbstract}</button>
+          </div>
+        `;
+        document.getElementById('reset-application-btn').addEventListener('click', function() { window.location.reload(); });
+      });
+
+      // Media Player Mock Logic
+      let videoInterval = null;
+      let activeProgress = 0;
+      let videoActive = false;
+
+      const actionBtn = document.getElementById('video-control-btn');
+      const actionIcon = document.getElementById('video-play-icon');
+      const fillBar = document.getElementById('video-progress-fill');
+      const playerTitle = document.getElementById('video-current-title');
+      const displayStatus = document.getElementById('video-display-status');
 
       function managePlayback() {
         const data = localData[currentLang];
-        const playerTitle = document.getElementById('secStreamTitle');
         if (!videoActive) {
           videoActive = true;
-          if (actionBtn) {
-            actionBtn.textContent = data.ui.pauseSession;
-            actionBtn.className = "btn secondary";
-          }
-          if (actionIcon) actionIcon.textContent = "⏸";
-          if (playerTitle) playerTitle.style.color = "var(--accent-blue)";
-          if (displayStatus) displayStatus.textContent = data.ui.streamingActive;
+          actionBtn.textContent = data.ui.pauseSession;
+          actionBtn.className = "btn secondary";
+          actionIcon.textContent = "⏸";
+          playerTitle.style.color = "var(--accent-blue)";
+          displayStatus.textContent = data.ui.streamingActive;
           videoInterval = setInterval(() => {
             if (activeProgress >= 100) activeProgress = 0;
             activeProgress += 0.4;
-            if (fillBar) fillBar.style.width = activeProgress + "%";
+            fillBar.style.width = activeProgress + "%";
           }, 100);
         } else {
           videoActive = false;
-          if (actionBtn) {
-            actionBtn.textContent = data.ui.startPlayback;
-            actionBtn.className = "btn";
-          }
-          if (actionIcon) actionIcon.textContent = "▶";
-          if (playerTitle) playerTitle.style.color = "";
-          if (displayStatus) displayStatus.textContent = data.ui.streamingPaused;
+          actionBtn.textContent = data.ui.startPlayback;
+          actionBtn.className = "btn";
+          actionIcon.textContent = "▶";
+          playerTitle.style.color = "";
+          displayStatus.textContent = data.ui.streamingPaused;
           clearInterval(videoInterval);
         }
       }
@@ -872,55 +1073,16 @@
 
       function initializeUI() {
         applyLanguage();
+        handleRoute();
         syncRSVPs();
         fetchChatMessages();
         if (chatPollInterval) clearInterval(chatPollInterval);
         chatPollInterval = setInterval(fetchChatMessages, 2500);
       }
 
-      function checkAuth() {
-        const token = localStorage.getItem('token');
-        const username = localStorage.getItem('username');
-        if (token && username) {
-          if (userInfo) userInfo.textContent = username;
-          userProfile?.classList.remove('hidden');
-          mainView?.classList.remove('hidden');
-          authView?.classList.add('hidden');
-          namePromptView?.classList.add('hidden');
-          initializeUI();
-        } else {
-          userProfile?.classList.add('hidden');
-          mainView?.classList.add('hidden');
-          namePromptView?.classList.add('hidden');
-          authView?.classList.remove('hidden');
-          applyLanguage();
-        }
-      }
-
-      function updateThemeBtnIcon(theme) {
-        if (theme === 'dark') {
-          themeToggleBtn.textContent = '☀️';
-        } else {
-          themeToggleBtn.textContent = '🌙';
-        }
-      }
-
       window.addEventListener('DOMContentLoaded', () => {
         applyLanguage();
         checkAuth();
-        
-        // Setup initial button appearance based on document active layout state
-        const activeTheme = document.documentElement.getAttribute('data-theme') || 'light';
-        updateThemeBtnIcon(activeTheme);
-
-        // Client-side theme switching logic
-        themeToggleBtn?.addEventListener('click', () => {
-          const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
-          const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-          document.documentElement.setAttribute('data-theme', newTheme);
-          localStorage.setItem('theme', newTheme);
-          updateThemeBtnIcon(newTheme);
-        });
       });
 
     })();
